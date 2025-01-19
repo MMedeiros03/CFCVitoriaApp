@@ -1,23 +1,18 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cfc_vitoria_app/Widgets/base_page_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
-
 import '../Widgets/home_card_animation.dart';
 
 class HomePage extends StatefulWidget {
-
- const HomePage({super.key});
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
-
 }
 
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-
     final larguraTela = MediaQuery.of(context).size.width;
     final alturaTela = MediaQuery.of(context).size.height;
 
@@ -31,9 +26,8 @@ class _HomePageState extends State<HomePage> {
             options: CarouselOptions(
                 height: alturaTela * 0.2,
                 autoPlay: true,
-                autoPlayInterval: Duration(seconds: 5)
-            ),
-            items: [1,2,3,4,5].map((i) {
+                autoPlayInterval: Duration(seconds: 5)),
+            items: [1, 2, 3, 4, 5].map((i) {
               return Builder(
                 builder: (BuildContext context) {
                   return Container(
@@ -41,10 +35,11 @@ class _HomePageState extends State<HomePage> {
                       margin: EdgeInsets.symmetric(horizontal: 5.0),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(8)),
-                          color: Colors.black12
-                      ),
-                      child: Text('text $i', style: TextStyle(fontSize: 16.0),)
-                  );
+                          color: Colors.black12),
+                      child: Text(
+                        'text $i',
+                        style: TextStyle(fontSize: 16.0),
+                      ));
                 },
               );
             }).toList(),
@@ -56,22 +51,18 @@ class _HomePageState extends State<HomePage> {
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
             children: [
-
               HomeCardAnimation(
                 title: "Serviços",
                 pathAnimation: 'assets/animations/LearnAnimation.json',
               ),
-
               HomeCardAnimation(
                 title: "Agende sua consulta!",
                 pathAnimation: 'assets/animations/VisitAnimation.json',
               ),
-
               HomeCardAnimation(
                 title: "Agendamentos",
                 pathAnimation: 'assets/animations/CalendarAnimation.json',
               ),
-
               HomeCardAnimation(
                 title: "Sobre nós",
                 pathAnimation: 'assets/animations/AboutAnimation.json',
@@ -85,10 +76,8 @@ class _HomePageState extends State<HomePage> {
           //   height: 250,
           //   fit: BoxFit.fill,
           // )
-
         ],
       ),
     );
   }
-
 }

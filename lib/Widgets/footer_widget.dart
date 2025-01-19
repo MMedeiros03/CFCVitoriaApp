@@ -1,8 +1,6 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
-import '../Pages/agendamento_page.dart';
-
 class FooterWidget extends StatefulWidget {
   const FooterWidget({super.key});
 
@@ -33,7 +31,6 @@ class _FooterWidgetState extends State<FooterWidget> {
                   size: 35,
                 ),
               ),
-
               GestureDetector(
                 onTap: () {
                   _redirecionarParaPagina("/sobreNos");
@@ -43,7 +40,6 @@ class _FooterWidgetState extends State<FooterWidget> {
                   size: 35,
                 ),
               ),
-
               GestureDetector(
                 onTap: () {
                   _redirecionarParaPagina("/agendamento");
@@ -53,34 +49,31 @@ class _FooterWidgetState extends State<FooterWidget> {
                   size: 45,
                 ),
               ),
-
               GestureDetector(
                 onTap: () {
                   _redirecionarParaPagina("/agendamentos");
                 },
                 child: Icon(
-                    Icons.calendar_today_outlined,
-                    size: 35,
-                  ),
+                  Icons.calendar_today_outlined,
+                  size: 35,
+                ),
               ),
-
               GestureDetector(
                 onTap: () {
                   _redirecionarParaPagina("/sobreNos");
                 },
                 child: Icon(
-                    Icons.phone_outlined,
-                    size: 35,
-                  ),
+                  Icons.phone_outlined,
+                  size: 35,
+                ),
               ),
             ],
           ),
         ));
   }
 
-  Future<void> _redirecionarParaPagina(String path) async{
+  Future<void> _redirecionarParaPagina(String path) async {
     await Get.toNamed(path);
     return;
   }
-
 }
