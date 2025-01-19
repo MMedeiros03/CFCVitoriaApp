@@ -69,13 +69,6 @@ class _HomePageState extends State<HomePage> {
               ),
             ],
           )
-
-          // Lottie.asset(
-          //   'assets/animations/Animation - 1736982305071.json',
-          //   width: 250,
-          //   height: 250,
-          //   fit: BoxFit.fill,
-          // )
         ],
       ),
     );

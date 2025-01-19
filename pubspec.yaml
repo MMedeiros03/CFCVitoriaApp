@@ -65,6 +65,7 @@ flutter:
   assets:
     - assets/image/logo_medeiros.jpg
     - assets/image/carrossel1.png
+    - assets/image/escolar.png
     - assets/animations/AboutAnimation.json
     - assets/animations/VisitAnimation.json
     - assets/animations/CalendarAnimation.json
