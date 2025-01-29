@@ -11,6 +11,9 @@ class HeaderWidget extends StatefulWidget {
 class _HeaderWidgetState extends State<HeaderWidget> {
   @override
   Widget build(BuildContext context) {
+
+    bool estaNaHome = Get.currentRoute == "/home";
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 14),
       child: Container(
@@ -34,14 +37,15 @@ class _HeaderWidgetState extends State<HeaderWidget> {
                   ),
                 ),
 
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text("Bem vindo, "),
-                    Text("Aluno!"),
-                  ],
-                ),
+                if(estaNaHome)
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text("Bem vindo, "),
+                      Text("Aluno!"),
+                    ],
+                  ),
 
                 GestureDetector(
                   onTap: () async {
