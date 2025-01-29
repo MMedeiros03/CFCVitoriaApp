@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Getx Rotas e Animações',
-      initialRoute: '/home',
+      initialRoute: '/semInternet',
       getPages: Routes.getRoutes()
     );
   }
