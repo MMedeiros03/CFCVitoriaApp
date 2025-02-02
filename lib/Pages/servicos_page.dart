@@ -56,11 +56,16 @@ class ServicosPageState extends State<ServicosPage> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Container(
+                            SizedBox(
                               width: constraints.maxWidth * 0.4,
-                              decoration: BoxDecoration(
-                                color: Colors.red,
-                                borderRadius: BorderRadius.circular(12),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(20),
+                                child: Image.asset(
+                                  width: constraints.maxWidth,
+                                  height: constraints.maxHeight,
+                                  "assets/image/logo_medeiros.jpg",
+                                  fit: BoxFit.fill,
+                                ),
                               ),
                             ),
                             Container(
