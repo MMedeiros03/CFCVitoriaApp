@@ -11,57 +11,48 @@ import '../Pages/servicos_page.dart';
 import '../Pages/sobre_nos_page.dart';
 
 class Routes {
-
-  static getRoutes(){
+  static getRoutes() {
     return [
-        GetPage(
-            name: '/home',
-            page: () => HomePage(),
-            transition: Transition.rightToLeftWithFade,
-            opaque: false
-        ),
-        GetPage(
-            name: '/servico',
-            page: () => ServicoPage(),
-            transition: Transition.rightToLeftWithFade,
-            opaque: false
-        ),
-        GetPage(
-            name: '/servicos',
-            page: () => ServicosPage(),
-            transition: Transition.rightToLeftWithFade,
-            opaque: false
-        ),
-        GetPage(
-            name: '/sobreNos',
-            page: () => SobreNosPage(),
-            transition: Transition.rightToLeftWithFade,
-            opaque: false
-        ),
-        GetPage(
-            name: '/agendamento',
-            page: () => AgendamentoPage(),
-            transition: Transition.rightToLeftWithFade,
-            opaque: false
-        ),
-        GetPage(
-            name: '/agendamentos',
-            page: () => AgendamentosPage(),
-            transition: Transition.rightToLeftWithFade,
-            opaque: false
-        ),
-        GetPage(
-            name: '/meusDados',
-            page: () => MeusDadosPage(),
-            transition: Transition.rightToLeftWithFade,
-            opaque: false
-        ),
-        GetPage(
-            name: '/semInternet',
-            page: () => SemInternetPage(),
-            transition: Transition.rightToLeftWithFade,
-            opaque: false
-        )
+      GetPage(
+          name: '/home',
+          page: () => HomePage(),
+          transition: Transition.rightToLeftWithFade,
+          opaque: false),
+      GetPage(
+          name: '/servico',
+          page: () => ServicoPage(),
+          transition: Transition.rightToLeftWithFade,
+          opaque: false),
+      GetPage(
+          name: '/servicos',
+          page: () => ServicosPage(),
+          transition: Transition.rightToLeftWithFade,
+          opaque: false),
+      GetPage(
+          name: '/sobreNos',
+          page: () => SobreNosPage(),
+          transition: Transition.rightToLeftWithFade,
+          opaque: false),
+      GetPage(
+          name: '/agendamento',
+          page: () => AgendamentoPage(),
+          transition: Transition.rightToLeftWithFade,
+          opaque: false),
+      GetPage(
+          name: '/agendamentos',
+          page: () => AgendamentosPage(),
+          transition: Transition.rightToLeftWithFade,
+          opaque: false),
+      GetPage(
+          name: '/meusDados',
+          page: () => MeusDadosPage(),
+          transition: Transition.rightToLeftWithFade,
+          opaque: false),
+      GetPage(
+          name: '/semInternet',
+          page: () => SemInternetPage(),
+          transition: Transition.rightToLeftWithFade,
+          opaque: false),
     ];
   }
 }

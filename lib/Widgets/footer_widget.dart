@@ -33,7 +33,7 @@ class _FooterWidgetState extends State<FooterWidget> {
               ),
               GestureDetector(
                 onTap: () {
-                  _redirecionarParaPagina("/sobreNos");
+                  _redirecionarParaPagina("/meusDados");
                 },
                 child: Icon(
                   Icons.person_outlined,

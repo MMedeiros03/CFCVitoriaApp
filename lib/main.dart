@@ -5,7 +5,6 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 
 void main() {
-
   WidgetsFlutterBinding.ensureInitialized();
   Intl.defaultLocale = 'pt_BR';
   initializeDateFormatting('pt_BR', null);
@@ -17,14 +16,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return GetMaterialApp(
-      locale: Locale("pt-BR"),
-      debugShowCheckedModeBanner: false,
-      title: 'Getx Rotas e Animações',
-      initialRoute: '/home',
-      getPages: Routes.getRoutes()
-    );
+        locale: Locale("pt-BR"),
+        debugShowCheckedModeBanner: false,
+        title: 'Getx Rotas e Animações',
+        initialRoute: '/home',
+        getPages: Routes.getRoutes());
   }
 }
-
