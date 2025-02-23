@@ -14,7 +14,7 @@ class _FooterWidgetState extends State<FooterWidget> {
     return Padding(
         padding: const EdgeInsets.all(14),
         child: Container(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
               color: Colors.black12,
               borderRadius: BorderRadius.all(Radius.circular(12))),
           child: Row(
@@ -46,6 +46,7 @@ class _FooterWidgetState extends State<FooterWidget> {
                 },
                 child: Icon(
                   Icons.add_box_outlined,
+                  color: Color(0xFFF0733D),
                   size: 45,
                 ),
               ),

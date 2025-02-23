@@ -78,11 +78,11 @@ class AgendamentoPageState extends State<AgendamentoPage> {
                   cellMargin: const EdgeInsets.all(0),
                   defaultTextStyle: TextStyle(fontSize: 15),
                   selectedDecoration: BoxDecoration(
-                      color: Colors.black,
+                      color: Color(0xFFF0733D),
                       shape: BoxShape.circle
                   ),
                   todayDecoration: BoxDecoration(
-                      color: Colors.black26,
+                      color: Color(0x80F0733D),
                       shape: BoxShape.circle
                   ),
               ),
@@ -125,7 +125,7 @@ class AgendamentoPageState extends State<AgendamentoPage> {
                           });
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: isSelected ? Colors.black54 : Color(0xFFD9D9D9),
+                          backgroundColor: isSelected ? Color(0xFFF0733D) : Color(0x4DF0733D),
                           foregroundColor: Colors.white,
                           padding: EdgeInsets.symmetric(vertical: 10),
                           shape: RoundedRectangleBorder(

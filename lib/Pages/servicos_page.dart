@@ -91,6 +91,10 @@ class ServicosPageState extends State<ServicosPage> {
                                               onPressed: () {
                                                 Get.toNamed("/servico");
                                               },
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: Color(0xFFF0733D),
+                                                foregroundColor: Colors.white,
+                                              ),
                                               child: Text("Saiba mais"))
                                         ],
                                       )

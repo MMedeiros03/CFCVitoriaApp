@@ -37,16 +37,6 @@ class _HeaderWidgetState extends State<HeaderWidget> {
                   ),
                 ),
 
-                if(estaNaHome)
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text("Bem vindo, "),
-                      Text("Aluno!"),
-                    ],
-                  ),
-
                 GestureDetector(
                   onTap: () async {
                     await Get.toNamed("/home");

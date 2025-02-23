@@ -22,6 +22,14 @@ class _HomePageState extends State<HomePage> {
         spacing: 10,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+
+          Row(
+            children: [
+              Icon(Icons.person_outlined, size: 50,),
+              Text("Bem vindo!")
+            ],
+          ),
+
           CarouselSlider(
             options: CarouselOptions(
                 height: alturaTela * 0.2,
@@ -44,31 +52,37 @@ class _HomePageState extends State<HomePage> {
               );
             }).toList(),
           ),
-          GridView.count(
-            crossAxisCount: 2,
-            crossAxisSpacing: 8.0,
-            mainAxisSpacing: 14.0,
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            children: [
-              HomeCardAnimation(
-                title: "Serviços",
-                pathAnimation: 'assets/animations/LearnAnimation.json',
-              ),
-              HomeCardAnimation(
-                title: "Agende sua consulta!",
-                pathAnimation: 'assets/animations/VisitAnimation.json',
-              ),
-              HomeCardAnimation(
-                title: "Agendamentos",
-                pathAnimation: 'assets/animations/CalendarAnimation.json',
-              ),
-              HomeCardAnimation(
-                title: "Sobre nós",
-                pathAnimation: 'assets/animations/AboutAnimation.json',
-              ),
-            ],
-          )
+          SizedBox(
+            width: larguraTela,
+            height: alturaTela * 0.12,
+            child: HomeCardAnimation(
+              title: "Serviços",
+              description: "Serviços",
+              pathAnimation: 'assets/animations/LearnAnimation.json',
+            ),
+          ),
+
+          SizedBox(
+            width: larguraTela,
+            height: alturaTela * 0.12,
+            child: HomeCardAnimation(
+              title: "Agende sua consulta!",
+              description: "Agende sua consulta!",
+              pathAnimation: 'assets/animations/VisitAnimation.json',
+            ),
+          ),
+
+
+          SizedBox(
+            width: larguraTela,
+            height: alturaTela * 0.12,
+            child: HomeCardAnimation(
+              title: "Agendamentos",
+              description: "Agendamentos",
+              pathAnimation: 'assets/animations/CalendarAnimation.json',
+            )
+          ),
+
         ],
       ),
     );
