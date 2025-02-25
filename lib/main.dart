@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
         locale: Locale("pt-BR"),
         debugShowCheckedModeBanner: false,
         title: 'Getx Rotas e Animações',
-        initialRoute: '/home',
+        initialRoute: '/tutorial',
         getPages: Routes.getRoutes());
   }
 }

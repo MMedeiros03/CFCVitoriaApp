@@ -1,5 +1,6 @@
 import 'package:cfc_vitoria_app/Pages/meus_dados_page.dart';
 import 'package:cfc_vitoria_app/Pages/sem_internet_page.dart';
+import 'package:cfc_vitoria_app/Pages/tutorial_page.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:get/get_navigation/src/routes/transitions_type.dart';
 
@@ -51,6 +52,11 @@ class Routes {
       GetPage(
           name: '/semInternet',
           page: () => SemInternetPage(),
+          transition: Transition.rightToLeftWithFade,
+          opaque: false),
+      GetPage(
+          name: '/tutorial',
+          page: () => TutorialPage(),
           transition: Transition.rightToLeftWithFade,
           opaque: false),
     ];

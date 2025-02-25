@@ -1,3 +1,4 @@
+import 'package:cfc_vitoria_app/Widgets/base_text_widget.dart';
 import 'package:flutter/material.dart';
 
 class BaseButton extends StatelessWidget {
@@ -44,13 +45,11 @@ class BaseButton extends StatelessWidget {
                   width: 1.5)
                   : BorderSide.none),
           minimumSize: Size(width ?? double.infinity, heigth ?? 50.0)),
-      child: Text(
-        text,
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          fontSize: fontSize,
-          color: colorFont
-        ),
+      child: BaseText(
+        text: text,
+        alignText: true,
+        size: fontSize!,
+          color: colorFont!
       )
 
     );
