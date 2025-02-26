@@ -1,6 +1,9 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cfc_vitoria_app/Utils/loading.dart';
 import 'package:cfc_vitoria_app/Widgets/base_page_widget.dart';
+import 'package:cfc_vitoria_app/Widgets/base_text_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../Widgets/home_card_animation.dart';
 
 class HomePage extends StatefulWidget {
@@ -12,6 +15,18 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final loadingController = Get.find<LoadingController>();
+      if (loadingController.isLoading.value) {
+        loadingController.hideLoading();
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final larguraTela = MediaQuery.of(context).size.width;
     final alturaTela = MediaQuery.of(context).size.height;
@@ -22,17 +37,35 @@ class _HomePageState extends State<HomePage> {
         spacing: 10,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
           Row(
+            spacing: 5,
             children: [
-              Icon(Icons.person_outlined, size: 50,),
-              Text("Bem vindo!")
+              Icon(
+                Icons.person_outlined,
+                size: 55,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  BaseText(
+                    text: "Bem vindo,",
+                    bold: true,
+                    size: 17,
+                    color: Colors.black,
+                  ),
+                  BaseText(
+                    text: "aluno!",
+                    bold: false,
+                    size: 17,
+                    color: Colors.black,
+                  ),
+                ],
+              )
             ],
           ),
-
           CarouselSlider(
             options: CarouselOptions(
-                height: alturaTela * 0.2,
+                height: alturaTela * 0.24,
                 autoPlay: true,
                 autoPlayInterval: Duration(seconds: 5)),
             items: [1, 2, 3, 4, 5].map((i) {
@@ -61,28 +94,23 @@ class _HomePageState extends State<HomePage> {
               pathAnimation: 'assets/animations/LearnAnimation.json',
             ),
           ),
-
-          SizedBox(
-            width: larguraTela,
-            height: alturaTela * 0.12,
-            child: HomeCardAnimation(
-              title: "Agende sua consulta!",
-              description: "Agende sua consulta!",
-              pathAnimation: 'assets/animations/VisitAnimation.json',
-            ),
-          ),
-
-
           SizedBox(
             width: larguraTela,
             height: alturaTela * 0.12,
             child: HomeCardAnimation(
               title: "Agendamentos",
-              description: "Agendamentos",
+              description: "Agende sua consulta!",
               pathAnimation: 'assets/animations/CalendarAnimation.json',
-            )
+            ),
           ),
-
+          SizedBox(
+              width: larguraTela,
+              height: alturaTela * 0.12,
+              child: HomeCardAnimation(
+                title: "Sobre nós",
+                description: "Sobre nós",
+                pathAnimation: 'assets/animations/AboutAnimation.json',
+              )),
         ],
       ),
     );
