@@ -1,10 +1,11 @@
+import 'package:cfc_vitoria_app/Pages/agendamento_page.dart';
 import 'package:cfc_vitoria_app/Pages/meus_dados_page.dart';
 import 'package:cfc_vitoria_app/Pages/sem_internet_page.dart';
 import 'package:cfc_vitoria_app/Pages/tutorial_page.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:get/get_navigation/src/routes/transitions_type.dart';
 
-import '../Pages/agendamento_page.dart';
+import '../Pages/createAgendamento_page.dart';
 import '../Pages/agendamentos_page.dart';
 import '../Pages/home_page.dart';
 import '../Pages/servico_page.dart';
@@ -35,8 +36,8 @@ class Routes {
           transition: Transition.rightToLeftWithFade,
           opaque: false),
       GetPage(
-          name: '/agendamento',
-          page: () => AgendamentoPage(),
+          name: '/create-agendamento',
+          page: () => CreateAgendamentoPage(),
           transition: Transition.rightToLeftWithFade,
           opaque: false),
       GetPage(
@@ -57,6 +58,11 @@ class Routes {
       GetPage(
           name: '/tutorial',
           page: () => TutorialPage(),
+          transition: Transition.rightToLeftWithFade,
+          opaque: false),
+      GetPage(
+          name: '/agendamento',
+          page: () => AgendamentoPage(),
           transition: Transition.rightToLeftWithFade,
           opaque: false),
     ];

@@ -40,6 +40,8 @@ dependencies:
   carousel_slider: ^5.0.0
   image_picker: ^1.1.2
   cupertino_icons: ^1.0.8
+  shared_preferences: ^2.2.3
+  flutter_secure_storage: ^9.2.2
 
 dev_dependencies:
   flutter_test:
@@ -68,6 +70,7 @@ flutter:
     - assets/image/logo_medeiros.jpg
     - assets/image/carrossel1.png
     - assets/image/escolar.png
+    - assets/image/logo_cfc.jpg
     - assets/animations/AboutAnimation.json
     - assets/animations/VisitAnimation.json
     - assets/animations/CalendarAnimation.json

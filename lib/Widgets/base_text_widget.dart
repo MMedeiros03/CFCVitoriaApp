@@ -6,8 +6,10 @@ class BaseText extends StatelessWidget {
   final Color color;
   final Function? onClick;
   final bool alignText;
+  final bool justifyText;
   final bool overflow;
   final bool bold;
+  final int? maxLines;
 
   const BaseText(
       {super.key,
@@ -16,7 +18,9 @@ class BaseText extends StatelessWidget {
       required this.color,
       this.bold = true,
       this.alignText = false,
+      this.justifyText = false,
       this.overflow = false,
+      this.maxLines,
       this.onClick});
 
   @override
@@ -24,7 +28,12 @@ class BaseText extends StatelessWidget {
     return onClick == null
         ? Text(
             text,
-            textAlign: alignText ? TextAlign.center : TextAlign.start,
+            maxLines: maxLines,
+            textAlign: alignText
+                ? TextAlign.center
+                : justifyText
+                    ? TextAlign.justify
+                    : TextAlign.start,
             style: TextStyle(
                 fontSize: size,
                 fontFamily: "Libre Baskerville",

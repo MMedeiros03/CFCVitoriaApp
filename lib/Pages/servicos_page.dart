@@ -1,5 +1,6 @@
+import 'package:cfc_vitoria_app/Widgets/base_text_widget.dart';
+import 'package:cfc_vitoria_app/Widgets/service_card_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import '../Widgets/base_page_widget.dart';
 
 class ServicosPage extends StatefulWidget {
@@ -10,103 +11,48 @@ class ServicosPage extends StatefulWidget {
 }
 
 class ServicosPageState extends State<ServicosPage> {
-  List<String> items = [
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
-    "10",
-    "11",
-    "12",
-    "13",
-    "14",
-    "15",
-    "16"
-  ];
+  List<String> items = List.generate(16, (index) => (index + 1).toString());
 
   @override
   Widget build(BuildContext context) {
     final alturaTela = MediaQuery.of(context).size.height;
+    final larguraTela = MediaQuery.of(context).size.width;
 
     return BasePage(
-      child: ListView.builder(
-        itemCount: items.length,
-        itemBuilder: (context, index) {
-          return Padding(
-              padding: EdgeInsets.only(bottom: 12, top: 12),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.black12,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                height: alturaTela * 0.2,
-                child: Padding(
-                    padding: EdgeInsets.all(12),
-                    child: LayoutBuilder(builder: (context, constraints) {
-                      return Container(
-                        decoration: BoxDecoration(
-                          color: Colors.transparent,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              width: constraints.maxWidth * 0.4,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(20),
-                                child: Image.asset(
-                                  width: constraints.maxWidth,
-                                  height: constraints.maxHeight,
-                                  "assets/image/logo_medeiros.jpg",
-                                  fit: BoxFit.fill,
-                                ),
-                              ),
-                            ),
-                            Container(
-                                width: constraints.maxWidth * 0.6,
-                                decoration: BoxDecoration(
-                                  color: Colors.transparent,
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Padding(
-                                  padding: EdgeInsets.only(left: 10),
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text("Nome do servico"),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        children: [
-                                          ElevatedButton(
-                                              onPressed: () {
-                                                Get.toNamed("/servico");
-                                              },
-                                              style: ElevatedButton.styleFrom(
-                                                backgroundColor: Color(0xFFF0733D),
-                                                foregroundColor: Colors.white,
-                                              ),
-                                              child: Text("Saiba mais"))
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                )),
-                          ],
-                        ),
-                      );
-                    })),
-              ));
-        },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            height: 20,
+          ),
+          BaseText(
+            text: " ${items.length} Serviços Encontrados",
+            size: 13,
+            color: Colors.black,
+          ),
+          SizedBox(
+            height: 25,
+          ),
+          Expanded(
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: items.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: EdgeInsets.only(bottom: 25),
+                  child: SizedBox(
+                    width: larguraTela,
+                    height: alturaTela * 0.20,
+                    child: ServiceCard(
+                      title: "Lorem Ipsumis simply",
+                      description: "Lorem Ipsumis ",
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

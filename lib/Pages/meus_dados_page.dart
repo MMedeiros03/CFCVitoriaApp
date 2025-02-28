@@ -25,6 +25,7 @@ class MeusDadosPageState extends State<MeusDadosPage> {
       });
     }
   }
+
   int _currentStep = 0;
   final _formKey = GlobalKey<FormState>();
 
@@ -37,118 +38,117 @@ class MeusDadosPageState extends State<MeusDadosPage> {
   @override
   Widget build(BuildContext context) {
     return BasePage(
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            spacing: 30,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        spacing: 30,
+        children: [
+          // Indicador de progresso
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Indicador de progresso
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _buildStepIndicator(0),
-                  _buildStepIndicator(1),
-                ],
-              ),
+              _buildStepIndicator(0),
+              _buildStepIndicator(1),
+            ],
+          ),
 
-              // Formulário com IndexedStack
-              IndexedStack(
-                  index: _currentStep,
-                  children: [
-                    _stepOne(),
-                    _stepTwo(),
-                  ],
-              ),
+          // Formulário com IndexedStack
+          IndexedStack(
+            index: _currentStep,
+            children: [
+              _stepOne(),
+              _stepTwo(),
+            ],
+          ),
 
-              // Botões de navegação
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  if (_currentStep > 0)
-                    ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          _currentStep--;
-                        });
-                      },
-                      child: Text('Voltar'),
-                    ),
-                  ElevatedButton(
-                    onPressed: () {
-                      if (_currentStep == 0) {
-                        if (_formKey.currentState!.validate()) {
-                          setState(() {
-                            _currentStep = 1;
-                          });
-                        }
-                      } else {
-                        // Aqui você pode processar os dados do formulário
-                        print('Nome: ${_nameController.text}');
-                        print('E-mail: ${_emailController.text}');
-                        print('Telefone: ${_phoneController.text}');
-                        print('Imagem: $_imagePath');
+          // Botões de navegação
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              if (_currentStep > 0)
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      _currentStep--;
+                    });
+                  },
+                  child: Text('Voltar'),
+                ),
+              ElevatedButton(
+                onPressed: () {
+                  if (_currentStep == 0) {
+                    if (_formKey.currentState!.validate()) {
+                      setState(() {
+                        _currentStep = 1;
+                      });
+                    }
+                  } else {
+                    // Aqui você pode processar os dados do formulário
+                    print('Nome: ${_nameController.text}');
+                    print('E-mail: ${_emailController.text}');
+                    print('Telefone: ${_phoneController.text}');
+                    print('Imagem: $_imagePath');
 
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Formulário enviado!')),
-                        );
-                      }
-                    },
-                    child: Text(_currentStep == 0 ? 'Próximo' : 'Finalizar'),
-                  ),
-                ],
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Formulário enviado!')),
+                    );
+                  }
+                },
+                child: Text(_currentStep == 0 ? 'Próximo' : 'Finalizar'),
               ),
             ],
           ),
+        ],
+      ),
     );
   }
 
   // Etapa 1: Informações básicas
   Widget _stepOne() {
-
     final alturaTela = MediaQuery.of(context).size.height;
 
     return Form(
       key: _formKey,
       child: Container(
-        height: alturaTela * 0.4,
-        decoration: BoxDecoration(
-          border: Border.all(
-              color: Color(0xFFF0733D),
-              width: 1
+          height: alturaTela * 0.4,
+          decoration: BoxDecoration(
+            border: Border.all(color: Color(0xFFF0733D), width: 1),
+            color: Color(0x4DD9D9D9),
+            borderRadius: BorderRadius.all(Radius.circular(12)),
           ),
-          color: Color(0x4DD9D9D9),
-          borderRadius: BorderRadius.all(Radius.circular(12)),
-        ),
-        child: Padding(
+          child: Padding(
             padding: EdgeInsets.all(12),
             child: Column(
               children: [
                 TextFormField(
                   controller: _nameController,
                   decoration: InputDecoration(labelText: 'Nome'),
-                  validator: (value) => value!.isEmpty ? 'Preencha o nome' : null,
+                  validator: (value) =>
+                      value!.isEmpty ? 'Preencha o nome' : null,
                 ),
                 TextFormField(
                   controller: _emailController,
                   decoration: InputDecoration(labelText: 'E-mail'),
                   keyboardType: TextInputType.emailAddress,
-                  validator: (value) => value!.contains('@') ? null : 'E-mail inválido',
+                  validator: (value) =>
+                      value!.contains('@') ? null : 'E-mail inválido',
                 ),
                 TextFormField(
                   controller: _phoneController,
                   decoration: InputDecoration(labelText: 'Telefone'),
                   keyboardType: TextInputType.phone,
-                  validator: (value) => value!.length >= 10 ? null : 'Telefone inválido',
+                  validator: (value) =>
+                      value!.length >= 10 ? null : 'Telefone inválido',
                 ),
                 TextFormField(
                   controller: _phoneController,
                   decoration: InputDecoration(labelText: 'Telefone'),
                   keyboardType: TextInputType.phone,
-                  validator: (value) => value!.length >= 10 ? null : 'Telefone inválido',
+                  validator: (value) =>
+                      value!.length >= 10 ? null : 'Telefone inválido',
                 ),
               ],
             ),
-        )
-      ),
+          )),
     );
   }
 
@@ -176,7 +176,9 @@ class MeusDadosPageState extends State<MeusDadosPage> {
           ),
         ),
         SizedBox(height: 20),
-        Text(_imagePath == null ? 'Clique para adicionar uma imagem' : 'Imagem selecionada'),
+        Text(_imagePath == null
+            ? 'Clique para adicionar uma imagem'
+            : 'Imagem selecionada'),
       ],
     );
   }
@@ -186,88 +188,88 @@ class MeusDadosPageState extends State<MeusDadosPage> {
       width: 70,
       height: 20,
       decoration: BoxDecoration(
-        color: 	Color(0xFFF0733D),
-        shape: _currentStep == step ? BoxShape.rectangle : BoxShape.circle,
-        borderRadius: _currentStep == step ? BorderRadius.circular(12) : null
-      ),
+          color: Color(0xFFF0733D),
+          shape: _currentStep == step ? BoxShape.rectangle : BoxShape.circle,
+          borderRadius:
+              _currentStep == step ? BorderRadius.circular(12) : null),
     );
   }
 
-  void _showOpcoesBottomSheet() {
-    showModalBottomSheet(
-      context: context,
-      builder: (_) {
-        return Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ListTile(
-                leading: CircleAvatar(
-                  backgroundColor: Colors.grey[200],
-                  child: Center(
-                    child: Icon(
-                      Icons.abc,
-                      color: Colors.grey[500],
-                    ),
-                  ),
-                ),
-                title: Text(
-                  'Galeria',
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-                onTap: () {
-                  Navigator.of(context).pop();
-                  // Buscar imagem da galeria
-                  pick(ImageSource.gallery);
-                },
-              ),
-              ListTile(
-                leading: CircleAvatar(
-                  backgroundColor: Colors.grey[200],
-                  child: Center(
-                    child: Icon(
-                      Icons.abc,
-                      color: Colors.grey[500],
-                    ),
-                  ),
-                ),
-                title: Text(
-                  'Câmera',
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-                onTap: () {
-                  Navigator.of(context).pop();
-                  // Fazer foto da câmera
-                  pick(ImageSource.camera);
-                },
-              ),
-              ListTile(
-                leading: CircleAvatar(
-                  backgroundColor: Colors.grey[200],
-                  child: Center(
-                    child: Icon(
-                      Icons.abc,
-                      color: Colors.grey[500],
-                    ),
-                  ),
-                ),
-                title: Text(
-                  'Remover',
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-                onTap: () {
-                  Navigator.of(context).pop();
-                  // Tornar a foto null
-                  setState(() {
-                    imageFile = null;
-                  });
-                },
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
+  // void _showOpcoesBottomSheet() {
+  //   showModalBottomSheet(
+  //     context: context,
+  //     builder: (_) {
+  //       return Padding(
+  //         padding: const EdgeInsets.all(16),
+  //         child: Column(
+  //           mainAxisSize: MainAxisSize.min,
+  //           children: [
+  //             ListTile(
+  //               leading: CircleAvatar(
+  //                 backgroundColor: Colors.grey[200],
+  //                 child: Center(
+  //                   child: Icon(
+  //                     Icons.abc,
+  //                     color: Colors.grey[500],
+  //                   ),
+  //                 ),
+  //               ),
+  //               title: Text(
+  //                 'Galeria',
+  //                 style: Theme.of(context).textTheme.bodyLarge,
+  //               ),
+  //               onTap: () {
+  //                 Navigator.of(context).pop();
+  //                 // Buscar imagem da galeria
+  //                 pick(ImageSource.gallery);
+  //               },
+  //             ),
+  //             ListTile(
+  //               leading: CircleAvatar(
+  //                 backgroundColor: Colors.grey[200],
+  //                 child: Center(
+  //                   child: Icon(
+  //                     Icons.abc,
+  //                     color: Colors.grey[500],
+  //                   ),
+  //                 ),
+  //               ),
+  //               title: Text(
+  //                 'Câmera',
+  //                 style: Theme.of(context).textTheme.bodyLarge,
+  //               ),
+  //               onTap: () {
+  //                 Navigator.of(context).pop();
+  //                 // Fazer foto da câmera
+  //                 pick(ImageSource.camera);
+  //               },
+  //             ),
+  //             ListTile(
+  //               leading: CircleAvatar(
+  //                 backgroundColor: Colors.grey[200],
+  //                 child: Center(
+  //                   child: Icon(
+  //                     Icons.abc,
+  //                     color: Colors.grey[500],
+  //                   ),
+  //                 ),
+  //               ),
+  //               title: Text(
+  //                 'Remover',
+  //                 style: Theme.of(context).textTheme.bodyLarge,
+  //               ),
+  //               onTap: () {
+  //                 Navigator.of(context).pop();
+  //                 // Tornar a foto null
+  //                 setState(() {
+  //                   imageFile = null;
+  //                 });
+  //               },
+  //             ),
+  //           ],
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 }

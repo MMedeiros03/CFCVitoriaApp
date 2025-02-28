@@ -27,7 +27,7 @@ class _FooterWidgetState extends State<FooterWidget> {
                   _redirecionarParaPagina("/servicos");
                 },
                 child: Icon(
-                  Icons.design_services_outlined,
+                  Icons.book_outlined,
                   size: 35,
                 ),
               ),
@@ -42,7 +42,7 @@ class _FooterWidgetState extends State<FooterWidget> {
               ),
               GestureDetector(
                 onTap: () {
-                  _redirecionarParaPagina("/agendamento");
+                  _redirecionarParaPagina("/create-agendamento");
                 },
                 child: Icon(
                   Icons.add_box_outlined,

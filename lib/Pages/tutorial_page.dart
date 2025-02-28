@@ -1,4 +1,5 @@
 import 'package:cfc_vitoria_app/Utils/loading.dart';
+import 'package:cfc_vitoria_app/Utils/storage.dart';
 import 'package:cfc_vitoria_app/Widgets/base_button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -105,6 +106,8 @@ class TutorialPageState extends State<TutorialPage> {
     final loadingController = Get.find<LoadingController>();
     loadingController.showLoading();
 
+    await StorageService.setVisualizedTutorial(true);
+
     await Future.delayed(Duration(milliseconds: 300));
 
     await Get.offAndToNamed('/home');
@@ -119,7 +122,7 @@ class TutorialPageState extends State<TutorialPage> {
           color: Color(0xFFE8E8E8),
           child: Padding(
             padding: EdgeInsets.only(
-                bottom: alturaTela * 0.06,
+                bottom: alturaTela * 0.03,
                 top: alturaTela * 0.08,
                 left: 20,
                 right: 20),

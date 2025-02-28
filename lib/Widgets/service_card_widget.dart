@@ -1,22 +1,15 @@
 import 'package:cfc_vitoria_app/Widgets/base_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
 
 import 'base_button_widget.dart';
 
-class HomeCardAnimation extends StatelessWidget {
-  const HomeCardAnimation(
-      {super.key,
-      required this.pathAnimation,
-      required this.description,
-      required this.path,
-      required this.title});
+class ServiceCard extends StatelessWidget {
+  const ServiceCard(
+      {super.key, required this.description, required this.title});
 
   final String description;
-  final String pathAnimation;
   final String title;
-  final String path;
 
   @override
   Widget build(BuildContext context) {
@@ -26,20 +19,26 @@ class HomeCardAnimation extends StatelessWidget {
         color: Colors.black12,
       ),
       child: Padding(
-        padding: EdgeInsets.only(right: 8, left: 0, top: 8, bottom: 2),
+        padding: EdgeInsets.only(right: 16, left: 16, top: 16, bottom: 16),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Row(
-              children: [
-                Lottie.asset(
-                  width: 130,
-                  height: 100,
-                  frameRate: FrameRate(90),
-                  pathAnimation,
+            SizedBox(
+              width: 145,
+              height: 145,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: Image.asset(
+                  "assets/image/logo_medeiros.jpg",
                   fit: BoxFit.fill,
                 ),
+              ),
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
                 Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -47,29 +46,32 @@ class HomeCardAnimation extends StatelessWidget {
                     BaseText(
                       size: 16,
                       color: Colors.black,
+                      maxLines: 2,
+                      overflow: true,
                       text: title,
                       bold: true,
                     ),
                     BaseText(
                       size: 10,
+                      maxLines: 3,
+                      overflow: true,
                       color: Colors.black45,
                       text: description,
                     ),
                   ],
                 ),
+                BaseButton(
+                  width: 125,
+                  heigth: 40,
+                  colorFont: Colors.black,
+                  backgroundColor: Color(0xFFF0733D),
+                  text: "Detalhes",
+                  fontSize: 14,
+                  onPressed: () {
+                    Get.toNamed("/servico");
+                  },
+                ),
               ],
-            ),
-            SizedBox(width: 3),
-            BaseButton(
-              width: 110,
-              heigth: 35,
-              colorFont: Colors.black,
-              backgroundColor: Color(0xFFF0733D),
-              text: "Ver",
-              fontSize: 14,
-              onPressed: () {
-                Get.toNamed(path);
-              },
             ),
           ],
         ),

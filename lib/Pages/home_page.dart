@@ -77,9 +77,11 @@ class _HomePageState extends State<HomePage> {
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(8)),
                           color: Colors.black12),
-                      child: Text(
-                        'text $i',
-                        style: TextStyle(fontSize: 16.0),
+                      child: BaseText(
+                        text: 'imagem $i',
+                        size: 16,
+                        bold: false,
+                        color: Colors.black,
                       ));
                 },
               );
@@ -89,6 +91,7 @@ class _HomePageState extends State<HomePage> {
             width: larguraTela,
             height: alturaTela * 0.12,
             child: HomeCardAnimation(
+              path: "/servicos",
               title: "Serviços",
               description: "Serviços",
               pathAnimation: 'assets/animations/LearnAnimation.json',
@@ -98,6 +101,7 @@ class _HomePageState extends State<HomePage> {
             width: larguraTela,
             height: alturaTela * 0.12,
             child: HomeCardAnimation(
+              path: "/agendamentos",
               title: "Agendamentos",
               description: "Agende sua consulta!",
               pathAnimation: 'assets/animations/CalendarAnimation.json',
@@ -107,6 +111,7 @@ class _HomePageState extends State<HomePage> {
               width: larguraTela,
               height: alturaTela * 0.12,
               child: HomeCardAnimation(
+                path: "/sobreNos",
                 title: "Sobre nós",
                 description: "Sobre nós",
                 pathAnimation: 'assets/animations/AboutAnimation.json',

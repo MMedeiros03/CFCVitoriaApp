@@ -40,9 +40,9 @@ class _HeaderWidgetState extends State<HeaderWidget> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: Image.asset(
-                      width: 50,
+                      width: 200,
                       height: 50,
-                      "assets/image/logo_medeiros.jpg",
+                      "assets/image/logo_cfc.jpg",
                       fit: BoxFit.fill,
                     ),
                   ),
