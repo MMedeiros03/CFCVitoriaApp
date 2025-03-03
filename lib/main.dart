@@ -18,12 +18,10 @@ void main() async {
 }
 
 Future<String> setInitPage() async {
-  // if (await StorageService.getVisualizedTutorial()) {
-  //   return "/home";
-  // }
-  // return "/tutorial";
-
-  return "/login";
+  if (await StorageService.getVisualizedTutorial()) {
+    return "/home";
+  }
+  return "/tutorial";
 }
 
 class MyApp extends StatelessWidget {
