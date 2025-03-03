@@ -1,4 +1,5 @@
 import 'package:cfc_vitoria_app/Pages/agendamento_page.dart';
+import 'package:cfc_vitoria_app/Pages/login_page.dart';
 import 'package:cfc_vitoria_app/Pages/meus_dados_page.dart';
 import 'package:cfc_vitoria_app/Pages/sem_internet_page.dart';
 import 'package:cfc_vitoria_app/Pages/tutorial_page.dart';
@@ -63,6 +64,11 @@ class Routes {
       GetPage(
           name: '/agendamento',
           page: () => AgendamentoPage(),
+          transition: Transition.rightToLeftWithFade,
+          opaque: false),
+      GetPage(
+          name: '/login',
+          page: () => LoginPage(),
           transition: Transition.rightToLeftWithFade,
           opaque: false),
     ];

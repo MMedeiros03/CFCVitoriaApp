@@ -18,10 +18,12 @@ void main() async {
 }
 
 Future<String> setInitPage() async {
-  if (await StorageService.getVisualizedTutorial()) {
-    return "/home";
-  }
-  return "/tutorial";
+  // if (await StorageService.getVisualizedTutorial()) {
+  //   return "/home";
+  // }
+  // return "/tutorial";
+
+  return "/login";
 }
 
 class MyApp extends StatelessWidget {
@@ -37,11 +39,15 @@ class MyApp extends StatelessWidget {
       initialRoute: initialRoute,
       getPages: Routes.getRoutes(),
       builder: (context, child) {
-        return Stack(
-          children: [
-            child!,
-            GlobalLoading(),
-          ],
+        return MediaQuery(
+          data: MediaQuery.of(context)
+              .copyWith(textScaler: const TextScaler.linear(1.0)),
+          child: Stack(
+            children: [
+              child!,
+              GlobalLoading(),
+            ],
+          ),
         );
       },
     );
