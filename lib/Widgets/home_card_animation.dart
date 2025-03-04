@@ -11,12 +11,14 @@ class HomeCardAnimation extends StatelessWidget {
       required this.pathAnimation,
       required this.description,
       required this.path,
+      required this.controller,
       required this.title});
 
   final String description;
   final String pathAnimation;
   final String title;
   final String path;
+  final AnimationController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +41,12 @@ class HomeCardAnimation extends StatelessWidget {
                   frameRate: FrameRate(90),
                   pathAnimation,
                   fit: BoxFit.fill,
+                  controller: controller,
+                  onLoaded: (composition) {
+                    controller
+                      ..duration = composition.duration
+                      ..repeat();
+                  },
                 ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.start,

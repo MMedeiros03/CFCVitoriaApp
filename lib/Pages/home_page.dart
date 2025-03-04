@@ -13,10 +13,21 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose(); // Garante que a animação pare ao sair da tela
+  }
+
   @override
   void initState() {
     super.initState();
+
+    _controller = AnimationController(vsync: this);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final loadingController = Get.find<LoadingController>();
@@ -91,6 +102,7 @@ class _HomePageState extends State<HomePage> {
             width: larguraTela,
             height: alturaTela * 0.12,
             child: HomeCardAnimation(
+              controller: _controller,
               path: "/servicos",
               title: "Serviços",
               description: "Serviços",
@@ -101,6 +113,7 @@ class _HomePageState extends State<HomePage> {
             width: larguraTela,
             height: alturaTela * 0.12,
             child: HomeCardAnimation(
+              controller: _controller,
               path: "/agendamentos",
               title: "Agendamentos",
               description: "Agende sua consulta!",
@@ -111,6 +124,7 @@ class _HomePageState extends State<HomePage> {
               width: larguraTela,
               height: alturaTela * 0.12,
               child: HomeCardAnimation(
+                controller: _controller,
                 path: "/sobreNos",
                 title: "Sobre nós",
                 description: "Sobre nós",

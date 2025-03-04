@@ -1,7 +1,7 @@
 import 'dart:io';
 
+import 'package:cfc_vitoria_app/Widgets/base_button_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import '../Widgets/base_page_widget.dart';
 
@@ -28,52 +28,69 @@ class MeusDadosPageState extends State<MeusDadosPage> {
 
   int _currentStep = 0;
   final _formKey = GlobalKey<FormState>();
+  final _formKey2 = GlobalKey<FormState>();
 
   // Controladores para capturar os dados do formulário
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _birthdaydate = TextEditingController();
   String? _imagePath;
 
   @override
   Widget build(BuildContext context) {
+    final larguraTela = MediaQuery.of(context).size.width;
+
     return BasePage(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        spacing: 30,
-        children: [
-          // Indicador de progresso
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _buildStepIndicator(0),
-              _buildStepIndicator(1),
-            ],
-          ),
+      child: SingleChildScrollView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            SizedBox(height: 20),
 
-          // Formulário com IndexedStack
-          IndexedStack(
-            index: _currentStep,
-            children: [
-              _stepOne(),
-              _stepTwo(),
-            ],
-          ),
+            // Indicador de progresso
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _buildStepIndicator(0),
+                _buildStepIndicator(1),
+              ],
+            ),
 
-          // Botões de navegação
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              if (_currentStep > 0)
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      _currentStep--;
-                    });
-                  },
-                  child: Text('Voltar'),
-                ),
-              ElevatedButton(
+            // Formulário com IndexedStack
+            SizedBox(height: 20),
+
+            IndexedStack(
+              index: _currentStep,
+              children: [
+                _stepOne(),
+                _stepTwo(),
+              ],
+            ),
+
+            SizedBox(height: 20),
+
+            if (_currentStep > 0)
+              BaseButton(
+                heigth: 50,
+                width: larguraTela * 0.4,
+                backgroundColor: Color(0xFFF0733D),
+                text: "Salvar",
+                colorFont: Colors.black,
+                onPressed: () {
+                  setState(() {
+                    _currentStep--;
+                  });
+                },
+              ),
+
+            if (_currentStep == 0)
+              BaseButton(
+                heigth: 50,
+                width: larguraTela * 0.4,
+                colorFont: Colors.black,
+                backgroundColor: Color(0xFFF0733D),
                 onPressed: () {
                   if (_currentStep == 0) {
                     if (_formKey.currentState!.validate()) {
@@ -82,106 +99,275 @@ class MeusDadosPageState extends State<MeusDadosPage> {
                       });
                     }
                   } else {
-                    // Aqui você pode processar os dados do formulário
                     print('Nome: ${_nameController.text}');
                     print('E-mail: ${_emailController.text}');
                     print('Telefone: ${_phoneController.text}');
                     print('Imagem: $_imagePath');
-
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Formulário enviado!')),
-                    );
                   }
                 },
-                child: Text(_currentStep == 0 ? 'Próximo' : 'Finalizar'),
+                text: _currentStep == 0 ? 'Próximo' : 'Finalizar',
               ),
-            ],
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _stepOne() {
+    return Form(
+      key: _formKey,
+      child: Column(
+        spacing: 15,
+        children: [
+          TextFormField(
+            controller: _nameController,
+            decoration: InputDecoration(
+              errorStyle: TextStyle(
+                  color: Color(0xFF970C02), fontFamily: "Libre Baskerville"),
+              labelStyle: TextStyle(
+                  color: Colors.black38, fontFamily: "Libre Baskerville"),
+              labelText: 'Nome',
+              prefixIcon: Icon(Icons.person, size: 15),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: Color(0xFFF0733D)),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: Color(0xFFF0733D)),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: Color(0xFFF0733D), width: 2),
+              ),
+            ),
+            validator: (value) => value!.isEmpty ? 'Preencha o nome' : null,
+          ),
+          TextFormField(
+            controller: _phoneController,
+            decoration: InputDecoration(
+              errorStyle: TextStyle(
+                  color: Color(0xFF970C02), fontFamily: "Libre Baskerville"),
+              labelStyle: TextStyle(
+                  color: Colors.black38, fontFamily: "Libre Baskerville"),
+              labelText: 'Telefone',
+              prefixIcon: Icon(Icons.phone, size: 15),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: Color(0xFFF0733D)),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: Color(0xFFF0733D)),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: Color(0xFFF0733D), width: 2),
+              ),
+            ),
+            validator: (value) =>
+                value!.isEmpty ? 'Preencha o número de telefone' : null,
+          ),
+          TextFormField(
+            controller: _emailController,
+            decoration: InputDecoration(
+              errorStyle: TextStyle(
+                  color: Color(0xFF970C02), fontFamily: "Libre Baskerville"),
+              labelStyle: TextStyle(
+                  color: Colors.black38, fontFamily: "Libre Baskerville"),
+              labelText: 'Email',
+              prefixIcon: Icon(Icons.email, size: 15),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: Color(0xFFF0733D)),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: Color(0xFFF0733D)),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: Color(0xFFF0733D), width: 2),
+              ),
+            ),
+            validator: (value) =>
+                value!.isEmpty ? 'Preencha o seu e-mail' : null,
+          ),
+          TextFormField(
+            controller: _birthdaydate,
+            decoration: InputDecoration(
+              errorStyle: TextStyle(
+                  color: const Color(0xFF970C02),
+                  fontFamily: "Libre Baskerville"),
+              labelStyle: TextStyle(
+                  color: Colors.black38, fontFamily: "Libre Baskerville"),
+              labelText: 'Data de Nascimento',
+              prefixIcon: Icon(Icons.calendar_month, size: 15),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: Color(0xFFF0733D)),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: Color(0xFFF0733D)),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: Color(0xFFF0733D), width: 2),
+              ),
+            ),
+            validator: (value) =>
+                value!.isEmpty ? 'Preencha sua data de nascimento' : null,
           ),
         ],
       ),
     );
   }
 
-  // Etapa 1: Informações básicas
-  Widget _stepOne() {
-    final alturaTela = MediaQuery.of(context).size.height;
-
+  Widget _stepTwo() {
     return Form(
-      key: _formKey,
-      child: Container(
-          height: alturaTela * 0.4,
-          decoration: BoxDecoration(
-            border: Border.all(color: Color(0xFFF0733D), width: 1),
-            color: Color(0x4DD9D9D9),
-            borderRadius: BorderRadius.all(Radius.circular(12)),
-          ),
-          child: Padding(
-            padding: EdgeInsets.all(12),
-            child: Column(
-              children: [
-                TextFormField(
-                  controller: _nameController,
-                  decoration: InputDecoration(labelText: 'Nome'),
-                  validator: (value) =>
-                      value!.isEmpty ? 'Preencha o nome' : null,
-                ),
-                TextFormField(
-                  controller: _emailController,
-                  decoration: InputDecoration(labelText: 'E-mail'),
-                  keyboardType: TextInputType.emailAddress,
-                  validator: (value) =>
-                      value!.contains('@') ? null : 'E-mail inválido',
-                ),
-                TextFormField(
-                  controller: _phoneController,
-                  decoration: InputDecoration(labelText: 'Telefone'),
-                  keyboardType: TextInputType.phone,
-                  validator: (value) =>
-                      value!.length >= 10 ? null : 'Telefone inválido',
-                ),
-                TextFormField(
-                  controller: _phoneController,
-                  decoration: InputDecoration(labelText: 'Telefone'),
-                  keyboardType: TextInputType.phone,
-                  validator: (value) =>
-                      value!.length >= 10 ? null : 'Telefone inválido',
-                ),
-              ],
+      key: _formKey2,
+      child: Column(
+        spacing: 15,
+        children: [
+          TextFormField(
+            controller: _nameController,
+            decoration: InputDecoration(
+              errorStyle: TextStyle(
+                  color: Color(0xFF970C02), fontFamily: "Libre Baskerville"),
+              labelStyle: TextStyle(
+                  color: Colors.black38, fontFamily: "Libre Baskerville"),
+              labelText: 'Rua',
+              prefixIcon: Icon(Icons.person, size: 15),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: Color(0xFFF0733D)),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: Color(0xFFF0733D)),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: Color(0xFFF0733D), width: 2),
+              ),
             ),
-          )),
+            validator: (value) => value!.isEmpty ? 'Preencha o nome' : null,
+          ),
+          TextFormField(
+            controller: _phoneController,
+            decoration: InputDecoration(
+              errorStyle: TextStyle(
+                  color: Color(0xFF970C02), fontFamily: "Libre Baskerville"),
+              labelStyle: TextStyle(
+                  color: Colors.black38, fontFamily: "Libre Baskerville"),
+              labelText: 'Numero',
+              prefixIcon: Icon(Icons.phone, size: 15),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: Color(0xFFF0733D)),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: Color(0xFFF0733D)),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: Color(0xFFF0733D), width: 2),
+              ),
+            ),
+            validator: (value) =>
+                value!.isEmpty ? 'Preencha o número de telefone' : null,
+          ),
+          TextFormField(
+            controller: _emailController,
+            decoration: InputDecoration(
+              errorStyle: TextStyle(
+                  color: Color(0xFF970C02), fontFamily: "Libre Baskerville"),
+              labelStyle: TextStyle(
+                  color: Colors.black38, fontFamily: "Libre Baskerville"),
+              labelText: 'Bairro',
+              prefixIcon: Icon(Icons.email, size: 15),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: Color(0xFFF0733D)),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: Color(0xFFF0733D)),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: Color(0xFFF0733D), width: 2),
+              ),
+            ),
+            validator: (value) =>
+                value!.isEmpty ? 'Preencha o seu e-mail' : null,
+          ),
+          TextFormField(
+            controller: _birthdaydate,
+            decoration: InputDecoration(
+              errorStyle: TextStyle(
+                  color: const Color(0xFF970C02),
+                  fontFamily: "Libre Baskerville"),
+              labelStyle: TextStyle(
+                  color: Colors.black38, fontFamily: "Libre Baskerville"),
+              labelText: 'Cidade',
+              prefixIcon: Icon(Icons.calendar_month, size: 15),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: Color(0xFFF0733D)),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: Color(0xFFF0733D)),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: Color(0xFFF0733D), width: 2),
+              ),
+            ),
+            validator: (value) =>
+                value!.isEmpty ? 'Preencha sua data de nascimento' : null,
+          ),
+        ],
+      ),
     );
   }
 
   // Etapa 2: Upload de imagem
-  Widget _stepTwo() {
-    return Column(
-      children: [
-        GestureDetector(
-          onTap: () {
-            // Aqui você pode implementar um picker de imagem
-            setState(() {
-              _imagePath = 'imagem_selecionada.png'; // Simulação
-            });
-          },
-          child: Container(
-            width: 150,
-            height: 150,
-            decoration: BoxDecoration(
-              color: Colors.grey[300],
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: _imagePath == null
-                ? Icon(Icons.add_a_photo, size: 50, color: Colors.grey[700])
-                : Image.asset(_imagePath!, fit: BoxFit.cover),
-          ),
-        ),
-        SizedBox(height: 20),
-        Text(_imagePath == null
-            ? 'Clique para adicionar uma imagem'
-            : 'Imagem selecionada'),
-      ],
-    );
-  }
+  // Widget _stepTwo() {
+  //   return Column(
+  //     children: [
+  //       GestureDetector(
+  //         onTap: () {
+  //           setState(() {
+  //             _imagePath = 'imagem_selecionada.png'; // Simulação
+  //           });
+  //         },
+  //         child: Container(
+  //           width: 150,
+  //           height: 150,
+  //           decoration: BoxDecoration(
+  //             color: Colors.grey[300],
+  //             borderRadius: BorderRadius.circular(10),
+  //           ),
+  //           child: _imagePath == null
+  //               ? Icon(Icons.add_a_photo, size: 50, color: Colors.grey[700])
+  //               : Image.asset(_imagePath!, fit: BoxFit.cover),
+  //         ),
+  //       ),
+  //       SizedBox(height: 20),
+  //       BaseText(
+  //         size: 10,
+  //         color: Colors.black,
+  //         text: _imagePath == null
+  //             ? 'Clique para adicionar uma imagem'
+  //             : 'Imagem selecionada',
+  //       ),
+  //     ],
+  //   );
+  // }
 
   Widget _buildStepIndicator(int step) {
     return Container(
