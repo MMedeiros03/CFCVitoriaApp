@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cfc_vitoria_app/Utils/loading.dart';
+import 'package:cfc_vitoria_app/Widgets/base_button_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_page_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_text_widget.dart';
 import 'package:flutter/material.dart';
@@ -17,10 +18,12 @@ class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
+  final bool usuarioLogado = false;
+
   @override
   void dispose() {
     super.dispose();
-    _controller.dispose(); // Garante que a animação pare ao sair da tela
+    _controller.dispose();
   }
 
   @override
@@ -98,6 +101,68 @@ class _HomePageState extends State<HomePage>
               );
             }).toList(),
           ),
+          if (usuarioLogado)
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              spacing: 10,
+              children: [
+                BaseText(
+                    text: "Próximo Agendamento ",
+                    size: 20,
+                    bold: true,
+                    color: Colors.black),
+                Container(
+                  width: larguraTela,
+                  height: alturaTela * 0.1,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Icon(
+                        Icons.calendar_month_outlined,
+                        size: 50,
+                        color: Color(0xFFF0733D),
+                      ),
+                      SizedBox(width: 8),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            BaseText(
+                              text: "20/10/2025 - 13:30",
+                              size: 20,
+                              color: Colors.black,
+                            ),
+                            SizedBox(height: 4),
+                            BaseText(
+                              text: "Faltam 5 dias para a visita.",
+                              size: 12,
+                              color: Colors.black45,
+                            ),
+                            SizedBox(height: 8),
+                          ],
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.bottomRight,
+                        child: BaseButton(
+                          width: 110,
+                          heigth: 35,
+                          colorFont: Colors.black,
+                          backgroundColor: Color(0xFFF0733D),
+                          text: "Ver",
+                          fontSize: 14,
+                          onPressed: () {},
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
           SizedBox(
             width: larguraTela,
             height: alturaTela * 0.12,
@@ -109,17 +174,18 @@ class _HomePageState extends State<HomePage>
               pathAnimation: 'assets/animations/LearnAnimation.json',
             ),
           ),
-          SizedBox(
-            width: larguraTela,
-            height: alturaTela * 0.12,
-            child: HomeCardAnimation(
-              controller: _controller,
-              path: "/agendamentos",
-              title: "Agendamentos",
-              description: "Agende sua consulta!",
-              pathAnimation: 'assets/animations/CalendarAnimation.json',
+          if (!usuarioLogado)
+            SizedBox(
+              width: larguraTela,
+              height: alturaTela * 0.12,
+              child: HomeCardAnimation(
+                controller: _controller,
+                path: "/agendamentos",
+                title: "Agendamentos",
+                description: "Agende sua consulta!",
+                pathAnimation: 'assets/animations/CalendarAnimation.json',
+              ),
             ),
-          ),
           SizedBox(
               width: larguraTela,
               height: alturaTela * 0.12,
