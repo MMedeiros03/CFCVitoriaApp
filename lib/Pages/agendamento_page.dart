@@ -172,7 +172,7 @@ class AgendamentoPageState extends State<AgendamentoPage> {
                 children: [
                   Expanded(
                     child: BaseButton(
-                      heigth: alturaTela * 0.08,
+                      heigth: alturaTela * 0.06,
                       width: larguraTela * 0.03,
                       colorFont: Colors.black,
                       onPressed: () {},
@@ -182,7 +182,7 @@ class AgendamentoPageState extends State<AgendamentoPage> {
                   ),
                   Expanded(
                     child: BaseButton(
-                      heigth: alturaTela * 0.08,
+                      heigth: alturaTela * 0.06,
                       width: larguraTela * 0.03,
                       colorFont: Colors.black,
                       onPressed: () {},
@@ -192,7 +192,7 @@ class AgendamentoPageState extends State<AgendamentoPage> {
                   ),
                   Expanded(
                     child: BaseButton(
-                      heigth: alturaTela * 0.08,
+                      heigth: alturaTela * 0.06,
                       width: larguraTela * 0.03,
                       colorFont: Colors.black,
                       onPressed: () {},
