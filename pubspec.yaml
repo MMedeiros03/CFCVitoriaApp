@@ -76,6 +76,7 @@ flutter:
     - assets/animations/CalendarAnimation.json
     - assets/animations/LearnAnimation.json
     - assets/animations/AlertAnimation.json
+    - assets/animations/LoadingAnimation.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

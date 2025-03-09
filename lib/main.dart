@@ -1,4 +1,3 @@
-import 'package:cfc_vitoria_app/Utils/loading.dart';
 import 'package:cfc_vitoria_app/Utils/routes.dart';
 import 'package:cfc_vitoria_app/Utils/storage.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +9,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Intl.defaultLocale = 'pt_BR';
   initializeDateFormatting('pt_BR', null);
-  Get.put(LoadingController());
   String initialRoute = await setInitPage();
   runApp(MyApp(
     initialRoute: initialRoute,
@@ -32,7 +30,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       locale: Locale("pt-BR"),
-      debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: true,
       title: 'Getx Rotas e Animações',
       initialRoute: initialRoute,
       getPages: Routes.getRoutes(),
@@ -43,7 +41,6 @@ class MyApp extends StatelessWidget {
           child: Stack(
             children: [
               child!,
-              GlobalLoading(),
             ],
           ),
         );

@@ -1,9 +1,11 @@
 import 'dart:core';
 
+import 'package:cfc_vitoria_app/Pages/loading_page.dart';
 import 'package:cfc_vitoria_app/Widgets/base_button_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_page_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_text_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class CreateAgendamentoPage extends StatefulWidget {
@@ -18,6 +20,8 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
   String? selectedValue;
   String? horarioselectedValue;
   List<String> items = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
+
+  final _formKey = GlobalKey<FormState>();
 
   List<String> horarios = [
     "09:00",
@@ -77,15 +81,41 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
             colorFont: Colors.black,
             backgroundColor: Color(0xFFF0733D),
             onPressed: () {
-              setState(() {
-                _currentStep = _currentStep + 1;
-              });
+              if (_formKey.currentState!.validate()) {
+                if (_currentStep == 2) {
+                  teste();
+                } else {
+                  setState(() {
+                    _currentStep = _currentStep + 1;
+                  });
+                }
+              }
             },
-            text: _currentStep != 3 ? 'Próximo' : 'Finalizar',
+            text: _currentStep != 2 ? 'Próximo' : 'Finalizar',
           ),
         ],
       ),
     );
+  }
+
+  void teste() async {
+    try {
+      Get.dialog(
+        LoadingScreen(),
+        barrierDismissible: false,
+      );
+
+      await Future.delayed(Duration(seconds: 3));
+
+      Get.back();
+
+      Get.snackbar("Sucesso", "Dados carregados com sucesso!",
+          snackPosition: SnackPosition.TOP);
+    } catch (e) {
+      Get.back();
+      Get.snackbar("Erro", "Falha ao carregar os dados!",
+          snackPosition: SnackPosition.TOP);
+    }
   }
 
   Widget _buildStepIndicator(int step) {
@@ -118,47 +148,53 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
                 text: "Selecione o serviço desejado",
                 size: 14,
                 color: Colors.black54),
-            DropdownButtonFormField<String>(
-              decoration: InputDecoration(
-                errorStyle: TextStyle(
-                    color: Color(0xFF970C02), fontFamily: "Libre Baskerville"),
-                labelStyle: TextStyle(
-                    color: Colors.black38, fontFamily: "Libre Baskerville"),
-                prefixIcon: Icon(Icons.book, size: 15),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: Color(0xFFF0733D)),
+            Form(
+              key: _formKey,
+              child: DropdownButtonFormField<String>(
+                decoration: InputDecoration(
+                  errorStyle: TextStyle(
+                      color: Color(0xFF970C02),
+                      fontFamily: "Libre Baskerville"),
+                  labelStyle: TextStyle(
+                      color: Colors.black38, fontFamily: "Libre Baskerville"),
+                  prefixIcon: Icon(Icons.book, size: 15),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: Color(0xFFF0733D)),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: Color(0xFFF0733D)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: Color(0xFFF0733D), width: 2),
+                  ),
                 ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: Color(0xFFF0733D)),
+                validator: (value) =>
+                    value == null ? 'Obrigatório selecionar um serviço.' : null,
+                menuMaxHeight: alturaTela * 0.30,
+                borderRadius: BorderRadius.circular(12),
+                hint: BaseText(
+                  text: 'Selecione uma opção',
+                  size: 12,
+                  color: Colors.black,
                 ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: Color(0xFFF0733D), width: 2),
-                ),
+                isExpanded: true,
+                value: selectedValue,
+                items: items.map((String item) {
+                  return DropdownMenuItem<String>(
+                    value: item,
+                    child: Text(item),
+                  );
+                }).toList(),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    selectedValue = newValue!;
+                  });
+                },
               ),
-              menuMaxHeight: alturaTela * 0.30,
-              borderRadius: BorderRadius.circular(12),
-              hint: BaseText(
-                text: 'Selecione uma opção',
-                size: 12,
-                color: Colors.black,
-              ),
-              isExpanded: true,
-              value: selectedValue,
-              items: items.map((String item) {
-                return DropdownMenuItem<String>(
-                  value: item,
-                  child: Text(item),
-                );
-              }).toList(),
-              onChanged: (String? newValue) {
-                setState(() {
-                  selectedValue = newValue!;
-                });
-              },
-            ),
+            )
           ],
         ),
         SizedBox(
@@ -222,7 +258,9 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
                               BaseButton(
                                 heigth: 30,
                                 width: constraints.maxWidth * 0.25,
-                                onPressed: () {},
+                                onPressed: () {
+                                  Get.toNamed("servico");
+                                },
                                 text: "Ver",
                                 backgroundColor: Color(0xFFF0733D),
                                 colorFont: Colors.black,
@@ -336,7 +374,7 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
             }).toList(),
             onChanged: (String? newValue) {
               setState(() {
-                selectedValue = newValue!;
+                horarioselectedValue = newValue!;
               });
             },
           ),
@@ -408,7 +446,9 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
                             BaseButton(
                               heigth: 30,
                               width: constraints.maxWidth * 0.25,
-                              onPressed: () {},
+                              onPressed: () {
+                                Get.toNamed("servico");
+                              },
                               text: "Ver",
                               backgroundColor: Color(0xFFF0733D),
                               colorFont: Colors.black,

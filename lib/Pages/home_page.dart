@@ -1,5 +1,4 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:cfc_vitoria_app/Utils/loading.dart';
 import 'package:cfc_vitoria_app/Widgets/base_button_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_page_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_text_widget.dart';
@@ -31,13 +30,6 @@ class _HomePageState extends State<HomePage>
     super.initState();
 
     _controller = AnimationController(vsync: this);
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final loadingController = Get.find<LoadingController>();
-      if (loadingController.isLoading.value) {
-        loadingController.hideLoading();
-      }
-    });
   }
 
   @override
@@ -155,7 +147,9 @@ class _HomePageState extends State<HomePage>
                           backgroundColor: Color(0xFFF0733D),
                           text: "Ver",
                           fontSize: 14,
-                          onPressed: () {},
+                          onPressed: () {
+                            Get.toNamed("servico");
+                          },
                         ),
                       )
                     ],

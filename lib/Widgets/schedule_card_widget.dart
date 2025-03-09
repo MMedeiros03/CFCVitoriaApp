@@ -11,6 +11,9 @@ class ScheduleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final larguraTela = MediaQuery.of(context).size.width;
+    final alturaTela = MediaQuery.of(context).size.height;
+
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(16)),
@@ -29,6 +32,7 @@ class ScheduleCard extends StatelessWidget {
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.start,
+              spacing: 5,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 BaseText(
@@ -46,9 +50,6 @@ class ScheduleCard extends StatelessWidget {
                   color: Colors.black38,
                   text: "faltam 5 dias para a visita.",
                 ),
-                SizedBox(
-                  height: 10,
-                ),
                 BaseText(
                   size: 13,
                   maxLines: 3,
@@ -56,6 +57,32 @@ class ScheduleCard extends StatelessWidget {
                   color: Colors.black54,
                   text: "Primeira Habilitação",
                 ),
+                Container(
+                  width: larguraTela * 0.4,
+                  height: alturaTela * 0.035,
+                  decoration: BoxDecoration(
+                      color: const Color(0x4700EF24),
+                      borderRadius: BorderRadius.circular(25)),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    child: Row(
+                      spacing: 6,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Icon(
+                          Icons.circle,
+                          color: const Color.fromARGB(255, 0, 207, 7),
+                        ),
+                        BaseText(
+                            bold: true,
+                            text: "Confirmado",
+                            size: 12,
+                            color: Colors.black)
+                      ],
+                    ),
+                  ),
+                )
               ],
             ),
             Align(

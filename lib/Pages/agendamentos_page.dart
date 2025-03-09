@@ -42,7 +42,7 @@ class AgendamentosPageState extends State<AgendamentosPage> {
                   padding: EdgeInsets.only(bottom: 25),
                   child: SizedBox(
                     width: larguraTela,
-                    height: alturaTela * 0.15,
+                    height: alturaTela * 0.16,
                     child: ScheduleCard(),
                   ),
                 );

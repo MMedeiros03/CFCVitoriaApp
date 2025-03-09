@@ -1,6 +1,7 @@
 import 'package:cfc_vitoria_app/Widgets/base_button_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_text_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../Widgets/base_page_widget.dart';
 
 class AgendamentoPage extends StatefulWidget {
@@ -65,7 +66,7 @@ class AgendamentoPageState extends State<AgendamentoPage> {
             children: [
               BaseText(text: "Seriço", size: 12, color: Colors.black38),
               Container(
-                height: alturaTela * 0.16,
+                height: alturaTela * 0.2,
                 width: larguraTela,
                 decoration: BoxDecoration(
                     color: const Color.fromARGB(70, 226, 226, 226),
@@ -75,6 +76,7 @@ class AgendamentoPageState extends State<AgendamentoPage> {
                   child: LayoutBuilder(
                     builder: (context, constraints) {
                       return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Icon(
@@ -82,22 +84,40 @@ class AgendamentoPageState extends State<AgendamentoPage> {
                             size: 65,
                             color: Color(0xFFF0733D),
                           ),
-                          SizedBox(
-                            width: constraints.maxWidth * 0.5,
-                            child: BaseText(
-                              text: "Primeira Habilitação",
-                              size: 25,
-                              color: Colors.black,
-                            ),
+                          Column(
+                            spacing: 5,
+                            children: [
+                              SizedBox(
+                                width: constraints.maxWidth * 0.5,
+                                child: BaseText(
+                                  text: "Primeira Habilitação",
+                                  size: 25,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              SizedBox(
+                                width: constraints.maxWidth * 0.5,
+                                child: BaseText(
+                                  maxLines: 4,
+                                  overflow: true,
+                                  text:
+                                      "fyacdafdaydadaydafdadawydadaydfadywt dadad adawdawdawdaw dadawdadadawd adawdad awd",
+                                  size: 12,
+                                  color: Colors.black45,
+                                ),
+                              ),
+                            ],
                           ),
                           Column(
                             mainAxisAlignment: MainAxisAlignment.end,
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
                               BaseButton(
-                                heigth: 45,
-                                width: constraints.maxWidth * 0.3,
-                                onPressed: () {},
+                                heigth: 30,
+                                width: constraints.maxWidth * 0.25,
+                                onPressed: () {
+                                  Get.toNamed("servico");
+                                },
                                 text: "Ver",
                                 backgroundColor: Color(0xFFF0733D),
                                 colorFont: Colors.black,

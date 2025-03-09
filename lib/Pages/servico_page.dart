@@ -73,31 +73,227 @@ class ServicoPageState extends State<ServicoPage> {
 
             // Carousel
             CarouselSlider(
-              options: CarouselOptions(
-                height: alturaTela * 0.4,
-                autoPlay: true,
-                autoPlayInterval: Duration(seconds: 5),
-              ),
-              items: [1, 2, 3].map((i) {
-                return Builder(
-                  builder: (BuildContext context) {
-                    return Container(
+                options: CarouselOptions(
+                  height: alturaTela * 0.4,
+                  enableInfiniteScroll: false,
+                  initialPage: 1,
+                  autoPlay: false,
+                ),
+                items: [
+                  Container(
                       width: larguraTela * 0.7,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(25)),
                         color: Colors.black12,
                       ),
-                      child: Center(
-                        child: Text(
-                          'Imagem $i',
-                          style: TextStyle(fontSize: 16.0),
+                      child: Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 8, vertical: 15),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Row(
+                              spacing: 10,
+                              children: [
+                                Icon(
+                                  Icons.schedule_outlined,
+                                  color: Color(0xFFF0733D),
+                                  size: 40,
+                                ),
+                                BaseText(
+                                    text: "Duração : ",
+                                    size: 16,
+                                    color: Colors.black)
+                              ],
+                            ),
+                            Row(
+                              spacing: 10,
+                              children: [
+                                Icon(
+                                  Icons.calendar_month_outlined,
+                                  color: Color(0xFFF0733D),
+                                  size: 40,
+                                ),
+                                BaseText(
+                                    text: "Validade : ",
+                                    size: 16,
+                                    color: Colors.black)
+                              ],
+                            ),
+                            LayoutBuilder(builder: (context, constraints) {
+                              return Row(
+                                spacing: 10,
+                                children: [
+                                  Icon(
+                                    Icons.task_alt_outlined,
+                                    color: Color(0xFFF0733D),
+                                    size: 40,
+                                  ),
+                                  SizedBox(
+                                      width: constraints.maxWidth * 0.8,
+                                      child: BaseText(
+                                          maxLines: 2,
+                                          text: "Reconhecido e homologado",
+                                          size: 16,
+                                          color: Colors.black))
+                                ],
+                              );
+                            }),
+                            LayoutBuilder(builder: (context, constraints) {
+                              return Row(
+                                spacing: 10,
+                                children: [
+                                  Icon(
+                                    Icons.shield_outlined,
+                                    color: Color(0xFFF0733D),
+                                    size: 40,
+                                  ),
+                                  SizedBox(
+                                    width: constraints.maxWidth * 0.8,
+                                    child: BaseText(
+                                        maxLines: 2,
+                                        text: "Certificado integrado ao DETRAN",
+                                        size: 16,
+                                        color: Colors.black),
+                                  )
+                                ],
+                              );
+                            }),
+                          ],
                         ),
+                      )),
+                  Container(
+                      width: larguraTela * 0.7,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(25)),
+                        color: Colors.black12,
                       ),
-                    );
-                  },
-                );
-              }).toList(),
-            ),
+                      child: Column(
+                        children: [],
+                      )),
+                  Container(
+                      width: larguraTela * 0.7,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(25)),
+                        color: Colors.black12,
+                      ),
+                      child: Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 8, vertical: 15),
+                        child: Column(
+                          spacing: 20,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                BaseText(
+                                    text: "Pré Requisitos",
+                                    size: 18,
+                                    color: Colors.black)
+                              ],
+                            ),
+                            LayoutBuilder(builder: (context, constraints) {
+                              return Row(
+                                spacing: 5,
+                                children: [
+                                  Icon(
+                                    Icons.circle,
+                                    size: 5,
+                                  ),
+                                  SizedBox(
+                                      width: constraints.maxWidth * 0.85,
+                                      child: BaseText(
+                                          bold: false,
+                                          text: "Ser maior de 21 anos;",
+                                          size: 12,
+                                          color: Colors.black)),
+                                ],
+                              );
+                            }),
+                            LayoutBuilder(builder: (context, constraints) {
+                              return Row(
+                                spacing: 5,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.circle,
+                                    size: 5,
+                                  ),
+                                  SizedBox(
+                                      width: constraints.maxWidth * 0.85,
+                                      child: BaseText(
+                                          bold: false,
+                                          maxLines: 4,
+                                          text:
+                                              "Possuir CNH (Carteira Nacional de Habilitação) categoria B, C, D ou E;",
+                                          size: 12,
+                                          color: Colors.black)),
+                                ],
+                              );
+                            }),
+                            LayoutBuilder(builder: (context, constraints) {
+                              return Row(
+                                spacing: 5,
+                                children: [
+                                  Icon(
+                                    Icons.circle,
+                                    size: 5,
+                                  ),
+                                  SizedBox(
+                                      width: constraints.maxWidth * 0.85,
+                                      child: BaseText(
+                                          bold: false,
+                                          maxLines: 3,
+                                          text:
+                                              "Não estar cumprindo pena de suspensão do direito de dirigir.",
+                                          size: 12,
+                                          color: Colors.black)),
+                                ],
+                              );
+                            }),
+                            LayoutBuilder(builder: (context, constraints) {
+                              return Row(
+                                spacing: 5,
+                                children: [
+                                  Icon(
+                                    Icons.circle,
+                                    size: 5,
+                                  ),
+                                  SizedBox(
+                                      width: constraints.maxWidth * 0.85,
+                                      child: BaseText(
+                                          bold: false,
+                                          maxLines: 3,
+                                          text:
+                                              "Não ter cometido mais de uma infração gravíssima nos últimos 12 meses;",
+                                          size: 12,
+                                          color: Colors.black)),
+                                ],
+                              );
+                            }),
+                            LayoutBuilder(builder: (context, constraints) {
+                              return Row(
+                                spacing: 5,
+                                children: [
+                                  Icon(
+                                    Icons.circle,
+                                    size: 5,
+                                  ),
+                                  SizedBox(
+                                      width: constraints.maxWidth * 0.85,
+                                      child: BaseText(
+                                          bold: false,
+                                          text:
+                                              "Não ter processo de cassação da CNH em andamento;",
+                                          size: 12,
+                                          color: Colors.black)),
+                                ],
+                              );
+                            })
+                          ],
+                        ),
+                      )),
+                ]),
             SizedBox(height: 20),
           ],
         ),

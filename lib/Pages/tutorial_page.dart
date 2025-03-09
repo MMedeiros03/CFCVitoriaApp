@@ -1,4 +1,4 @@
-import 'package:cfc_vitoria_app/Utils/loading.dart';
+import 'package:cfc_vitoria_app/Pages/loading_page.dart';
 import 'package:cfc_vitoria_app/Utils/storage.dart';
 import 'package:cfc_vitoria_app/Widgets/base_button_widget.dart';
 import 'package:flutter/material.dart';
@@ -103,12 +103,16 @@ class TutorialPageState extends State<TutorialPage> {
   }
 
   _redirectToHome() async {
-    final loadingController = Get.find<LoadingController>();
-    loadingController.showLoading();
+    Get.dialog(
+      LoadingScreen(),
+      barrierDismissible: false,
+    );
 
     await StorageService.setVisualizedTutorial(true);
 
     await Future.delayed(Duration(milliseconds: 300));
+
+    Get.back();
 
     await Get.offAndToNamed('/home');
   }
