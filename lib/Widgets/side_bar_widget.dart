@@ -41,7 +41,7 @@ class SideBarMenuState extends State<SideBarMenu> {
             selected: currentRoute == "/servicos",
           ),
           ItemSideBarMenu(
-            icon: Icons.book_outlined,
+            icon: Icons.calendar_month_outlined,
             title: "Agendamentos",
             path: "/agendamentos",
             onTap: _redirectToRegisters,
