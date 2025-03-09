@@ -21,7 +21,7 @@ class ServiceCard extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.only(right: 16, left: 16, top: 16, bottom: 16),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             SizedBox(
