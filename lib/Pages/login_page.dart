@@ -1,5 +1,8 @@
+import 'package:cfc_vitoria_app/Dto/Request/login_dto.dart';
+import 'package:cfc_vitoria_app/Services/login_service.dart';
 import 'package:cfc_vitoria_app/Widgets/base_button_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
 import '../Widgets/base_text_widget.dart';
@@ -17,6 +20,14 @@ class LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
+
+  Future login() async {
+    LoginService service = LoginService();
+
+    await service.login(LoginDTO(login: "admin", password: "admin"));
+
+    Get.toNamed("/home");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -165,7 +176,7 @@ class LoginPageState extends State<LoginPage> {
                             child: BaseButton(
                               heigth: 50,
                               widget: 20,
-                              onPressed: () {},
+                              onPressed: login,
                               text: "Entrar",
                               fontSize: 14,
                               colorFont: Colors.black,

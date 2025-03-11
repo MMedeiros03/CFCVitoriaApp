@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cfc_vitoria_app/Utils/storage.dart';
 import 'package:cfc_vitoria_app/Widgets/base_button_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_page_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_text_widget.dart';
@@ -17,7 +18,7 @@ class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
-  final bool usuarioLogado = false;
+  late bool usuarioLogado = false;
 
   @override
   void dispose() {
@@ -28,8 +29,16 @@ class _HomePageState extends State<HomePage>
   @override
   void initState() {
     super.initState();
-
     _controller = AnimationController(vsync: this);
+    _inicializar();
+  }
+
+  _inicializar() async {
+    var token = await StorageService.getToken(true);
+
+    setState(() {
+      usuarioLogado = token?.isNotEmpty ?? false;
+    });
   }
 
   @override

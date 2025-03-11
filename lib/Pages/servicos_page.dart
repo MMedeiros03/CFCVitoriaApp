@@ -1,3 +1,4 @@
+import 'package:cfc_vitoria_app/Services/servico_service.dart';
 import 'package:cfc_vitoria_app/Widgets/base_text_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/service_card_widget.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,21 @@ class ServicosPage extends StatefulWidget {
 
 class ServicosPageState extends State<ServicosPage> {
   List<String> items = List.generate(16, (index) => (index + 1).toString());
+
+  @override
+  void initState() {
+    super.initState();
+
+    _inicializar();
+  }
+
+  Future _inicializar() async {
+    var service = ServicoService();
+
+    var servicos = await service.getAll();
+
+    print(servicos);
+  }
 
   @override
   Widget build(BuildContext context) {

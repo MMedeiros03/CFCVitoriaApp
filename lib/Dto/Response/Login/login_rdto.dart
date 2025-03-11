@@ -6,10 +6,10 @@ part 'login_rdto.g.dart';
 
 @JsonSerializable()
 class LoginRDTO {
-  final String login;
-  final String password;
+  final String accessToken;
+  final String tokenType;
 
-  LoginRDTO({required this.login, required this.password});
+  LoginRDTO({required this.accessToken, required this.tokenType});
 
   Map<String, dynamic> toJson() => _$LoginRDTOToJson(this);
 

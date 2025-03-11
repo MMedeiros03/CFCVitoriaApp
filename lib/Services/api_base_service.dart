@@ -7,8 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
 class ApiServiceBase {
-  // String baseUrl = "http://10.0.2.2:5139/api"; // emulador
-  String baseUrl = "https://5975-45-226-217-5.ngrok-free.app/api"; // ngrok
+  String baseUrl = "http://10.0.0.105:5000/api";
   final _timeout = const Duration(seconds: 30);
 
   Future<bool> ping() async {
@@ -75,21 +74,16 @@ class ApiServiceBase {
     }
   }
 
-  Future<Response> get(String endpoint,
-      {Map<String, String>? headers,
-      bool autoriza = false,
-      Duration? timeout}) async {
+  Future<Response> get(String endpoint, {bool autoriza = false}) async {
     try {
       var newHeader = await _montarHeader(autoriza);
-      if (headers != null) {
-        newHeader.addAll(headers);
-      }
+
       var response = await http
           .get(
             Uri.parse('$baseUrl$endpoint'),
             headers: newHeader,
           )
-          .timeout(timeout ?? _timeout);
+          .timeout(_timeout);
       garantirSucesso(response);
       return response;
     } catch (ex) {
