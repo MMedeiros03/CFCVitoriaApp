@@ -1,3 +1,5 @@
+import 'package:cfc_vitoria_app/Dto/Response/Agendamento/agendamento_rdto.dart';
+import 'package:cfc_vitoria_app/Services/agendamento_service.dart';
 import 'package:cfc_vitoria_app/Widgets/base_text_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/schedule_card_widget.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +13,28 @@ class AgendamentosPage extends StatefulWidget {
 }
 
 class AgendamentosPageState extends State<AgendamentosPage> {
-  List<int> items = [1, 2, 3, 4, 5, 6];
+  List<AgendamentoRDTO> agendamentos = [];
+  List<DateTime> horarios = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    _inicializar();
+  }
+
+  Future _inicializar() async {
+    var service = AgendamentoService();
+
+    var agendamentosApi = await service.getAll();
+
+    var horariosApi = await service.getHorariosDisponiveis(DateTime.now());
+
+    setState(() {
+      agendamentos = agendamentosApi;
+      horarios = horariosApi;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +49,7 @@ class AgendamentosPageState extends State<AgendamentosPage> {
             height: 20,
           ),
           BaseText(
-            text: " ${items.length} Agendamentos Encontrados",
+            text: " ${agendamentos.length} Agendamentos Encontrados",
             size: 13,
             color: Colors.black,
           ),
@@ -36,14 +59,19 @@ class AgendamentosPageState extends State<AgendamentosPage> {
           Expanded(
             child: ListView.builder(
               shrinkWrap: true,
-              itemCount: items.length,
+              itemCount: agendamentos.length,
               itemBuilder: (context, index) {
+                AgendamentoRDTO agendamento = agendamentos[index];
+
                 return Padding(
                   padding: EdgeInsets.only(bottom: 25),
                   child: SizedBox(
                     width: larguraTela,
                     height: alturaTela * 0.16,
-                    child: ScheduleCard(),
+                    child: ScheduleCard(
+                      id: agendamento.id,
+                      dataAgendamento: agendamento.dataHoraAgendado,
+                    ),
                   ),
                 );
               },

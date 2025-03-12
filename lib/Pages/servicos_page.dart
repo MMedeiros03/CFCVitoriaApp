@@ -1,3 +1,4 @@
+import 'package:cfc_vitoria_app/Dto/Response/Servico/servico_rdto.dart';
 import 'package:cfc_vitoria_app/Services/servico_service.dart';
 import 'package:cfc_vitoria_app/Widgets/base_text_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/service_card_widget.dart';
@@ -12,7 +13,7 @@ class ServicosPage extends StatefulWidget {
 }
 
 class ServicosPageState extends State<ServicosPage> {
-  List<String> items = List.generate(16, (index) => (index + 1).toString());
+  List<ServicoRDTO> servicos = [];
 
   @override
   void initState() {
@@ -24,9 +25,11 @@ class ServicosPageState extends State<ServicosPage> {
   Future _inicializar() async {
     var service = ServicoService();
 
-    var servicos = await service.getAll();
+    var servicosApi = await service.getAll();
 
-    print(servicos);
+    setState(() {
+      servicos = servicosApi;
+    });
   }
 
   @override
@@ -42,7 +45,7 @@ class ServicosPageState extends State<ServicosPage> {
             height: 20,
           ),
           BaseText(
-            text: " ${items.length} Serviços Encontrados",
+            text: " ${servicos.length} Serviços Encontrados",
             size: 13,
             color: Colors.black,
           ),
@@ -52,16 +55,19 @@ class ServicosPageState extends State<ServicosPage> {
           Expanded(
             child: ListView.builder(
               shrinkWrap: true,
-              itemCount: items.length,
+              itemCount: servicos.length,
               itemBuilder: (context, index) {
+                ServicoRDTO servico = servicos[index];
+
                 return Padding(
                   padding: EdgeInsets.only(bottom: 25),
                   child: SizedBox(
                     width: larguraTela,
                     height: alturaTela * 0.20,
                     child: ServiceCard(
-                      title: "Lorem Ipsumis simply",
-                      description: "Lorem Ipsumis ",
+                      id: servico.id,
+                      title: servico.titulo,
+                      description: servico.descricao,
                     ),
                   ),
                 );

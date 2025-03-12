@@ -1,13 +1,19 @@
 import 'package:cfc_vitoria_app/Widgets/base_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import 'base_button_widget.dart';
 
 class ScheduleCard extends StatelessWidget {
   const ScheduleCard({
     super.key,
+    required this.id,
+    required this.dataAgendamento,
   });
+
+  final DateTime dataAgendamento;
+  final int id;
 
   @override
   Widget build(BuildContext context) {
@@ -36,11 +42,12 @@ class ScheduleCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 BaseText(
-                  size: 18,
+                  size: 17,
                   color: Colors.black,
                   maxLines: 2,
                   overflow: true,
-                  text: "20/10/2025 - 13:30",
+                  text:
+                      DateFormat("dd/MM/yyyy - HH:mm").format(dataAgendamento),
                   bold: true,
                 ),
                 BaseText(

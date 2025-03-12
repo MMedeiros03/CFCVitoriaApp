@@ -6,10 +6,14 @@ import 'base_button_widget.dart';
 
 class ServiceCard extends StatelessWidget {
   const ServiceCard(
-      {super.key, required this.description, required this.title});
+      {super.key,
+      required this.description,
+      required this.title,
+      required this.id});
 
   final String description;
   final String title;
+  final int id;
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +50,7 @@ class ServiceCard extends StatelessWidget {
                           SizedBox(
                             width: constraints.maxWidth * 0.5,
                             child: BaseText(
-                              text: "Primeira Habilitação",
+                              text: title,
                               size: 18,
                               color: Colors.black,
                             ),
@@ -56,8 +60,7 @@ class ServiceCard extends StatelessWidget {
                             child: BaseText(
                               maxLines: 3,
                               overflow: true,
-                              text:
-                                  "fyacdafdaydadaydafdadawydadaydfadywt dadad adawdawdawdaw dadawdadadawd adawdad awd awdadada dadawdawdawd",
+                              text: description,
                               size: 8,
                               color: Colors.black45,
                             ),
