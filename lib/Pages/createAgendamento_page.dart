@@ -1,12 +1,18 @@
 import 'dart:core';
 
+import 'package:cfc_vitoria_app/Dto/Response/Servico/servico_rdto.dart';
 import 'package:cfc_vitoria_app/Pages/loading_page.dart';
+import 'package:cfc_vitoria_app/Services/agendamento_service.dart';
+import 'package:cfc_vitoria_app/Services/servico_service.dart';
 import 'package:cfc_vitoria_app/Widgets/base_button_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_page_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
+
+import '../Dto/Request/Agendamento/agendamento_dto.dart';
 
 class CreateAgendamentoPage extends StatefulWidget {
   const CreateAgendamentoPage({super.key});
@@ -17,36 +23,41 @@ class CreateAgendamentoPage extends StatefulWidget {
 
 class AgendamentoPageState extends State<CreateAgendamentoPage> {
   int _currentStep = 0;
-  String? selectedValue;
-  String? horarioselectedValue;
-  List<String> items = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
+  ServicoRDTO? servicoSelected;
+  DateTime? horarioselectedValue;
+  List<ServicoRDTO> servicos = [];
 
   final _formKey = GlobalKey<FormState>();
 
-  List<String> horarios = [
-    "09:00",
-    "09:30",
-    "10:00",
-    "10:30",
-    "11:00",
-    "11:30",
-    "13:00",
-    "13:30",
-    "14:00",
-    "14:30",
-    "15:00",
-    "15:30",
-    "16:00",
-    "16:30",
-    "17:00",
-    "17:30",
-    "18:00",
-    "18:30",
-  ];
+  List<DateTime> horarios = [];
 
   bool selecionouData = false;
   DateTime dataSelecionada = DateTime.now();
   int? selectedIndex;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _inicializar();
+  }
+
+  Future _inicializar() async {
+    var serviceServico = await ServicoService().getAll();
+
+    setState(() {
+      servicos = serviceServico;
+    });
+  }
+
+  Future _buscaHorariosDisponiveis() async {
+    var agendamentoService =
+        await AgendamentoService().getHorariosDisponiveis(dataSelecionada);
+
+    setState(() {
+      horarios = agendamentoService;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +94,7 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
             onPressed: () {
               if (_formKey.currentState!.validate()) {
                 if (_currentStep == 2) {
-                  teste();
+                  criarAgendamento();
                 } else {
                   setState(() {
                     _currentStep = _currentStep + 1;
@@ -98,14 +109,26 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
     );
   }
 
-  void teste() async {
+  Future criarAgendamento() async {
     try {
       Get.dialog(
         LoadingScreen(),
         barrierDismissible: false,
       );
 
-      await Future.delayed(Duration(seconds: 3));
+      DateTime dataCompleta = DateTime(
+        dataSelecionada.year,
+        dataSelecionada.month,
+        dataSelecionada.day,
+        horarioselectedValue!.hour,
+        horarioselectedValue!.minute,
+      );
+
+      await AgendamentoService().createAgendamento(AgendamentoDTO(
+          alunoId: 1,
+          servicoId: servicoSelected!.id,
+          dataHoraAgendamento: dataCompleta,
+          observacao: ""));
 
       Get.back();
 
@@ -150,7 +173,7 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
                 color: Colors.black54),
             Form(
               key: _formKey,
-              child: DropdownButtonFormField<String>(
+              child: DropdownButtonFormField<ServicoRDTO>(
                 decoration: InputDecoration(
                   errorStyle: TextStyle(
                       color: Color(0xFF970C02),
@@ -181,16 +204,20 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
                   color: Colors.black,
                 ),
                 isExpanded: true,
-                value: selectedValue,
-                items: items.map((String item) {
-                  return DropdownMenuItem<String>(
+                value: servicoSelected,
+                items: servicos.map((ServicoRDTO item) {
+                  return DropdownMenuItem<ServicoRDTO>(
                     value: item,
-                    child: Text(item),
+                    child: BaseText(
+                      text: item.titulo,
+                      size: 13,
+                      color: Colors.black,
+                    ),
                   );
                 }).toList(),
-                onChanged: (String? newValue) {
+                onChanged: (ServicoRDTO? newValue) {
                   setState(() {
-                    selectedValue = newValue!;
+                    servicoSelected = newValue!;
                   });
                 },
               ),
@@ -200,7 +227,7 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
         SizedBox(
           height: 40,
         ),
-        if (selectedValue != null)
+        if (servicoSelected != null)
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -233,7 +260,7 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
                               SizedBox(
                                 width: constraints.maxWidth * 0.5,
                                 child: BaseText(
-                                  text: "Primeira Habilitação",
+                                  text: servicoSelected?.titulo ?? "",
                                   size: 25,
                                   color: Colors.black,
                                 ),
@@ -243,8 +270,7 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
                                 child: BaseText(
                                   maxLines: 4,
                                   overflow: true,
-                                  text:
-                                      "fyacdafdaydadaydafdadawydadaydfadywt dadad adawdawdawdaw dadawdadadawd adawdad awd",
+                                  text: servicoSelected?.descricao ?? "",
                                   size: 12,
                                   color: Colors.black45,
                                 ),
@@ -259,7 +285,8 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
                                 heigth: 30,
                                 width: constraints.maxWidth * 0.25,
                                 onPressed: () {
-                                  Get.toNamed("servico");
+                                  Get.toNamed("servico",
+                                      arguments: servicoSelected!);
                                 },
                                 text: "Ver",
                                 backgroundColor: Color(0xFFF0733D),
@@ -333,7 +360,7 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
           ),
         SizedBox(height: alturaTela * 0.03),
         if (selecionouData)
-          DropdownButtonFormField<String>(
+          DropdownButtonFormField<DateTime>(
             decoration: InputDecoration(
               errorStyle: TextStyle(
                   color: Color(0xFF970C02), fontFamily: "Libre Baskerville"),
@@ -362,17 +389,17 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
             ),
             isExpanded: true,
             value: horarioselectedValue,
-            items: horarios.map((String item) {
-              return DropdownMenuItem<String>(
+            items: horarios.map((DateTime item) {
+              return DropdownMenuItem<DateTime>(
                 value: item,
                 child: BaseText(
-                  text: item,
+                  text: DateFormat("HH:mm").format(item),
                   color: Colors.black,
                   size: 12,
                 ),
               );
             }).toList(),
-            onChanged: (String? newValue) {
+            onChanged: (DateTime? newValue) {
               setState(() {
                 horarioselectedValue = newValue!;
               });
@@ -386,118 +413,125 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
     final alturaTela = MediaQuery.of(context).size.height;
     final larguraTela = MediaQuery.of(context).size.width;
 
-    return Column(
-      spacing: 20,
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          spacing: 20,
-          children: [
-            BaseText(
-                text: "Seriço Selecionado", size: 12, color: Colors.black38),
-            Container(
-              height: alturaTela * 0.2,
-              width: larguraTela,
-              decoration: BoxDecoration(
-                  color: const Color.fromARGB(70, 226, 226, 226),
-                  borderRadius: BorderRadius.circular(25)),
-              child: Padding(
-                padding: EdgeInsets.all(8),
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Icon(
-                          Icons.book_outlined,
-                          size: 65,
-                          color: Color(0xFFF0733D),
-                        ),
-                        Column(
-                          spacing: 5,
-                          children: [
-                            SizedBox(
-                              width: constraints.maxWidth * 0.5,
-                              child: BaseText(
-                                text: "Primeira Habilitação",
-                                size: 25,
-                                color: Colors.black,
+    return horarioselectedValue == null
+        ? SizedBox()
+        : Column(
+            spacing: 20,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                spacing: 20,
+                children: [
+                  BaseText(
+                      text: "Seriço Selecionado",
+                      size: 12,
+                      color: Colors.black38),
+                  Container(
+                    height: alturaTela * 0.2,
+                    width: larguraTela,
+                    decoration: BoxDecoration(
+                        color: const Color.fromARGB(70, 226, 226, 226),
+                        borderRadius: BorderRadius.circular(25)),
+                    child: Padding(
+                      padding: EdgeInsets.all(8),
+                      child: LayoutBuilder(
+                        builder: (context, constraints) {
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Icon(
+                                Icons.book_outlined,
+                                size: 65,
+                                color: Color(0xFFF0733D),
                               ),
-                            ),
-                            SizedBox(
-                              width: constraints.maxWidth * 0.5,
-                              child: BaseText(
-                                maxLines: 4,
-                                overflow: true,
-                                text:
-                                    "fyacdafdaydadaydafdadawydadaydfadywt dadad adawdawdawdaw dadawdadadawd adawdad awd",
-                                size: 12,
-                                color: Colors.black45,
+                              Column(
+                                spacing: 5,
+                                children: [
+                                  SizedBox(
+                                    width: constraints.maxWidth * 0.5,
+                                    child: BaseText(
+                                      text: servicoSelected?.titulo ?? "",
+                                      size: 25,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: constraints.maxWidth * 0.5,
+                                    child: BaseText(
+                                      maxLines: 4,
+                                      overflow: true,
+                                      text: servicoSelected?.descricao ?? "",
+                                      size: 12,
+                                      color: Colors.black45,
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                          ],
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            BaseButton(
-                              heigth: 30,
-                              width: constraints.maxWidth * 0.25,
-                              onPressed: () {
-                                Get.toNamed("servico");
-                              },
-                              text: "Ver",
-                              backgroundColor: Color(0xFFF0733D),
-                              colorFont: Colors.black,
-                            )
-                          ],
-                        )
-                      ],
-                    );
-                  },
-                ),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  BaseButton(
+                                    heigth: 30,
+                                    width: constraints.maxWidth * 0.25,
+                                    onPressed: () {
+                                      Get.toNamed("servico",
+                                          arguments: servicoSelected!);
+                                    },
+                                    text: "Ver",
+                                    backgroundColor: Color(0xFFF0733D),
+                                    colorFont: Colors.black,
+                                  )
+                                ],
+                              )
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                  )
+                ],
               ),
-            )
-          ],
-        ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          spacing: 15,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            BaseText(
-                text: "Data/Hora Agendada", size: 12, color: Colors.black38),
-            Column(
-              spacing: 15,
-              children: [
-                Row(
-                  children: [
-                    BaseText(
-                      text: "20/10/2025 - 13:30",
-                      size: 25,
-                      color: Colors.black,
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    BaseText(
-                      text: "faltam 5 dias para a visita.",
-                      bold: false,
-                      size: 15,
-                      color: Colors.black38,
-                    ),
-                  ],
-                ),
-              ],
-            )
-          ],
-        ),
-      ],
-    );
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                spacing: 15,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  BaseText(
+                      text: "Data/Hora Agendada",
+                      size: 12,
+                      color: Colors.black38),
+                  Column(
+                    spacing: 15,
+                    children: [
+                      Row(
+                        children: [
+                          BaseText(
+                            text:
+                                "${DateFormat("dd/MM/yyyy").format(dataSelecionada)} - ${DateFormat("HH:mm").format(horarioselectedValue!)} ",
+                            size: 25,
+                            color: Colors.black,
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          BaseText(
+                            text: "faltam 5 dias para a visita.",
+                            bold: false,
+                            size: 15,
+                            color: Colors.black38,
+                          ),
+                        ],
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ],
+          );
   }
 
   _diaSelecionado(DateTime diaSelecinado, DateTime diaFocado) {
@@ -505,5 +539,7 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
       selecionouData = true;
       dataSelecionada = diaSelecinado;
     });
+
+    _buscaHorariosDisponiveis();
   }
 }

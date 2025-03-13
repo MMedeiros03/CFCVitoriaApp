@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
 class ApiServiceBase {
-  String baseUrl = "http://10.0.0.105:5000/api";
+  String baseUrl = "http://10.0.0.103:5000/api";
   final _timeout = const Duration(seconds: 30);
 
   Future<bool> ping() async {

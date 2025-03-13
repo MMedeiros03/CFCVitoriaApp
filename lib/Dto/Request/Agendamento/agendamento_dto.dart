@@ -8,13 +8,13 @@ part 'agendamento_dto.g.dart';
 class AgendamentoDTO {
   int alunoId;
   int servicoId;
-  DateTime dataHoraAgendado;
+  DateTime dataHoraAgendamento;
   String observacao;
 
   AgendamentoDTO({
     required this.alunoId,
     required this.servicoId,
-    required this.dataHoraAgendado,
+    required this.dataHoraAgendamento,
     required this.observacao,
   });
 

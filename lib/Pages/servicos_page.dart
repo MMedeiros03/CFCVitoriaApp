@@ -65,9 +65,7 @@ class ServicosPageState extends State<ServicosPage> {
                     width: larguraTela,
                     height: alturaTela * 0.20,
                     child: ServiceCard(
-                      id: servico.id,
-                      title: servico.titulo,
-                      description: servico.descricao,
+                      servico: servico,
                     ),
                   ),
                 );

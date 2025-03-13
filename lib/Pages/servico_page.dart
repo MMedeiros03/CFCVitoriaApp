@@ -1,7 +1,9 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cfc_vitoria_app/Dto/Response/Servico/servico_rdto.dart';
 import 'package:cfc_vitoria_app/Widgets/base_button_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_text_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../Widgets/base_page_widget.dart';
 
 class ServicoPage extends StatefulWidget {
@@ -12,6 +14,8 @@ class ServicoPage extends StatefulWidget {
 }
 
 class ServicoPageState extends State<ServicoPage> {
+  final ServicoRDTO servico = Get.arguments as ServicoRDTO;
+
   @override
   Widget build(BuildContext context) {
     final larguraTela = MediaQuery.of(context).size.width;
@@ -36,7 +40,7 @@ class ServicoPageState extends State<ServicoPage> {
 
             // Título
             BaseText(
-              text: "MOVIMENTAÇÃO DE CARGAS PERIGOSAS - MOPP",
+              text: servico.titulo,
               size: 15,
               bold: true,
               alignText: true,
@@ -46,8 +50,7 @@ class ServicoPageState extends State<ServicoPage> {
 
             // Descrição
             BaseText(
-              text:
-                  "O curso de Transporte de Cargas Indivisíveis capacita motoristas para transportar cargas de grandes dimensões e pesos que não podem ser divididas, como máquinas industriais, transformadores e estruturas metálicas. O curso inclui conhecimentos sobre legislação, segurança e técnicas específicas e movimentação de cargas.",
+              text: servico.descricao,
               alignText: false,
               justifyText: true,
               size: 13,
@@ -101,7 +104,8 @@ class ServicoPageState extends State<ServicoPage> {
                                   size: 40,
                                 ),
                                 BaseText(
-                                    text: "Duração : ",
+                                    text:
+                                        "Duração : ${servico.anosValidade} horas",
                                     size: 16,
                                     color: Colors.black)
                               ],
@@ -115,7 +119,8 @@ class ServicoPageState extends State<ServicoPage> {
                                   size: 40,
                                 ),
                                 BaseText(
-                                    text: "Validade : ",
+                                    text:
+                                        "Validade : ${servico.anosValidade} anos",
                                     size: 16,
                                     color: Colors.black)
                               ],

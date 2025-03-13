@@ -1,3 +1,4 @@
+import 'package:cfc_vitoria_app/Dto/Response/Servico/servico_rdto.dart';
 import 'package:cfc_vitoria_app/Widgets/base_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -5,15 +6,12 @@ import 'package:get/get.dart';
 import 'base_button_widget.dart';
 
 class ServiceCard extends StatelessWidget {
-  const ServiceCard(
-      {super.key,
-      required this.description,
-      required this.title,
-      required this.id});
+  const ServiceCard({
+    super.key,
+    required this.servico,
+  });
 
-  final String description;
-  final String title;
-  final int id;
+  final ServicoRDTO servico;
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +48,7 @@ class ServiceCard extends StatelessWidget {
                           SizedBox(
                             width: constraints.maxWidth * 0.5,
                             child: BaseText(
-                              text: title,
+                              text: servico.titulo,
                               size: 18,
                               color: Colors.black,
                             ),
@@ -60,7 +58,7 @@ class ServiceCard extends StatelessWidget {
                             child: BaseText(
                               maxLines: 3,
                               overflow: true,
-                              text: description,
+                              text: servico.descricao,
                               size: 8,
                               color: Colors.black45,
                             ),
@@ -75,7 +73,7 @@ class ServiceCard extends StatelessWidget {
                         text: "Detalhes",
                         fontSize: 14,
                         onPressed: () {
-                          Get.toNamed("/servico");
+                          Get.toNamed("/servico", arguments: servico);
                         },
                       ),
                     ],
