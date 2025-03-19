@@ -1,8 +1,10 @@
 import 'package:cfc_vitoria_app/Dto/Response/Agendamento/agendamento_rdto.dart';
 import 'package:cfc_vitoria_app/Services/agendamento_service.dart';
+import 'package:cfc_vitoria_app/Utils/utils.dart';
 import 'package:cfc_vitoria_app/Widgets/base_text_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/schedule_card_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../Widgets/base_page_widget.dart';
 
 class AgendamentosPage extends StatefulWidget {
@@ -14,7 +16,7 @@ class AgendamentosPage extends StatefulWidget {
 
 class AgendamentosPageState extends State<AgendamentosPage> {
   List<AgendamentoRDTO> agendamentos = [];
-  List<DateTime> horarios = [];
+  bool carregando = true;
 
   @override
   void initState() {
@@ -24,16 +26,29 @@ class AgendamentosPageState extends State<AgendamentosPage> {
   }
 
   Future _inicializar() async {
+    var tokenValido = await Utils.validaToken();
+
+    if (!tokenValido) {
+      Get.toNamed("/login",
+          arguments:
+              "Você precisa fazer o login para visualizar seus agendamentos");
+    }
+
     var service = AgendamentoService();
 
-    var agendamentosApi = await service.getAll();
+    try {
+      var agendamentosApi = await service.getAll();
 
-    var horariosApi = await service.getHorariosDisponiveis(DateTime.now());
-
-    setState(() {
-      agendamentos = agendamentosApi;
-      horarios = horariosApi;
-    });
+      setState(() {
+        agendamentos = agendamentosApi;
+        carregando = false;
+      });
+    } catch (ex) {
+      setState(() {
+        agendamentos = [];
+        carregando = false;
+      });
+    }
   }
 
   @override
@@ -42,43 +57,48 @@ class AgendamentosPageState extends State<AgendamentosPage> {
     final larguraTela = MediaQuery.of(context).size.width;
 
     return BasePage(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            height: 20,
-          ),
-          BaseText(
-            text: " ${agendamentos.length} Agendamentos Encontrados",
-            size: 13,
-            color: Colors.black,
-          ),
-          SizedBox(
-            height: 25,
-          ),
-          Expanded(
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: agendamentos.length,
-              itemBuilder: (context, index) {
-                AgendamentoRDTO agendamento = agendamentos[index];
+      child: carregando
+          ? Center(
+              child: CircularProgressIndicator(
+                color: Colors.black,
+              ),
+            )
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 20,
+                ),
+                BaseText(
+                  text: " ${agendamentos.length} Agendamentos Encontrados",
+                  size: 13,
+                  color: Colors.black,
+                ),
+                SizedBox(
+                  height: 25,
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: agendamentos.length,
+                    itemBuilder: (context, index) {
+                      AgendamentoRDTO agendamento = agendamentos[index];
 
-                return Padding(
-                  padding: EdgeInsets.only(bottom: 25),
-                  child: SizedBox(
-                    width: larguraTela,
-                    height: alturaTela * 0.16,
-                    child: ScheduleCard(
-                      id: agendamento.id,
-                      dataAgendamento: agendamento.dataHoraAgendado,
-                    ),
+                      return Padding(
+                        padding: EdgeInsets.only(bottom: 25),
+                        child: SizedBox(
+                          width: larguraTela,
+                          height: alturaTela * 0.16,
+                          child: ScheduleCard(
+                            agendamento: agendamento,
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                );
-              },
+                ),
+              ],
             ),
-          ),
-        ],
-      ),
     );
   }
 }

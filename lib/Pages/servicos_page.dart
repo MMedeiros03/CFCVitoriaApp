@@ -14,6 +14,7 @@ class ServicosPage extends StatefulWidget {
 
 class ServicosPageState extends State<ServicosPage> {
   List<ServicoRDTO> servicos = [];
+  bool carregando = true;
 
   @override
   void initState() {
@@ -23,13 +24,21 @@ class ServicosPageState extends State<ServicosPage> {
   }
 
   Future _inicializar() async {
-    var service = ServicoService();
+    try {
+      var service = ServicoService();
 
-    var servicosApi = await service.getAll();
+      var servicosApi = await service.getAll();
 
-    setState(() {
-      servicos = servicosApi;
-    });
+      setState(() {
+        servicos = servicosApi;
+        carregando = false;
+      });
+    } catch (ex) {
+      setState(() {
+        servicos = [];
+        carregando = false;
+      });
+    }
   }
 
   @override
@@ -38,42 +47,48 @@ class ServicosPageState extends State<ServicosPage> {
     final larguraTela = MediaQuery.of(context).size.width;
 
     return BasePage(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            height: 20,
-          ),
-          BaseText(
-            text: " ${servicos.length} Serviços Encontrados",
-            size: 13,
-            color: Colors.black,
-          ),
-          SizedBox(
-            height: 25,
-          ),
-          Expanded(
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: servicos.length,
-              itemBuilder: (context, index) {
-                ServicoRDTO servico = servicos[index];
+      child: carregando
+          ? Center(
+              child: CircularProgressIndicator(
+                color: Colors.black,
+              ),
+            )
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 20,
+                ),
+                BaseText(
+                  text: " ${servicos.length} Serviços Encontrados",
+                  size: 13,
+                  color: Colors.black,
+                ),
+                SizedBox(
+                  height: 25,
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: servicos.length,
+                    itemBuilder: (context, index) {
+                      ServicoRDTO servico = servicos[index];
 
-                return Padding(
-                  padding: EdgeInsets.only(bottom: 25),
-                  child: SizedBox(
-                    width: larguraTela,
-                    height: alturaTela * 0.20,
-                    child: ServiceCard(
-                      servico: servico,
-                    ),
+                      return Padding(
+                        padding: EdgeInsets.only(bottom: 25),
+                        child: SizedBox(
+                          width: larguraTela,
+                          height: alturaTela * 0.20,
+                          child: ServiceCard(
+                            servico: servico,
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                );
-              },
+                ),
+              ],
             ),
-          ),
-        ],
-      ),
     );
   }
 }

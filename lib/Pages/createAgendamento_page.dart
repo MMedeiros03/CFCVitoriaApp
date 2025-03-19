@@ -4,8 +4,10 @@ import 'package:cfc_vitoria_app/Dto/Response/Servico/servico_rdto.dart';
 import 'package:cfc_vitoria_app/Pages/loading_page.dart';
 import 'package:cfc_vitoria_app/Services/agendamento_service.dart';
 import 'package:cfc_vitoria_app/Services/servico_service.dart';
+import 'package:cfc_vitoria_app/Utils/utils.dart';
 import 'package:cfc_vitoria_app/Widgets/base_button_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_page_widget.dart';
+import 'package:cfc_vitoria_app/Widgets/base_snackbar_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -22,11 +24,14 @@ class CreateAgendamentoPage extends StatefulWidget {
 }
 
 class AgendamentoPageState extends State<CreateAgendamentoPage> {
+  final ServicoRDTO? servico = Get.arguments as ServicoRDTO?;
+
   int _currentStep = 0;
   ServicoRDTO? servicoSelected;
   DateTime? horarioselectedValue;
   List<ServicoRDTO> servicos = [];
-
+  bool carregando = true;
+  bool carregandoHorarios = true;
   final _formKey = GlobalKey<FormState>();
 
   List<DateTime> horarios = [];
@@ -43,19 +48,45 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
   }
 
   Future _inicializar() async {
+    var tokenValido = await Utils.validaToken();
+
+    if (!tokenValido) {
+      Get.toNamed("/login",
+          arguments: "Você precisa fazer o login para criar um agendamento!");
+    }
+
     var serviceServico = await ServicoService().getAll();
 
     setState(() {
+      carregando = false;
       servicos = serviceServico;
     });
+
+    if (servico != null) {
+      var servicoSelecionadoDetalhes =
+          serviceServico.where((x) => x.id == servico?.id).firstOrNull;
+
+      if (servicoSelecionadoDetalhes != null) {
+        setState(() {
+          servicoSelected = servicoSelecionadoDetalhes;
+        });
+      }
+    }
   }
 
   Future _buscaHorariosDisponiveis() async {
+    setState(() {
+      horarios = [];
+      horarioselectedValue = null;
+      carregandoHorarios = true;
+    });
+
     var agendamentoService =
         await AgendamentoService().getHorariosDisponiveis(dataSelecionada);
 
     setState(() {
       horarios = agendamentoService;
+      carregandoHorarios = false;
     });
   }
 
@@ -132,12 +163,15 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
 
       Get.back();
 
-      Get.snackbar("Sucesso", "Dados carregados com sucesso!",
-          snackPosition: SnackPosition.TOP);
+      BaseSnackbar.exibirNotificacao(
+          "Sucesso", "Agendamento criado com sucesso!", true);
+
+      Get.offAndToNamed("/agendamentos");
     } catch (e) {
       Get.back();
-      Get.snackbar("Erro", "Falha ao carregar os dados!",
-          snackPosition: SnackPosition.TOP);
+
+      BaseSnackbar.exibirNotificacao(
+          "Erro", "Falha ao criar agendamento!", false);
     }
   }
 
@@ -199,7 +233,7 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
                 menuMaxHeight: alturaTela * 0.30,
                 borderRadius: BorderRadius.circular(12),
                 hint: BaseText(
-                  text: 'Selecione uma opção',
+                  text: carregando ? "Buscando..." : "Selecione uma opção",
                   size: 12,
                   color: Colors.black,
                 ),
@@ -383,7 +417,7 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
             menuMaxHeight: alturaTela * 0.30,
             borderRadius: BorderRadius.circular(12),
             hint: BaseText(
-              text: 'Selecione uma opção',
+              text: carregandoHorarios ? "Buscando..." : 'Selecione uma opção',
               size: 12,
               color: Colors.black,
             ),
@@ -519,7 +553,7 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
                       Row(
                         children: [
                           BaseText(
-                            text: "faltam 5 dias para a visita.",
+                            text: _calculaDiasParaAgendamento(),
                             bold: false,
                             size: 15,
                             color: Colors.black38,
@@ -532,6 +566,14 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
               ),
             ],
           );
+  }
+
+  String _calculaDiasParaAgendamento() {
+    final hoje = DateTime.now();
+    final diasDiferenca = dataSelecionada.difference(hoje).inDays;
+    return diasDiferenca > 0
+        ? "Faltam $diasDiferenca dias para a visita!"
+        : "Sua visita é hoje!";
   }
 
   _diaSelecionado(DateTime diaSelecinado, DateTime diaFocado) {

@@ -8,20 +8,18 @@ part of 'agendamento_rdto.dart';
 
 AgendamentoRDTO _$AgendamentoRDTOFromJson(Map<String, dynamic> json) =>
     AgendamentoRDTO(
-      id: (json['id'] as num).toInt(),
-      alunoId: (json['alunoId'] as num).toInt(),
-      servicoId: (json['servicoId'] as num).toInt(),
-      cancelado: json['cancelado'] as bool,
       dataHoraAgendado: DateTime.parse(json['dataHoraAgendado'] as String),
+      contagemDias: json['contagemDias'] as String,
+      situacaoAgendamento: json['situacaoAgendamento'] as String,
       observacao: json['observacao'] as String,
+      servico: ServicoRDTO.fromJson(json['servico'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$AgendamentoRDTOToJson(AgendamentoRDTO instance) =>
     <String, dynamic>{
-      'alunoId': instance.alunoId,
-      'id': instance.id,
-      'servicoId': instance.servicoId,
-      'cancelado': instance.cancelado,
       'dataHoraAgendado': instance.dataHoraAgendado.toIso8601String(),
+      'contagemDias': instance.contagemDias,
+      'situacaoAgendamento': instance.situacaoAgendamento,
       'observacao': instance.observacao,
+      'servico': instance.servico,
     };

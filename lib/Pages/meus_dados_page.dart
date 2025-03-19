@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:cfc_vitoria_app/Utils/utils.dart';
 import 'package:cfc_vitoria_app/Widgets/base_button_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import '../Widgets/base_page_widget.dart';
 
@@ -36,6 +38,22 @@ class MeusDadosPageState extends State<MeusDadosPage> {
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _birthdaydate = TextEditingController();
   String? _imagePath;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _inicializar();
+  }
+
+  Future _inicializar() async {
+    var tokenValido = await Utils.validaToken();
+
+    if (!tokenValido) {
+      Get.toNamed("/login",
+          arguments: "Você precisa fazer o login para visualizar seus dados");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

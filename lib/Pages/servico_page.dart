@@ -68,7 +68,9 @@ class ServicoPageState extends State<ServicoPage> {
                 fontSize: 13,
                 backgroundColor: Color(0xFFF0733D),
                 colorFont: Colors.black,
-                onPressed: () {},
+                onPressed: () {
+                  Get.toNamed("/create-agendamento", arguments: servico);
+                },
                 text: "Tenho interesse",
               ),
             ),

@@ -1,3 +1,4 @@
+import 'package:cfc_vitoria_app/Dto/Response/Agendamento/agendamento_rdto.dart';
 import 'package:cfc_vitoria_app/Widgets/base_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,12 +9,10 @@ import 'base_button_widget.dart';
 class ScheduleCard extends StatelessWidget {
   const ScheduleCard({
     super.key,
-    required this.id,
-    required this.dataAgendamento,
+    required this.agendamento,
   });
 
-  final DateTime dataAgendamento;
-  final int id;
+  final AgendamentoRDTO agendamento;
 
   @override
   Widget build(BuildContext context) {
@@ -46,8 +45,8 @@ class ScheduleCard extends StatelessWidget {
                   color: Colors.black,
                   maxLines: 2,
                   overflow: true,
-                  text:
-                      DateFormat("dd/MM/yyyy - HH:mm").format(dataAgendamento),
+                  text: DateFormat("dd/MM/yyyy - HH:mm")
+                      .format(agendamento.dataHoraAgendado),
                   bold: true,
                 ),
                 BaseText(
@@ -102,7 +101,7 @@ class ScheduleCard extends StatelessWidget {
                 text: "Detalhes",
                 fontSize: 14,
                 onPressed: () {
-                  Get.toNamed("/agendamento");
+                  Get.toNamed("/agendamento", arguments: agendamento);
                 },
               ),
             )

@@ -1,5 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:cfc_vitoria_app/Utils/storage.dart';
+import 'package:cfc_vitoria_app/Utils/utils.dart';
 import 'package:cfc_vitoria_app/Widgets/base_button_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_page_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_text_widget.dart';
@@ -22,8 +22,8 @@ class _HomePageState extends State<HomePage>
 
   @override
   void dispose() {
-    super.dispose();
     _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -34,10 +34,10 @@ class _HomePageState extends State<HomePage>
   }
 
   _inicializar() async {
-    var token = await StorageService.getToken(true);
+    var tokenValido = await Utils.validaToken();
 
     setState(() {
-      usuarioLogado = token?.isNotEmpty ?? false;
+      usuarioLogado = tokenValido;
     });
   }
 

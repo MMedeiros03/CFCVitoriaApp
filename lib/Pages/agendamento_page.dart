@@ -1,7 +1,9 @@
+import 'package:cfc_vitoria_app/Dto/Response/Agendamento/agendamento_rdto.dart';
 import 'package:cfc_vitoria_app/Widgets/base_button_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import '../Widgets/base_page_widget.dart';
 
 class AgendamentoPage extends StatefulWidget {
@@ -12,6 +14,8 @@ class AgendamentoPage extends StatefulWidget {
 }
 
 class AgendamentoPageState extends State<AgendamentoPage> {
+  final AgendamentoRDTO agendamento = Get.arguments as AgendamentoRDTO;
+
   @override
   Widget build(BuildContext context) {
     final larguraTela = MediaQuery.of(context).size.width;
@@ -48,7 +52,7 @@ class AgendamentoPageState extends State<AgendamentoPage> {
                           ),
                           BaseText(
                               bold: true,
-                              text: "Confirmado",
+                              text: agendamento.situacaoAgendamento,
                               size: 13,
                               color: Colors.black)
                         ],
@@ -90,7 +94,7 @@ class AgendamentoPageState extends State<AgendamentoPage> {
                               SizedBox(
                                 width: constraints.maxWidth * 0.5,
                                 child: BaseText(
-                                  text: "Primeira Habilitação",
+                                  text: agendamento.servico.titulo,
                                   size: 25,
                                   color: Colors.black,
                                 ),
@@ -100,8 +104,7 @@ class AgendamentoPageState extends State<AgendamentoPage> {
                                 child: BaseText(
                                   maxLines: 4,
                                   overflow: true,
-                                  text:
-                                      "fyacdafdaydadaydafdadawydadaydfadywt dadad adawdawdawdaw dadawdadadawd adawdad awd",
+                                  text: agendamento.servico.descricao,
                                   size: 12,
                                   color: Colors.black45,
                                 ),
@@ -116,7 +119,8 @@ class AgendamentoPageState extends State<AgendamentoPage> {
                                 heigth: 30,
                                 width: constraints.maxWidth * 0.25,
                                 onPressed: () {
-                                  Get.toNamed("servico");
+                                  Get.toNamed("servico",
+                                      arguments: agendamento.servico);
                                 },
                                 text: "Ver",
                                 backgroundColor: Color(0xFFF0733D),
@@ -144,7 +148,8 @@ class AgendamentoPageState extends State<AgendamentoPage> {
                   Row(
                     children: [
                       BaseText(
-                        text: "20/10/2025 - 13:30",
+                        text: DateFormat("dd/MM/yyyy")
+                            .format(agendamento.dataHoraAgendado),
                         size: 25,
                         color: Colors.black,
                       ),
@@ -153,7 +158,7 @@ class AgendamentoPageState extends State<AgendamentoPage> {
                   Row(
                     children: [
                       BaseText(
-                        text: "faltam 5 dias para a visita.",
+                        text: agendamento.contagemDias,
                         bold: false,
                         size: 15,
                         color: Colors.black38,

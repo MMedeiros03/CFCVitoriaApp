@@ -79,6 +79,7 @@ class Routes {
       GetPage(
           name: '/login',
           page: () => LoginPage(),
+          arguments: "",
           transitionDuration: Duration(milliseconds: 500),
           transition: Transition.rightToLeftWithFade,
           opaque: true),

@@ -7,21 +7,8 @@ import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
 class ApiServiceBase {
-  String baseUrl = "http://10.0.0.103:5000/api";
+  String baseUrl = "https://cfcvitoria-production.up.railway.app/api";
   final _timeout = const Duration(seconds: 30);
-
-  Future<bool> ping() async {
-    try {
-      var newHeader = await _montarHeader(false);
-      final response = await http
-          .get(Uri.parse('$baseUrl/ping'), headers: newHeader)
-          .timeout(_timeout);
-      garantirSucesso(response);
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
 
   Future<Response> post(String endpoint, Map<String, dynamic> body,
       {bool autoriza = false}) async {
@@ -84,6 +71,7 @@ class ApiServiceBase {
             headers: newHeader,
           )
           .timeout(_timeout);
+
       garantirSucesso(response);
       return response;
     } catch (ex) {
