@@ -103,68 +103,71 @@ class _HomePageState extends State<HomePage>
             }).toList(),
           ),
           if (usuarioLogado)
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              spacing: 10,
-              children: [
-                BaseText(
-                    text: "Próximo Agendamento ",
-                    size: 20,
-                    bold: true,
-                    color: Colors.black),
-                Container(
-                  width: larguraTela,
-                  height: alturaTela * 0.1,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Icon(
-                        Icons.calendar_month_outlined,
-                        size: 50,
-                        color: Color(0xFFF0733D),
-                      ),
-                      SizedBox(width: 8),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            BaseText(
-                              text: "20/10/2025 - 13:30",
-                              size: 20,
-                              color: Colors.black,
-                            ),
-                            SizedBox(height: 4),
-                            BaseText(
-                              text: "Faltam 5 dias para a visita.",
-                              size: 12,
-                              color: Colors.black45,
-                            ),
-                            SizedBox(height: 8),
-                          ],
+            Padding(
+              padding: EdgeInsets.fromLTRB(4, 0, 4, 0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                spacing: 10,
+                children: [
+                  BaseText(
+                      text: "Próximo Agendamento ",
+                      size: 20,
+                      bold: true,
+                      color: Colors.black),
+                  Container(
+                    width: larguraTela,
+                    height: alturaTela * 0.1,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(
+                          Icons.calendar_month_outlined,
+                          size: 50,
+                          color: Color(0xFFF0733D),
                         ),
-                      ),
-                      Align(
-                        alignment: Alignment.bottomRight,
-                        child: BaseButton(
-                          width: 110,
-                          heigth: 35,
-                          colorFont: Colors.black,
-                          backgroundColor: Color(0xFFF0733D),
-                          text: "Ver",
-                          fontSize: 14,
-                          onPressed: () {
-                            Get.toNamed("servico");
-                          },
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              BaseText(
+                                text: "20/10/2025 - 13:30",
+                                size: 20,
+                                color: Colors.black,
+                              ),
+                              SizedBox(height: 4),
+                              BaseText(
+                                text: "Faltam 5 dias para a visita.",
+                                size: 12,
+                                color: Colors.black45,
+                              ),
+                              SizedBox(height: 8),
+                            ],
+                          ),
                         ),
-                      )
-                    ],
+                        Align(
+                          alignment: Alignment.bottomRight,
+                          child: BaseButton(
+                            width: 65,
+                            heigth: 35,
+                            colorFont: Colors.black,
+                            backgroundColor: Color(0xFFF0733D),
+                            text: "Ver",
+                            fontSize: 14,
+                            onPressed: () {
+                              Get.toNamed("servico");
+                            },
+                          ),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           SizedBox(
             width: larguraTela,
@@ -173,7 +176,7 @@ class _HomePageState extends State<HomePage>
               controller: _controller,
               path: "/servicos",
               title: "Serviços",
-              description: "Serviços",
+              description: "Conheça os serviços que temos disponiveis para você",
               pathAnimation: 'assets/animations/LearnAnimation.json',
             ),
           ),
@@ -185,7 +188,7 @@ class _HomePageState extends State<HomePage>
                 controller: _controller,
                 path: "/agendamentos",
                 title: "Agendamentos",
-                description: "Agende sua consulta!",
+                description: "Veja o seu histórico de agendamentos ",
                 pathAnimation: 'assets/animations/CalendarAnimation.json',
               ),
             ),
@@ -196,7 +199,7 @@ class _HomePageState extends State<HomePage>
                 controller: _controller,
                 path: "/sobreNos",
                 title: "Sobre nós",
-                description: "Sobre nós",
+                description: "Conheça um pouco mais sobre nosso CFC!",
                 pathAnimation: 'assets/animations/AboutAnimation.json',
               )),
         ],

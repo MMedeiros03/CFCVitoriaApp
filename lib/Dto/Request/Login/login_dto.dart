@@ -13,6 +13,8 @@ class LoginDTO {
 
   Map<String, dynamic> toJson() => _$LoginDTOToJson(this);
 
+  static LoginDTO toMap(Map<String, dynamic> map) => _$LoginDTOFromJson(map);
+
   String toJsonString() {
     return jsonEncode(toJson());
   }

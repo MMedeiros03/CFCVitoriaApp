@@ -29,11 +29,11 @@ class HomeCardAnimation extends StatelessWidget {
       ),
       child: Padding(
         padding: EdgeInsets.only(right: 8, left: 0, top: 8, bottom: 2),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
+        child:
+          LayoutBuilder(builder: (context, constraints) {
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Lottie.asset(
                   width: 130,
@@ -49,38 +49,52 @@ class HomeCardAnimation extends StatelessWidget {
                   },
                 ),
                 Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    BaseText(
-                      size: 16,
-                      color: Colors.black,
-                      text: title,
-                      bold: true,
-                    ),
-                    BaseText(
-                      size: 10,
-                      color: Colors.black45,
-                      text: description,
+                    Column(
+                      spacing: 5,
+                      children: [
+                          SizedBox(
+                            width: constraints.maxWidth * 0.5,
+                            child: BaseText(
+                              size: 16,
+                              maxLines: 2,
+                              overflow: true,
+                              color: Colors.black,
+                              text: title,
+                              bold: true,
+                            ),
+                          ),
+                          SizedBox(
+                            width: constraints.maxWidth * 0.5,
+                            child: BaseText(
+                              size: 11,
+                              maxLines: 3,
+                              overflow: true,
+                              color: Colors.black45,
+                              text: description,
+                            ),
+
+                          ),
+                      ],
                     ),
                   ],
                 ),
+                BaseButton(
+                  width: constraints.maxWidth * 0.15,
+                  heigth: 35,
+                  colorFont: Colors.black,
+                  backgroundColor: Color(0xFFF0733D),
+                  text: "Ver",
+                  fontSize: 14,
+                  onPressed: () {
+                    Get.toNamed(path);
+                  },
+                ),
               ],
-            ),
-            SizedBox(width: 3),
-            BaseButton(
-              width: 110,
-              heigth: 35,
-              colorFont: Colors.black,
-              backgroundColor: Color(0xFFF0733D),
-              text: "Ver",
-              fontSize: 14,
-              onPressed: () {
-                Get.toNamed(path);
-              },
-            ),
-          ],
-        ),
+            );
+          }),
       ),
     );
   }

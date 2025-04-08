@@ -1,7 +1,6 @@
 import 'dart:core';
 
 import 'package:cfc_vitoria_app/Dto/Response/Servico/servico_rdto.dart';
-import 'package:cfc_vitoria_app/Pages/loading_page.dart';
 import 'package:cfc_vitoria_app/Services/agendamento_service.dart';
 import 'package:cfc_vitoria_app/Services/servico_service.dart';
 import 'package:cfc_vitoria_app/Utils/utils.dart';
@@ -25,6 +24,8 @@ class CreateAgendamentoPage extends StatefulWidget {
 
 class AgendamentoPageState extends State<CreateAgendamentoPage> {
   final ServicoRDTO? servico = Get.arguments as ServicoRDTO?;
+
+  bool criandoAgendamento = false;
 
   int _currentStep = 0;
   ServicoRDTO? servicoSelected;
@@ -95,57 +96,72 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
     final larguraTela = MediaQuery.of(context).size.width;
 
     return BasePage(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        spacing: 40,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _buildStepIndicator(0),
-              _buildStepIndicator(1),
-              _buildStepIndicator(2),
-            ],
-          ),
-          Expanded(
-            child: IndexedStack(
-              index: _currentStep,
+      child: criandoAgendamento
+          ? Center(
+              child: CircularProgressIndicator(
+                color: Colors.black,
+              ),
+            )
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              spacing: 40,
               children: [
-                _stepOne(),
-                _stepTwo(),
-                _stepTree(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _buildStepIndicator(0),
+                    _buildStepIndicator(1),
+                    _buildStepIndicator(2),
+                  ],
+                ),
+                Expanded(
+                  child: IndexedStack(
+                    index: _currentStep,
+                    children: [
+                      _stepOne(),
+                      _stepTwo(),
+                      _stepTree(),
+                    ],
+                  ),
+                ),
+                BaseButton(
+                  heigth: 50,
+                  width: larguraTela * 0.4,
+                  colorFont: Colors.black,
+                  backgroundColor: Color(0xFFF0733D),
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      if (_currentStep == 1) {
+                        if (horarioselectedValue == null) {
+                          BaseSnackbar.exibirNotificacao(
+                              "Erro",
+                              "Obrigatório selecionar uma data e horário para prosseguir!",
+                              false);
+                          return;
+                        }
+                      }
+
+                      if (_currentStep == 2) {
+                        criarAgendamento();
+                      } else {
+                        setState(() {
+                          _currentStep = _currentStep + 1;
+                        });
+                      }
+                    }
+                  },
+                  text: _currentStep != 2 ? 'Próximo' : 'Finalizar',
+                ),
               ],
             ),
-          ),
-          BaseButton(
-            heigth: 50,
-            width: larguraTela * 0.4,
-            colorFont: Colors.black,
-            backgroundColor: Color(0xFFF0733D),
-            onPressed: () {
-              if (_formKey.currentState!.validate()) {
-                if (_currentStep == 2) {
-                  criarAgendamento();
-                } else {
-                  setState(() {
-                    _currentStep = _currentStep + 1;
-                  });
-                }
-              }
-            },
-            text: _currentStep != 2 ? 'Próximo' : 'Finalizar',
-          ),
-        ],
-      ),
     );
   }
 
   Future criarAgendamento() async {
     try {
-      Get.dialog(
-        LoadingScreen(),
-        barrierDismissible: false,
-      );
+      setState(() {
+        criandoAgendamento = true;
+      });
 
       DateTime dataCompleta = DateTime(
         dataSelecionada.year,
@@ -161,14 +177,18 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
           dataHoraAgendamento: dataCompleta,
           observacao: ""));
 
-      Get.back();
+      setState(() {
+        criandoAgendamento = false;
+      });
 
       BaseSnackbar.exibirNotificacao(
           "Sucesso", "Agendamento criado com sucesso!", true);
 
-      Get.offAndToNamed("/agendamentos");
+      Get.offNamed("/agendamentos");
     } catch (e) {
-      Get.back();
+      setState(() {
+        criandoAgendamento = false;
+      });
 
       BaseSnackbar.exibirNotificacao(
           "Erro", "Falha ao criar agendamento!", false);
@@ -176,14 +196,21 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
   }
 
   Widget _buildStepIndicator(int step) {
-    return Container(
-      width: 70,
-      height: 20,
-      decoration: BoxDecoration(
-          color: Color(0xFFF0733D),
-          shape: _currentStep == step ? BoxShape.rectangle : BoxShape.circle,
-          borderRadius:
-              _currentStep == step ? BorderRadius.circular(12) : null),
+    return InkWell(
+      onTap: () {
+        setState(() {
+          _currentStep = step;
+        });
+      },
+      child: Container(
+        width: 70,
+        height: 20,
+        decoration: BoxDecoration(
+            color: Color(0xFFF0733D),
+            shape: _currentStep == step ? BoxShape.rectangle : BoxShape.circle,
+            borderRadius:
+                _currentStep == step ? BorderRadius.circular(12) : null),
+      ),
     );
   }
 

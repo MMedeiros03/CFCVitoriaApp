@@ -1,4 +1,4 @@
-import 'package:cfc_vitoria_app/Dto/Request/login_dto.dart';
+import 'package:cfc_vitoria_app/Dto/Request/Login/login_dto.dart';
 import 'package:cfc_vitoria_app/Services/login_service.dart';
 import 'package:cfc_vitoria_app/Widgets/base_button_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_snackbar_widget.dart';
@@ -35,6 +35,10 @@ class LoginPageState extends State<LoginPage> {
     Get.toNamed("/home");
   }
 
+  Future redirectCadastro() async {
+    Get.toNamed("/cadastro-aluno");
+  }
+
   @override
   void initState() {
     super.initState();
@@ -45,7 +49,9 @@ class LoginPageState extends State<LoginPage> {
   }
 
   _inicializar() async {
-    BaseSnackbar.exibirNotificacao("", mensagem!, false);
+    if (mensagem != null) {
+      BaseSnackbar.exibirNotificacao("", mensagem ?? "", false);
+    }
   }
 
   @override
@@ -62,13 +68,11 @@ class LoginPageState extends State<LoginPage> {
       },
       child: Scaffold(
         backgroundColor: Color(0xFFF0733D),
-        resizeToAvoidBottomInset: true,
         body: SafeArea(
           child: SingleChildScrollView(
             child: ConstrainedBox(
               constraints: BoxConstraints(minHeight: alturaTela),
               child: IntrinsicHeight(
-                // Permite que o Column cresça corretamente
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -107,6 +111,9 @@ class LoginPageState extends State<LoginPage> {
                               child: Column(
                                 children: [
                                   TextFormField(
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontFamily: "Libre Baskerville"),
                                     controller: _nameController,
                                     decoration: InputDecoration(
                                       labelStyle: TextStyle(
@@ -137,6 +144,9 @@ class LoginPageState extends State<LoginPage> {
                                   SizedBox(height: 10),
                                   TextFormField(
                                     controller: _emailController,
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontFamily: "Libre Baskerville"),
                                     decoration: InputDecoration(
                                       labelStyle: TextStyle(
                                           color: Colors.black38,
@@ -205,6 +215,19 @@ class LoginPageState extends State<LoginPage> {
                                 widget: 20,
                                 onPressed: login,
                                 text: "Entrar",
+                                fontSize: 14,
+                                colorFont: Colors.black,
+                                backgroundColor: Color(0xFFF0733D),
+                              ),
+                            ),
+                            SizedBox(height: 15),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 50),
+                              child: BaseButton(
+                                heigth: 50,
+                                widget: 20,
+                                onPressed: redirectCadastro,
+                                text: "Cadastre-se",
                                 fontSize: 14,
                                 colorFont: Colors.black,
                                 backgroundColor: Color(0xFFF0733D),

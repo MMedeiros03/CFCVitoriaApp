@@ -35,6 +35,11 @@ class ApiServiceBase {
         throw Exception("Not authorized");
       }
       headers.addAll({'Authorization': "Bearer $token"});
+    } else {
+      headers.addAll({
+        'X-API-KEY':
+            "z7fjZUPmwZF3MyXuYF9HLVGHrhM1UF5q9zd6vXzQVyWR5PNdnKlWSVbBxeJTx7coQLVA6DTVsFmJKKVlAaD2wjAXaI8xnnNjf71zeZpXXcxPG2gONXFideh6ojkLosenahLeOgjIBcMRl6EmXObBf3D5sjwNzot39KimgOy7CFEoHDrnRWI6BFztZ76QSplUVdQgU2M7Lh3AUtdYX3Xw6CP8jkzlnVkt3Af8upB9p24UVf1V9j0gIGqmENlEpRDb"
+      });
     }
 
     return headers;

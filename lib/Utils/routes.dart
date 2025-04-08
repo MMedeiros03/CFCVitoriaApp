@@ -1,4 +1,5 @@
 import 'package:cfc_vitoria_app/Pages/agendamento_page.dart';
+import 'package:cfc_vitoria_app/Pages/cadastro_aluno_page.dart';
 import 'package:cfc_vitoria_app/Pages/login_page.dart';
 import 'package:cfc_vitoria_app/Pages/meus_dados_page.dart';
 import 'package:cfc_vitoria_app/Pages/sem_internet_page.dart';
@@ -73,6 +74,13 @@ class Routes {
       GetPage(
           name: '/agendamento',
           page: () => AgendamentoPage(),
+          transitionDuration: Duration(milliseconds: 500),
+          transition: Transition.rightToLeftWithFade,
+          opaque: true),
+      GetPage(
+          name: '/cadastro-aluno',
+          page: () => CadastroAlunoPage(),
+          arguments: "",
           transitionDuration: Duration(milliseconds: 500),
           transition: Transition.rightToLeftWithFade,
           opaque: true),

@@ -17,13 +17,20 @@ class TutorialPageState extends State<TutorialPage> {
   int currentStep = 1;
 
   Widget _buildStepIndicator(int step) {
-    return Container(
-      width: currentStep == step ? 70 : 40,
-      height: 20,
-      decoration: BoxDecoration(
-          color: Color(0xFFF0733D),
-          shape: currentStep == step ? BoxShape.rectangle : BoxShape.circle,
-          borderRadius: currentStep == step ? BorderRadius.circular(12) : null),
+    return InkWell(
+      onTap: () {
+        setState(() {
+          currentStep = step;
+        });
+      },
+      child: Container(
+        width: currentStep == step ? 70 : 40,
+        height: 20,
+        decoration: BoxDecoration(
+            color: Color(0xFFF0733D),
+            shape: currentStep == step ? BoxShape.rectangle : BoxShape.circle,
+            borderRadius: currentStep == step ? BorderRadius.circular(12) : null),
+      ),
     );
   }
 
@@ -43,8 +50,8 @@ class TutorialPageState extends State<TutorialPage> {
               padding: EdgeInsets.only(right: 20, left: 20),
               child: BaseText(
                 text:
-                    "It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged",
-                size: 18,
+                    "Crie sua conta para salvar suas informações e aproveitar todos os recursos do aplicativo",
+                size: 20,
                 bold: false,
                 color: Colors.black54,
                 alignText: true,
@@ -66,8 +73,8 @@ class TutorialPageState extends State<TutorialPage> {
               padding: EdgeInsets.only(right: 20, left: 20),
               child: BaseText(
                 text:
-                    "It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged",
-                size: 18,
+                    "Conheça os serviços do nosso CFC e descubra tudo o que podemos oferecer para sua formação.",
+                size: 20,
                 bold: false,
                 color: Colors.black54,
                 alignText: true,
@@ -89,8 +96,8 @@ class TutorialPageState extends State<TutorialPage> {
               padding: EdgeInsets.only(right: 20, left: 20),
               child: BaseText(
                 text:
-                    "It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged",
-                size: 18,
+                    "Agende sua visita ao CFC e finalize sua matrícula com rapidez e praticidade.",
+                size: 20,
                 bold: false,
                 color: Colors.black54,
                 alignText: true,
@@ -114,7 +121,7 @@ class TutorialPageState extends State<TutorialPage> {
 
     Get.back();
 
-    await Get.offAndToNamed('/home');
+    await Get.offNamed('/home');
   }
 
   @override

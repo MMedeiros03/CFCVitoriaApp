@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:cfc_vitoria_app/Dto/Request/login_dto.dart';
+import 'package:cfc_vitoria_app/Dto/Request/Login/login_dto.dart';
 import 'package:cfc_vitoria_app/Dto/Response/Login/login_rdto.dart';
 import 'package:cfc_vitoria_app/Services/api_base_service.dart';
 import 'package:cfc_vitoria_app/Utils/storage.dart';
