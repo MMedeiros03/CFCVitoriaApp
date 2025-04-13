@@ -14,6 +14,21 @@ class ScheduleCard extends StatelessWidget {
 
   final AgendamentoRDTO agendamento;
 
+  Color defineCorPorSituacao(bool container){
+    var situacaoAgendamento = agendamento.situacaoAgendamento;
+
+    switch(situacaoAgendamento){
+      case "Agendado":
+        return container ? Color(0x33FFFF00) : Colors.yellow;
+      case "Confirmado":
+        return container ? Color(0x4700EF24) : Colors.green;
+      case "Cancelado":
+        return container ? Color(0x33FF0000) : Colors.red;
+      default:
+        return Colors.white;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final larguraTela = MediaQuery.of(context).size.width;
@@ -54,20 +69,20 @@ class ScheduleCard extends StatelessWidget {
                   maxLines: 3,
                   overflow: true,
                   color: Colors.black38,
-                  text: "faltam 5 dias para a visita.",
+                  text: agendamento.contagemDias,
                 ),
                 BaseText(
                   size: 13,
                   maxLines: 3,
                   overflow: true,
                   color: Colors.black54,
-                  text: "Primeira Habilitação",
+                  text: agendamento.servico.titulo,
                 ),
                 Container(
                   width: larguraTela * 0.4,
                   height: alturaTela * 0.035,
                   decoration: BoxDecoration(
-                      color: const Color(0x4700EF24),
+                      color: defineCorPorSituacao(true),
                       borderRadius: BorderRadius.circular(25)),
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 8),
@@ -78,11 +93,11 @@ class ScheduleCard extends StatelessWidget {
                       children: [
                         Icon(
                           Icons.circle,
-                          color: const Color.fromARGB(255, 0, 207, 7),
+                          color: defineCorPorSituacao(false),
                         ),
                         BaseText(
                             bold: true,
-                            text: "Confirmado",
+                            text: agendamento.situacaoAgendamento,
                             size: 12,
                             color: Colors.black)
                       ],

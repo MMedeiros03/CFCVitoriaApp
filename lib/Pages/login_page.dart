@@ -59,190 +59,161 @@ class LoginPageState extends State<LoginPage> {
     final alturaTela = MediaQuery.of(context).size.height;
     final larguraTela = MediaQuery.of(context).size.width;
 
-    return PopScope(
-      canPop: false,
-      onPopInvokedWithResult: (didPop, result) {
-        Get.offNamed(
-          "/home",
-        );
-      },
-      child: Scaffold(
-        backgroundColor: Color(0xFFF0733D),
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(minHeight: alturaTela),
-              child: IntrinsicHeight(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      height: alturaTela * 0.35,
-                      child: Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Lottie.asset(
-                          width: larguraTela * 0.9,
-                          height: larguraTela * 0.6,
-                          repeat: true,
-                          frameRate: FrameRate(90),
-                          "assets/animations/AboutAnimation.json",
-                          fit: BoxFit.fill,
+    return Scaffold(
+      resizeToAvoidBottomInset: true,
+      backgroundColor: Color(0xFFF0733D),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return SingleChildScrollView(
+              child: ConstrainedBox(
+                  constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                  child: IntrinsicHeight(
+                    child: Column(children: [
+                      SizedBox(
+                        height: alturaTela * 0.4,
+                        child: Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Lottie.asset(
+                            "assets/animations/AboutAnimation.json",
+                            width: larguraTela * 0.9,
+                            height: larguraTela * 0.6,
+                            repeat: true,
+                            frameRate: FrameRate(90),
+                            fit: BoxFit.fill,
+                          ),
                         ),
                       ),
-                    ),
-                    Expanded(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(100),
-                          ),
-                          color: Color(0xFFE8E8E8),
-                        ),
-                        width: larguraTela,
-                        padding: EdgeInsets.all(35),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          spacing: 10,
-                          children: [
-                            BaseText(
-                                text: "Login", size: 25, color: Colors.black),
-                            Form(
-                              key: _formKey,
-                              child: Column(
-                                children: [
-                                  TextFormField(
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontFamily: "Libre Baskerville"),
-                                    controller: _nameController,
-                                    decoration: InputDecoration(
-                                      labelStyle: TextStyle(
-                                          color: Colors.black38,
-                                          fontFamily: "Libre Baskerville"),
-                                      labelText: 'Nome',
-                                      prefixIcon: Icon(Icons.person, size: 15),
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                        borderSide: BorderSide(
-                                            color: Color(0xFFF0733D)),
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                        borderSide: BorderSide(
-                                            color: Color(0xFFF0733D)),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                        borderSide: BorderSide(
-                                            color: Color(0xFFF0733D), width: 2),
-                                      ),
-                                    ),
-                                    validator: (value) => value!.isEmpty
-                                        ? 'Preencha o nome'
-                                        : null,
-                                  ),
-                                  SizedBox(height: 10),
-                                  TextFormField(
-                                    controller: _emailController,
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontFamily: "Libre Baskerville"),
-                                    decoration: InputDecoration(
-                                      labelStyle: TextStyle(
-                                          color: Colors.black38,
-                                          fontFamily: "Libre Baskerville"),
-                                      labelText: 'Senha',
-                                      prefixIcon: Icon(Icons.lock, size: 15),
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                        borderSide: BorderSide(
-                                            color: Color(0xFFF0733D)),
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                        borderSide: BorderSide(
-                                            color: Color(0xFFF0733D)),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                        borderSide: BorderSide(
-                                            color: Color(0xFFF0733D), width: 2),
-                                      ),
-                                    ),
-                                    validator: (value) => value!.isEmpty
-                                        ? 'Preencha a senha'
-                                        : null,
-                                  ),
-                                ],
-                              ),
+                      Expanded(
+                        child: Container(
+                          width: larguraTela,
+                          padding: EdgeInsets.all(35),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(100),
                             ),
-                            SizedBox(height: 10),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
+                            color: Color(0xFFE8E8E8),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              BaseText(
+                                  text: "Login", size: 25, color: Colors.black),
+                              Form(
+                                key: _formKey,
+                                child: Column(
                                   children: [
-                                    Checkbox(
-                                      activeColor: Colors.black12,
-                                      checkColor: Colors.green,
-                                      value: _isChecked,
-                                      onChanged: (bool? newValue) {
-                                        setState(() {
-                                          _isChecked = newValue!;
-                                        });
-                                      },
+                                    TextFormField(
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontFamily: "Libre Baskerville"),
+                                      controller: _nameController,
+                                      decoration: _buildInputDecoration(
+                                          "Nome", Icons.person),
+                                      validator: (value) => value!.isEmpty
+                                          ? 'Preencha o nome'
+                                          : null,
                                     ),
-                                    BaseText(
-                                        bold: false,
-                                        text: "Lembrar senha",
-                                        size: 12,
-                                        color: Colors.black),
+                                    SizedBox(height: 10),
+                                    TextFormField(
+                                      controller: _emailController,
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontFamily: "Libre Baskerville"),
+                                      decoration: _buildInputDecoration(
+                                          "Senha", Icons.lock),
+                                      validator: (value) => value!.isEmpty
+                                          ? 'Preencha a senha'
+                                          : null,
+                                    ),
                                   ],
                                 ),
-                                BaseText(
-                                    onClick: () {},
-                                    bold: false,
-                                    text: "Esqueceu sua senha?",
-                                    size: 11,
-                                    color: Colors.black)
-                              ],
-                            ),
-                            SizedBox(height: 15),
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 50),
-                              child: BaseButton(
-                                heigth: 50,
-                                widget: 20,
-                                onPressed: login,
-                                text: "Entrar",
-                                fontSize: 14,
-                                colorFont: Colors.black,
-                                backgroundColor: Color(0xFFF0733D),
                               ),
-                            ),
-                            SizedBox(height: 15),
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 50),
-                              child: BaseButton(
-                                heigth: 50,
-                                widget: 20,
-                                onPressed: redirectCadastro,
-                                text: "Cadastre-se",
-                                fontSize: 14,
-                                colorFont: Colors.black,
-                                backgroundColor: Color(0xFFF0733D),
+                              SizedBox(height: 10),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Checkbox(
+                                        activeColor: Colors.black12,
+                                        checkColor: Colors.green,
+                                        value: _isChecked,
+                                        onChanged: (bool? newValue) {
+                                          setState(() {
+                                            _isChecked = newValue!;
+                                          });
+                                        },
+                                      ),
+                                      BaseText(
+                                          bold: false,
+                                          text: "Lembrar senha",
+                                          size: 12,
+                                          color: Colors.black),
+                                    ],
+                                  ),
+                                  BaseText(
+                                      onClick: () {},
+                                      bold: false,
+                                      text: "Esqueceu sua senha?",
+                                      size: 11,
+                                      color: Colors.black)
+                                ],
                               ),
-                            ),
-                          ],
+                              SizedBox(height: 15),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 50),
+                                child: BaseButton(
+                                  heigth: 50,
+                                  widget: 20,
+                                  onPressed: login,
+                                  text: "Entrar",
+                                  fontSize: 14,
+                                  colorFont: Colors.black,
+                                  backgroundColor: Color(0xFFF0733D),
+                                ),
+                              ),
+                              SizedBox(height: 15),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 50),
+                                child: BaseButton(
+                                  heigth: 50,
+                                  widget: 20,
+                                  onPressed: redirectCadastro,
+                                  text: "Cadastre-se",
+                                  fontSize: 14,
+                                  colorFont: Colors.black,
+                                  backgroundColor: Color(0xFFF0733D),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
+                      )
+                    ]),
+                  )));
+        },
+      ),
+    );
+  }
+
+  InputDecoration _buildInputDecoration(String label, IconData icon) {
+    return InputDecoration(
+      labelStyle:
+          TextStyle(color: Colors.black38, fontFamily: "Libre Baskerville"),
+      labelText: label,
+      prefixIcon: Icon(icon, size: 15),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(color: Color(0xFFF0733D)),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(color: Color(0xFFF0733D)),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(color: Color(0xFFF0733D), width: 2),
       ),
     );
   }

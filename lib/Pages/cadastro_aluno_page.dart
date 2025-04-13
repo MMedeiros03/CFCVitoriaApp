@@ -62,6 +62,9 @@ class CadastroAlunoPageState extends State<CadastroAlunoPage> {
                 cidade: _cidadeController.value.text,
                 estado: _estadoController.value.text)));
 
+        BaseSnackbar.exibirNotificacao(
+            "Sucesso!", "Cadastrado com sucesso!", true);
+
         Get.offNamed("/login");
       } else {
         BaseSnackbar.exibirNotificacao("Erro!",
@@ -102,102 +105,97 @@ class CadastroAlunoPageState extends State<CadastroAlunoPage> {
 
   @override
   Widget build(BuildContext context) {
-    final alturaTela = MediaQuery.of(context).size.height;
-    final larguraTela = MediaQuery.of(context).size.width;
-
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       backgroundColor: Color(0xFFF0733D),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(minHeight: alturaTela),
-            child: IntrinsicHeight(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    height: alturaTela * 0.10,
-                  ),
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(100),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: constraints.maxHeight),
+              child: IntrinsicHeight(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.15),
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(100),
+                          ),
+                          color: Color(0xFFE8E8E8),
                         ),
-                        color: Color(0xFFE8E8E8),
-                      ),
-                      width: larguraTela,
-                      padding: EdgeInsets.all(35),
-                      child: carregando
-                          ? Center(
-                              child: CircularProgressIndicator(
-                                color: Colors.black,
-                              ),
-                            )
-                          : Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              spacing: 40,
-                              children: [
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    BaseText(
-                                        text: _currentStep == 0
-                                            ? "Informe seus dados"
-                                            : "Informe seu Endereço",
-                                        size: 20,
-                                        color: Colors.black),
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    _buildStepIndicator(0),
-                                    _buildStepIndicator(1),
-                                  ],
-                                ),
-                                Expanded(
-                                  child: IndexedStack(
+                        width: double.infinity,
+                        padding: EdgeInsets.all(35),
+                        child: carregando
+                            ? Center(
+                                child: CircularProgressIndicator(
+                                    color: Colors.black))
+                            : Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  SizedBox(height: 10),
+                                  Center(
+                                    child: BaseText(
+                                      text: _currentStep == 0
+                                          ? "Informe seus dados"
+                                          : "Informe seu Endereço",
+                                      size: 20,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  SizedBox(height: 15),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      _buildStepIndicator(0),
+                                      _buildStepIndicator(1),
+                                    ],
+                                  ),
+                                  SizedBox(height: 20),
+                                  IndexedStack(
                                     index: _currentStep,
                                     children: [
                                       _stepOne(),
                                       _stepTwo(),
                                     ],
                                   ),
-                                ),
-                                BaseButton(
-                                  heigth: 50,
-                                  width: larguraTela * 0.4,
-                                  colorFont: Colors.black,
-                                  backgroundColor: Color(0xFFF0733D),
-                                  onPressed: () {
-                                    if (_currentStep == 0 &&
-                                        _formKeyAluno.currentState!
+                                  SizedBox(height: 20),
+                                  BaseButton(
+                                    heigth: 50,
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.4,
+                                    colorFont: Colors.black,
+                                    backgroundColor: Color(0xFFF0733D),
+                                    onPressed: () {
+                                      if (_currentStep == 0 &&
+                                          _formKeyAluno.currentState!
+                                              .validate()) {
+                                        setState(() {
+                                          _currentStep += 1;
+                                        });
+                                      } else if (_currentStep == 1) {
+                                        if (_formKeyEndereco.currentState!
                                             .validate()) {
-                                      setState(() {
-                                        _currentStep = _currentStep + 1;
-                                      });
-                                    } else if (_currentStep == 1) {
-                                      if (_formKeyEndereco.currentState!
-                                          .validate()) {
-                                        createAluno();
+                                          createAluno();
+                                        }
                                       }
-                                    }
-                                  },
-                                  text: _currentStep != 1
-                                      ? 'Próximo'
-                                      : 'Finalizar',
-                                ),
-                              ],
-                            ),
-                    ),
-                  ),
-                ],
+                                    },
+                                    text: _currentStep != 1
+                                        ? 'Próximo'
+                                        : 'Finalizar',
+                                  ),
+                                ],
+                              ),
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }

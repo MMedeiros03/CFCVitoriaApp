@@ -1,9 +1,11 @@
 import 'package:cfc_vitoria_app/Dto/Response/Agendamento/agendamento_rdto.dart';
 import 'package:cfc_vitoria_app/Widgets/base_button_widget.dart';
+import 'package:cfc_vitoria_app/Widgets/base_snackbar_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../Widgets/base_page_widget.dart';
 
 class AgendamentoPage extends StatefulWidget {
@@ -15,6 +17,33 @@ class AgendamentoPage extends StatefulWidget {
 
 class AgendamentoPageState extends State<AgendamentoPage> {
   final AgendamentoRDTO agendamento = Get.arguments as AgendamentoRDTO;
+
+  Color defineCorPorSituacao(bool container) {
+    var situacaoAgendamento = agendamento.situacaoAgendamento;
+
+    switch (situacaoAgendamento) {
+      case "Agendado":
+        return container ? Color(0x33FFFF00) : Colors.yellow;
+      case "Confirmado":
+        return container ? Color(0x4700EF24) : Colors.green;
+      case "Cancelado":
+        return container ? Color(0x33FF0000) : Colors.red;
+      default:
+        return Colors.white;
+    }
+  }
+
+  Future<void> _openGoogleMaps() async {
+    final url = Uri.parse(
+        'https://www.google.com/maps/search/?api=1&query=CFC+VITORIA+AUTO+MOTO+ESCOLA');
+
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url, mode: LaunchMode.externalApplication);
+    } else {
+      BaseSnackbar.exibirNotificacao(
+          "Erro!", "Não foi possivel redirecionar para a localização", false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +68,7 @@ class AgendamentoPageState extends State<AgendamentoPage> {
                   Container(
                     width: larguraTela * 0.4,
                     decoration: BoxDecoration(
-                        color: const Color(0x4700EF24),
+                        color: defineCorPorSituacao(true),
                         borderRadius: BorderRadius.circular(25)),
                     child: Padding(
                       padding: EdgeInsets.all(8),
@@ -48,7 +77,7 @@ class AgendamentoPageState extends State<AgendamentoPage> {
                         children: [
                           Icon(
                             Icons.circle,
-                            color: const Color.fromARGB(255, 0, 207, 7),
+                            color: defineCorPorSituacao(false),
                           ),
                           BaseText(
                               bold: true,
@@ -178,57 +207,63 @@ class AgendamentoPageState extends State<AgendamentoPage> {
                   text: "Local de Atendimento",
                   size: 12,
                   color: Colors.black38),
-              SizedBox(
-                width: larguraTela,
-                child: Image.asset(
-                  "assets/image/logo_cfc.jpg",
+              InkWell(
+                onTap: _openGoogleMaps,
+                child: SizedBox(
+                  width: larguraTela,
+                  height: alturaTela * 0.2,
+                  child: Image.asset(
+                    fit: BoxFit.cover,
+                    "assets/image/localizacao.png",
+                  ),
                 ),
               )
             ],
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            spacing: 15,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              BaseText(text: "Ações", size: 12, color: Colors.black38),
-              Row(
-                spacing: 10,
-                children: [
-                  Expanded(
-                    child: BaseButton(
-                      heigth: alturaTela * 0.06,
-                      width: larguraTela * 0.03,
-                      colorFont: Colors.black,
-                      onPressed: () {},
-                      text: "Confirmar",
-                      backgroundColor: const Color.fromARGB(110, 0, 248, 37),
+          if (agendamento.situacaoAgendamento != "Cancelado")
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              spacing: 15,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                BaseText(text: "Ações", size: 12, color: Colors.black38),
+                Row(
+                  spacing: 10,
+                  children: [
+                    Expanded(
+                      child: BaseButton(
+                        heigth: alturaTela * 0.06,
+                        width: larguraTela * 0.03,
+                        colorFont: Colors.black,
+                        onPressed: () {},
+                        text: "Confirmar",
+                        backgroundColor: const Color.fromARGB(110, 0, 248, 37),
+                      ),
                     ),
-                  ),
-                  Expanded(
-                    child: BaseButton(
-                      heigth: alturaTela * 0.06,
-                      width: larguraTela * 0.03,
-                      colorFont: Colors.black,
-                      onPressed: () {},
-                      text: "Cancelar",
-                      backgroundColor: const Color.fromARGB(109, 248, 0, 0),
+                    Expanded(
+                      child: BaseButton(
+                        heigth: alturaTela * 0.06,
+                        width: larguraTela * 0.03,
+                        colorFont: Colors.black,
+                        onPressed: () {},
+                        text: "Cancelar",
+                        backgroundColor: const Color.fromARGB(109, 248, 0, 0),
+                      ),
                     ),
-                  ),
-                  Expanded(
-                    child: BaseButton(
-                      heigth: alturaTela * 0.06,
-                      width: larguraTela * 0.03,
-                      colorFont: Colors.black,
-                      onPressed: () {},
-                      text: "Remarcar",
-                      backgroundColor: const Color.fromARGB(109, 244, 248, 0),
+                    Expanded(
+                      child: BaseButton(
+                        heigth: alturaTela * 0.06,
+                        width: larguraTela * 0.03,
+                        colorFont: Colors.black,
+                        onPressed: () {},
+                        text: "Remarcar",
+                        backgroundColor: const Color.fromARGB(109, 244, 248, 0),
+                      ),
                     ),
-                  ),
-                ],
-              )
-            ],
-          ),
+                  ],
+                )
+              ],
+            ),
         ],
       ),
     ));

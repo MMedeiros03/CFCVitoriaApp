@@ -1,7 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cfc_vitoria_app/Widgets/base_snackbar_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_text_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../Widgets/base_page_widget.dart';
 
 class SobreNosPage extends StatefulWidget {
@@ -12,6 +13,18 @@ class SobreNosPage extends StatefulWidget {
 }
 
 class SobreNosPageState extends State<SobreNosPage> {
+  Future<void> _openGoogleMaps() async {
+    final url = Uri.parse(
+        'https://www.google.com/maps/search/?api=1&query=CFC+VITORIA+AUTO+MOTO+ESCOLA');
+
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url, mode: LaunchMode.externalApplication);
+    } else {
+      BaseSnackbar.exibirNotificacao(
+          "Erro!", "Não foi possivel redirecionar para a localização", false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final larguraTela = MediaQuery.of(context).size.width;
@@ -137,6 +150,7 @@ class SobreNosPageState extends State<SobreNosPage> {
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            spacing: 10,
             children: [
               Row(
                 children: [
@@ -154,7 +168,6 @@ class SobreNosPageState extends State<SobreNosPage> {
                   ),
                 ],
               ),
-              SizedBox(height: 10),
               Column(
                 spacing: 20,
                 children: [
@@ -166,6 +179,17 @@ class SobreNosPageState extends State<SobreNosPage> {
                       size: 13,
                       color: Colors.black38),
                 ],
+              ),
+              InkWell(
+                onTap: _openGoogleMaps,
+                child: SizedBox(
+                  width: larguraTela,
+                  height: alturaTela * 0.2,
+                  child: Image.asset(
+                    fit: BoxFit.cover,
+                    "assets/image/localizacao.png",
+                  ),
+                ),
               )
             ],
           ),
