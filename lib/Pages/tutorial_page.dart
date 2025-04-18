@@ -1,4 +1,3 @@
-import 'package:cfc_vitoria_app/Pages/loading_page.dart';
 import 'package:cfc_vitoria_app/Utils/storage.dart';
 import 'package:cfc_vitoria_app/Widgets/base_button_widget.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +28,8 @@ class TutorialPageState extends State<TutorialPage> {
         decoration: BoxDecoration(
             color: Color(0xFFF0733D),
             shape: currentStep == step ? BoxShape.rectangle : BoxShape.circle,
-            borderRadius: currentStep == step ? BorderRadius.circular(12) : null),
+            borderRadius:
+                currentStep == step ? BorderRadius.circular(12) : null),
       ),
     );
   }
@@ -110,16 +110,9 @@ class TutorialPageState extends State<TutorialPage> {
   }
 
   _redirectToHome() async {
-    Get.dialog(
-      LoadingScreen(),
-      barrierDismissible: false,
-    );
-
     await StorageService.setVisualizedTutorial(true);
 
     await Future.delayed(Duration(milliseconds: 300));
-
-    Get.back();
 
     await Get.offNamed('/home');
   }

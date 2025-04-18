@@ -1,3 +1,5 @@
+import 'package:cfc_vitoria_app/Utils/storage.dart';
+import 'package:cfc_vitoria_app/Utils/utils.dart';
 import 'package:cfc_vitoria_app/Widgets/item_sidebar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,11 +14,21 @@ class SideBarMenu extends StatefulWidget {
 }
 
 class SideBarMenuState extends State<SideBarMenu> {
+  bool usuarioLogado = false;
+
   @override
   void initState() {
     super.initState();
-
     currentRoute = Get.currentRoute;
+    _inicializar();
+  }
+
+  _inicializar() async {
+    var tokenValido = await Utils.validaToken();
+
+    setState(() {
+      usuarioLogado = tokenValido;
+    });
   }
 
   late String currentRoute = "";
@@ -61,16 +73,35 @@ class SideBarMenuState extends State<SideBarMenu> {
             onTap: _redirectToRegisters,
             selected: currentRoute == "/tutorial",
           ),
-          ItemSideBarMenu(
-            icon: Icons.login_outlined,
-            title: "Login",
-            path: "/login",
-            onTap: _redirectToRegisters,
-            selected: currentRoute == "/login",
-          ),
+          if (!usuarioLogado)
+            ItemSideBarMenu(
+              icon: Icons.login_outlined,
+              title: "Entrar",
+              path: "/login",
+              onTap: _redirectToRegisters,
+              selected: currentRoute == "/login",
+            ),
+          if (usuarioLogado)
+            ItemSideBarMenu(
+              icon: Icons.logout_outlined,
+              title: "Sair",
+              path: "/login",
+              onTap: _logOutAluno,
+              selected: currentRoute == "/login",
+            ),
         ],
       ),
     );
+  }
+
+  _logOutAluno(String path) async {
+    await StorageService.removeToken(true);
+
+    if (mounted) {
+      Scaffold.of(context).openDrawer();
+    }
+
+    Get.offNamed(path);
   }
 
   _redirectToRegisters(String path) async {

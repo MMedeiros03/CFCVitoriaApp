@@ -20,8 +20,6 @@ class AgendamentoService extends ApiServiceBase {
   Future<List<DateTime>> getHorariosDisponiveis(
       DateTime dataHoraSelecionado) async {
     try {
-      dataHoraSelecionado = DateTime.now();
-
       final response = await get(
           '/Agendamento/ObterHorariosDisponiveis?dataHoraAgendamento=$dataHoraSelecionado',
           autoriza: true);

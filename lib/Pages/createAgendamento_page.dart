@@ -198,9 +198,11 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
   Widget _buildStepIndicator(int step) {
     return InkWell(
       onTap: () {
-        setState(() {
-          _currentStep = step;
-        });
+        if (_formKey.currentState!.validate()) {
+          setState(() {
+            _currentStep = step;
+          });
+        }
       },
       child: Container(
         width: 70,
