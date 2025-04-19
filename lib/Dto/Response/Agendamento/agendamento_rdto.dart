@@ -7,6 +7,7 @@ part 'agendamento_rdto.g.dart';
 
 @JsonSerializable()
 class AgendamentoRDTO {
+  int id;
   DateTime dataHoraAgendado;
   String contagemDias;
   String situacaoAgendamento;
@@ -14,6 +15,7 @@ class AgendamentoRDTO {
   ServicoRDTO servico;
 
   AgendamentoRDTO({
+    required this.id,
     required this.dataHoraAgendado,
     required this.contagemDias,
     required this.situacaoAgendamento,

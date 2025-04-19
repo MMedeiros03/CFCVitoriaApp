@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cfc_vitoria_app/Dto/Request/Agendamento/agendamento_dto.dart';
+import 'package:cfc_vitoria_app/Dto/Request/Agendamento/alterar_agendamento_dto.dart';
 import 'package:cfc_vitoria_app/Dto/Response/Agendamento/agendamento_rdto.dart';
 import 'package:cfc_vitoria_app/Services/api_base_service.dart';
 
@@ -36,6 +37,17 @@ class AgendamentoService extends ApiServiceBase {
   Future createAgendamento(AgendamentoDTO novoAgendamento) async {
     try {
       await post('/Agendamento', novoAgendamento.toJson(), autoriza: true);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future alterarSituacaoAgendamento(
+      AlterarAgendamentoDTO alterarAgendamentoDTO) async {
+    try {
+      await post('/Agendamento/AlterarSituacaoAgendamento',
+          alterarAgendamentoDTO.toJson(),
+          autoriza: true);
     } catch (e) {
       rethrow;
     }

@@ -30,7 +30,8 @@ class LoginPageState extends State<LoginPage> {
   Future login() async {
     LoginService service = LoginService();
 
-    await service.login(LoginDTO(login: "admin", password: "admin"));
+    await service.login(
+        LoginDTO(login: _nameController.text, password: _nameController.text));
 
     Get.toNamed("/home");
   }

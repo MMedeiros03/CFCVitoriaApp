@@ -1,4 +1,6 @@
+import 'package:cfc_vitoria_app/Dto/Request/Agendamento/alterar_agendamento_dto.dart';
 import 'package:cfc_vitoria_app/Dto/Response/Agendamento/agendamento_rdto.dart';
+import 'package:cfc_vitoria_app/Services/agendamento_service.dart';
 import 'package:cfc_vitoria_app/Widgets/base_button_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_snackbar_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_text_widget.dart';
@@ -43,6 +45,97 @@ class AgendamentoPageState extends State<AgendamentoPage> {
       BaseSnackbar.exibirNotificacao(
           "Erro!", "Não foi possivel redirecionar para a localização", false);
     }
+  }
+
+  Future<void> alterarSituacaoAgendamento(int acao) async {
+    try {
+      AlterarAgendamentoDTO alterarAgendamentoDTO = AlterarAgendamentoDTO(
+          agendamentoId: agendamento.id,
+          novaSituacao: acao,
+          dataRemercado: acao == 3 ? DateTime.now() : null);
+
+      await AgendamentoService()
+          .alterarSituacaoAgendamento(alterarAgendamentoDTO);
+
+      var mensagem = "";
+      var novaSituacaoAgendamento = "";
+
+      switch (acao) {
+        case 1:
+          mensagem = "Agendamento confirmado com sucesso!";
+          novaSituacaoAgendamento = "Confirmado";
+          break;
+        case 2:
+          mensagem = "Agendamento cancelado com sucesso!";
+          novaSituacaoAgendamento = "Cancelado";
+          break;
+      }
+
+      setState(() {
+        agendamento.situacaoAgendamento = novaSituacaoAgendamento;
+      });
+
+      BaseSnackbar.exibirNotificacao('Sucesso', mensagem, true);
+    } catch (e) {
+      BaseSnackbar.exibirNotificacao(
+          'Erro', "Erro ao tentar alterar situação do agendamento!", false);
+    }
+  }
+
+  void mostrarDialogConfirmacao(BuildContext context, int acao) {
+    var mensagemConfirmacao = "";
+
+    switch (acao) {
+      case 1:
+        mensagemConfirmacao =
+            "Realmente confirma sua presença na data deste agendamento?";
+        break;
+      case 2:
+        mensagemConfirmacao = "Realmente deseja cancelar este agendamento?";
+        break;
+    }
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: BaseText(
+            text: 'Confirmação',
+            size: 18,
+            bold: true,
+            color: Colors.black,
+          ),
+          content: BaseText(
+            text: mensagemConfirmacao,
+            color: Colors.black,
+            bold: false,
+            size: 14,
+          ),
+          actions: [
+            BaseButton(
+              text: "Confirmar",
+              colorFont: Colors.black,
+              backgroundColor: Color(0xFFF0733D),
+              onPressed: () {
+                alterarSituacaoAgendamento(acao);
+                Navigator.of(context).pop();
+              },
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            BaseButton(
+              text: "Cancelar",
+              backgroundColor: Colors.red,
+              colorFont: Colors.black,
+              onPressed: () {
+                Navigator.of(context).pop(); // Fecha o dialog
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -220,7 +313,7 @@ class AgendamentoPageState extends State<AgendamentoPage> {
               )
             ],
           ),
-          if (agendamento.situacaoAgendamento != "Cancelado")
+          if (agendamento.situacaoAgendamento == "Agendado")
             Column(
               mainAxisAlignment: MainAxisAlignment.start,
               spacing: 15,
@@ -235,7 +328,9 @@ class AgendamentoPageState extends State<AgendamentoPage> {
                         heigth: alturaTela * 0.06,
                         width: larguraTela * 0.03,
                         colorFont: Colors.black,
-                        onPressed: () {},
+                        onPressed: () {
+                          mostrarDialogConfirmacao(context, 1);
+                        },
                         text: "Confirmar",
                         backgroundColor: const Color.fromARGB(110, 0, 248, 37),
                       ),
@@ -245,19 +340,11 @@ class AgendamentoPageState extends State<AgendamentoPage> {
                         heigth: alturaTela * 0.06,
                         width: larguraTela * 0.03,
                         colorFont: Colors.black,
-                        onPressed: () {},
+                        onPressed: () {
+                          mostrarDialogConfirmacao(context, 2);
+                        },
                         text: "Cancelar",
                         backgroundColor: const Color.fromARGB(109, 248, 0, 0),
-                      ),
-                    ),
-                    Expanded(
-                      child: BaseButton(
-                        heigth: alturaTela * 0.06,
-                        width: larguraTela * 0.03,
-                        colorFont: Colors.black,
-                        onPressed: () {},
-                        text: "Remarcar",
-                        backgroundColor: const Color.fromARGB(109, 244, 248, 0),
                       ),
                     ),
                   ],
