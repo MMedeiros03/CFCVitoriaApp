@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cfc_vitoria_app/Dto/Response/Servico/servico_rdto.dart';
+import 'package:cfc_vitoria_app/Dto/Response/ValorServico/valor_servico_rdto.dart';
 import 'package:cfc_vitoria_app/Widgets/base_button_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_text_widget.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +25,7 @@ class ServicoPageState extends State<ServicoPage> {
     return BasePage(
       child: SingleChildScrollView(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             // Imagem
             ClipRRect(
@@ -175,131 +176,127 @@ class ServicoPageState extends State<ServicoPage> {
                         borderRadius: BorderRadius.all(Radius.circular(25)),
                         color: Colors.black12,
                       ),
-                      child: Column(
-                        children: [],
-                      )),
-                  Container(
-                      width: larguraTela * 0.7,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(25)),
-                        color: Colors.black12,
-                      ),
                       child: Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 8, vertical: 15),
-                        child: Column(
-                          spacing: 20,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 8, vertical: 15),
+                          child: SingleChildScrollView(
+                            child: Column(
+                              spacing: 15,
                               children: [
-                                BaseText(
-                                    text: "Pré Requisitos",
-                                    size: 18,
-                                    color: Colors.black)
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    BaseText(
+                                        text: "Valores",
+                                        size: 18,
+                                        color: Colors.black)
+                                  ],
+                                ),
+                                ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: servico.valorServicos.length,
+                                  itemBuilder: (context, index) {
+                                    ValorServicoRDTO valorServico =
+                                        servico.valorServicos[index];
+
+                                    return LayoutBuilder(
+                                        builder: (context, constraints) {
+                                      return Column(
+                                        children: [
+                                          SizedBox(
+                                            width: constraints.maxWidth,
+                                            child: BaseText(
+                                              maxLines: 2,
+                                              overflow: true,
+                                              text: valorServico.descricao,
+                                              size: 14,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          Row(
+                                            children: [
+                                              Icon(Icons.paid_outlined,
+                                                  color: Color(0xFFF0733D)),
+                                              SizedBox(
+                                                  width: constraints.maxWidth *
+                                                      0.85,
+                                                  child: BaseText(
+                                                      bold: false,
+                                                      text:
+                                                          " R\$ ${valorServico.valor}",
+                                                      size: 18,
+                                                      color: Colors.black45)),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 20,
+                                          ),
+                                        ],
+                                      );
+                                    });
+                                  },
+                                ),
                               ],
                             ),
-                            LayoutBuilder(builder: (context, constraints) {
-                              return Row(
-                                spacing: 5,
-                                children: [
-                                  Icon(
-                                    Icons.circle,
-                                    size: 5,
-                                  ),
-                                  SizedBox(
-                                      width: constraints.maxWidth * 0.85,
+                          ))),
+                  Container(
+                    width: larguraTela * 0.7,
+                    // Defina uma altura máxima ou fixa
+                    constraints: BoxConstraints(
+                      maxHeight:
+                          300, // ajuste esse valor conforme o layout desejado
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(25)),
+                      color: Colors.black12,
+                    ),
+                    child: Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 8, vertical: 15),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Center(
+                              child: BaseText(
+                                text: "Pré Requisitos",
+                                size: 18,
+                                color: Colors.black,
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            ...[
+                              "Ser maior de 21 anos;",
+                              "Possuir CNH (Carteira Nacional de Habilitação) categoria B, C, D ou E;",
+                              "Não estar cumprindo pena de suspensão do direito de dirigir.",
+                              "Não ter cometido mais de uma infração gravíssima nos últimos 12 meses;",
+                              "Não ter processo de cassação da CNH em andamento;",
+                            ].map((texto) {
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 4),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Icon(Icons.circle, size: 5),
+                                    SizedBox(width: 8),
+                                    Expanded(
                                       child: BaseText(
-                                          bold: false,
-                                          text: "Ser maior de 21 anos;",
-                                          size: 12,
-                                          color: Colors.black)),
-                                ],
+                                        text: texto,
+                                        size: 12,
+                                        color: Colors.black,
+                                        bold: false,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               );
-                            }),
-                            LayoutBuilder(builder: (context, constraints) {
-                              return Row(
-                                spacing: 5,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.circle,
-                                    size: 5,
-                                  ),
-                                  SizedBox(
-                                      width: constraints.maxWidth * 0.85,
-                                      child: BaseText(
-                                          bold: false,
-                                          maxLines: 4,
-                                          text:
-                                              "Possuir CNH (Carteira Nacional de Habilitação) categoria B, C, D ou E;",
-                                          size: 12,
-                                          color: Colors.black)),
-                                ],
-                              );
-                            }),
-                            LayoutBuilder(builder: (context, constraints) {
-                              return Row(
-                                spacing: 5,
-                                children: [
-                                  Icon(
-                                    Icons.circle,
-                                    size: 5,
-                                  ),
-                                  SizedBox(
-                                      width: constraints.maxWidth * 0.85,
-                                      child: BaseText(
-                                          bold: false,
-                                          maxLines: 3,
-                                          text:
-                                              "Não estar cumprindo pena de suspensão do direito de dirigir.",
-                                          size: 12,
-                                          color: Colors.black)),
-                                ],
-                              );
-                            }),
-                            LayoutBuilder(builder: (context, constraints) {
-                              return Row(
-                                spacing: 5,
-                                children: [
-                                  Icon(
-                                    Icons.circle,
-                                    size: 5,
-                                  ),
-                                  SizedBox(
-                                      width: constraints.maxWidth * 0.85,
-                                      child: BaseText(
-                                          bold: false,
-                                          maxLines: 3,
-                                          text:
-                                              "Não ter cometido mais de uma infração gravíssima nos últimos 12 meses;",
-                                          size: 12,
-                                          color: Colors.black)),
-                                ],
-                              );
-                            }),
-                            LayoutBuilder(builder: (context, constraints) {
-                              return Row(
-                                spacing: 5,
-                                children: [
-                                  Icon(
-                                    Icons.circle,
-                                    size: 5,
-                                  ),
-                                  SizedBox(
-                                      width: constraints.maxWidth * 0.85,
-                                      child: BaseText(
-                                          bold: false,
-                                          text:
-                                              "Não ter processo de cassação da CNH em andamento;",
-                                          size: 12,
-                                          color: Colors.black)),
-                                ],
-                              );
-                            })
+                            }).toList(),
                           ],
                         ),
-                      )),
+                      ),
+                    ),
+                  )
                 ]),
             SizedBox(height: 20),
           ],

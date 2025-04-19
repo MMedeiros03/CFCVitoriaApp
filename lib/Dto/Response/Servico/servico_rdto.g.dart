@@ -13,6 +13,9 @@ ServicoRDTO _$ServicoRDTOFromJson(Map<String, dynamic> json) => ServicoRDTO(
       pathImage: json['pathImage'] as String,
       anosValidade: (json['anosValidade'] as num).toInt(),
       valorServico: (json['valorServico'] as num).toDouble(),
+      valorServicos: (json['valorServicos'] as List<dynamic>)
+          .map((e) => ValorServicoRDTO.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$ServicoRDTOToJson(ServicoRDTO instance) =>
@@ -23,4 +26,5 @@ Map<String, dynamic> _$ServicoRDTOToJson(ServicoRDTO instance) =>
       'pathImage': instance.pathImage,
       'anosValidade': instance.anosValidade,
       'valorServico': instance.valorServico,
+      'valorServicos': instance.valorServicos,
     };

@@ -49,7 +49,7 @@ class ServiceCard extends StatelessWidget {
                             width: constraints.maxWidth * 0.5,
                             child: BaseText(
                               text: servico.titulo,
-                              size: 18,
+                              size: 16,
                               color: Colors.black,
                             ),
                           ),
