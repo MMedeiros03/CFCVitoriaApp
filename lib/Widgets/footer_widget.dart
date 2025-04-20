@@ -1,3 +1,4 @@
+import 'package:cfc_vitoria_app/Utils/utils.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
@@ -33,7 +34,7 @@ class _FooterWidgetState extends State<FooterWidget> {
               ),
               GestureDetector(
                 onTap: () {
-                  _redirecionarParaPagina("/meusDados");
+                  _validarERedirecionar("/meusDados");
                 },
                 child: Icon(
                   Icons.person_outlined,
@@ -42,7 +43,7 @@ class _FooterWidgetState extends State<FooterWidget> {
               ),
               GestureDetector(
                 onTap: () {
-                  _redirecionarParaPagina("/create-agendamento");
+                  _validarERedirecionar("/create-agendamento");
                 },
                 child: Icon(
                   Icons.add_box_outlined,
@@ -52,7 +53,7 @@ class _FooterWidgetState extends State<FooterWidget> {
               ),
               GestureDetector(
                 onTap: () {
-                  _redirecionarParaPagina("/agendamentos");
+                  _validarERedirecionar("/agendamentos");
                 },
                 child: Icon(
                   Icons.calendar_today_outlined,
@@ -71,6 +72,21 @@ class _FooterWidgetState extends State<FooterWidget> {
             ],
           ),
         ));
+  }
+
+  Future _validarERedirecionar(path) async {
+    var tokenValido = await Utils.validaToken();
+
+    if (mounted) {
+      Scaffold.of(context).closeDrawer();
+    }
+
+    if (!tokenValido) {
+      Get.toNamed("/login",
+          arguments: "Você precisa fazer o login para visualizar seus dados");
+    } else {
+      Get.offNamed(path);
+    }
   }
 
   Future<void> _redirecionarParaPagina(String path) async {

@@ -1,10 +1,8 @@
 import 'package:cfc_vitoria_app/Dto/Response/Agendamento/agendamento_rdto.dart';
 import 'package:cfc_vitoria_app/Services/agendamento_service.dart';
-import 'package:cfc_vitoria_app/Utils/utils.dart';
 import 'package:cfc_vitoria_app/Widgets/base_text_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/schedule_card_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import '../Widgets/base_page_widget.dart';
 
 class AgendamentosPage extends StatefulWidget {
@@ -26,14 +24,6 @@ class AgendamentosPageState extends State<AgendamentosPage> {
   }
 
   Future _inicializar() async {
-    var tokenValido = await Utils.validaToken();
-
-    if (!tokenValido) {
-      Get.toNamed("/login",
-          arguments:
-              "Você precisa fazer o login para visualizar seus agendamentos");
-    }
-
     var service = AgendamentoService();
 
     try {

@@ -1,10 +1,13 @@
 import 'dart:io';
 
-import 'package:cfc_vitoria_app/Utils/utils.dart';
+import 'package:cfc_vitoria_app/Dto/Response/Aluno/aluno_rdto.dart';
+import 'package:cfc_vitoria_app/Services/aluno_service.dart';
 import 'package:cfc_vitoria_app/Widgets/base_button_widget.dart';
+import 'package:cfc_vitoria_app/Widgets/base_snackbar_widget.dart';
+import 'package:cfc_vitoria_app/Widgets/base_text_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import '../Widgets/base_page_widget.dart';
 
 class MeusDadosPage extends StatefulWidget {
@@ -17,6 +20,8 @@ class MeusDadosPage extends StatefulWidget {
 class MeusDadosPageState extends State<MeusDadosPage> {
   final imagePicker = ImagePicker();
   File? imageFile;
+  bool carregando = true;
+  AlunoRDTO? alunoLogado;
 
   pick(ImageSource source) async {
     final pickedFile = await imagePicker.pickImage(source: source);
@@ -29,14 +34,7 @@ class MeusDadosPageState extends State<MeusDadosPage> {
   }
 
   int _currentStep = 0;
-  final _formKey = GlobalKey<FormState>();
-  final _formKey2 = GlobalKey<FormState>();
 
-  // Controladores para capturar os dados do formulário
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _phoneController = TextEditingController();
-  final TextEditingController _birthdaydate = TextEditingController();
   String? _imagePath;
 
   @override
@@ -47,11 +45,20 @@ class MeusDadosPageState extends State<MeusDadosPage> {
   }
 
   Future _inicializar() async {
-    var tokenValido = await Utils.validaToken();
+    try {
+      var aluno = await AlunoService().obterDadosAluno();
 
-    if (!tokenValido) {
-      Get.toNamed("/login",
-          arguments: "Você precisa fazer o login para visualizar seus dados");
+      setState(() {
+        alunoLogado = aluno;
+        carregando = false;
+      });
+    } catch (e) {
+      BaseSnackbar.exibirNotificacao(
+          "Erro", "Erro ao tentar buscar suas informações.", false);
+
+      setState(() {
+        carregando = false;
+      });
     }
   }
 
@@ -60,332 +67,243 @@ class MeusDadosPageState extends State<MeusDadosPage> {
     final larguraTela = MediaQuery.of(context).size.width;
 
     return BasePage(
-      child: SingleChildScrollView(
-        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            SizedBox(height: 20),
-
-            // Indicador de progresso
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _buildStepIndicator(0),
-                _buildStepIndicator(1),
-              ],
-            ),
-
-            // Formulário com IndexedStack
-            SizedBox(height: 20),
-
-            IndexedStack(
-              index: _currentStep,
-              children: [
-                _stepOne(),
-                _stepTwo(),
-              ],
-            ),
-
-            SizedBox(height: 20),
-
-            if (_currentStep > 0)
-              BaseButton(
-                heigth: 50,
-                width: larguraTela * 0.4,
-                backgroundColor: Color(0xFFF0733D),
-                text: "Salvar",
-                colorFont: Colors.black,
-                onPressed: () {
-                  setState(() {
-                    _currentStep--;
-                  });
-                },
+      child: carregando
+          ? Center(
+              child: CircularProgressIndicator(
+                color: Colors.black,
               ),
+            )
+          : SingleChildScrollView(
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  SizedBox(height: 20),
 
-            if (_currentStep == 0)
-              BaseButton(
-                heigth: 50,
-                width: larguraTela * 0.4,
-                colorFont: Colors.black,
-                backgroundColor: Color(0xFFF0733D),
-                onPressed: () {
-                  if (_currentStep == 0) {
-                    if (_formKey.currentState!.validate()) {
-                      setState(() {
-                        _currentStep = 1;
-                      });
-                    }
-                  } else {
-                    print('Nome: ${_nameController.text}');
-                    print('E-mail: ${_emailController.text}');
-                    print('Telefone: ${_phoneController.text}');
-                    print('Imagem: $_imagePath');
-                  }
-                },
-                text: _currentStep == 0 ? 'Próximo' : 'Finalizar',
+                  // Indicador de progresso
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _buildStepIndicator(0),
+                      _buildStepIndicator(1),
+                    ],
+                  ),
+
+                  // Formulário com IndexedStack
+                  SizedBox(height: 20),
+
+                  IndexedStack(
+                    index: _currentStep,
+                    children: [
+                      _stepOne(),
+                      _stepTwo(),
+                    ],
+                  ),
+
+                  SizedBox(height: 20),
+
+                  if (_currentStep == 0)
+                    BaseButton(
+                      heigth: 50,
+                      width: larguraTela * 0.4,
+                      colorFont: Colors.black,
+                      backgroundColor: Color(0xFFF0733D),
+                      onPressed: () {
+                        if (_currentStep == 0) {
+                          setState(() {
+                            _currentStep = 1;
+                          });
+                        } else {}
+                      },
+                      text: 'Próximo',
+                    ),
+                ],
               ),
-          ],
-        ),
-      ),
+            ),
     );
   }
 
   Widget _stepOne() {
-    return Form(
-      key: _formKey,
-      child: Column(
-        spacing: 15,
-        children: [
-          TextFormField(
-            controller: _nameController,
-            decoration: InputDecoration(
-              errorStyle: TextStyle(
-                  color: Color(0xFF970C02), fontFamily: "Libre Baskerville"),
-              labelStyle: TextStyle(
-                  color: Colors.black38, fontFamily: "Libre Baskerville"),
-              labelText: 'Nome',
-              prefixIcon: Icon(Icons.person, size: 15),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: Color(0xFFF0733D)),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: Color(0xFFF0733D)),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: Color(0xFFF0733D), width: 2),
+    return SingleChildScrollView(
+        child: Column(
+      spacing: 20,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            BaseText(
+              color: Colors.black,
+              text: "Dados Pessoais",
+              size: 25,
+            ),
+            SizedBox(width: 10),
+            Expanded(
+              child: Container(
+                height: 2,
+                color: Color(0xFFF0733D),
               ),
             ),
-            validator: (value) => value!.isEmpty ? 'Preencha o nome' : null,
-          ),
-          TextFormField(
-            controller: _phoneController,
-            decoration: InputDecoration(
-              errorStyle: TextStyle(
-                  color: Color(0xFF970C02), fontFamily: "Libre Baskerville"),
-              labelStyle: TextStyle(
-                  color: Colors.black38, fontFamily: "Libre Baskerville"),
-              labelText: 'Telefone',
-              prefixIcon: Icon(Icons.phone, size: 15),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: Color(0xFFF0733D)),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: Color(0xFFF0733D)),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: Color(0xFFF0733D), width: 2),
+          ],
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            BaseText(
+                text: "Nome", size: 14, bold: false, color: Colors.black38),
+            BaseText(
+                text: alunoLogado?.nome ?? "", size: 18, color: Colors.black),
+          ],
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            BaseText(text: "CPF", size: 14, bold: false, color: Colors.black38),
+            BaseText(
+                text: alunoLogado?.cpf ?? "", size: 18, color: Colors.black),
+          ],
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            BaseText(
+                text: "Telefone", size: 14, bold: false, color: Colors.black38),
+            BaseText(
+                text: alunoLogado?.telefone ?? "",
+                size: 18,
+                color: Colors.black),
+          ],
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            BaseText(
+                text: "Email", size: 14, bold: false, color: Colors.black38),
+            BaseText(
+                text: alunoLogado?.email ?? "", size: 18, color: Colors.black),
+          ],
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            BaseText(
+                text: "Data de Nascimento",
+                size: 14,
+                bold: false,
+                color: Colors.black38),
+            BaseText(
+                text: alunoLogado?.dataNascimento != null
+                    ? DateFormat("dd/MM/yyyy")
+                        .format(alunoLogado!.dataNascimento)
+                    : "",
+                size: 18,
+                color: Colors.black),
+          ],
+        ),
+        Row(
+          children: [
+            BaseText(
+              color: Colors.black,
+              text: "Endereço",
+              size: 25,
+            ),
+            SizedBox(width: 10),
+            Expanded(
+              child: Container(
+                height: 2,
+                color: Color(0xFFF0733D),
               ),
             ),
-            validator: (value) =>
-                value!.isEmpty ? 'Preencha o número de telefone' : null,
-          ),
-          TextFormField(
-            controller: _emailController,
-            decoration: InputDecoration(
-              errorStyle: TextStyle(
-                  color: Color(0xFF970C02), fontFamily: "Libre Baskerville"),
-              labelStyle: TextStyle(
-                  color: Colors.black38, fontFamily: "Libre Baskerville"),
-              labelText: 'Email',
-              prefixIcon: Icon(Icons.email, size: 15),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: Color(0xFFF0733D)),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: Color(0xFFF0733D)),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: Color(0xFFF0733D), width: 2),
-              ),
-            ),
-            validator: (value) =>
-                value!.isEmpty ? 'Preencha o seu e-mail' : null,
-          ),
-          TextFormField(
-            controller: _birthdaydate,
-            decoration: InputDecoration(
-              errorStyle: TextStyle(
-                  color: const Color(0xFF970C02),
-                  fontFamily: "Libre Baskerville"),
-              labelStyle: TextStyle(
-                  color: Colors.black38, fontFamily: "Libre Baskerville"),
-              labelText: 'Data de Nascimento',
-              prefixIcon: Icon(Icons.calendar_month, size: 15),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: Color(0xFFF0733D)),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: Color(0xFFF0733D)),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: Color(0xFFF0733D), width: 2),
-              ),
-            ),
-            validator: (value) =>
-                value!.isEmpty ? 'Preencha sua data de nascimento' : null,
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            BaseText(text: "CEP", size: 14, bold: false, color: Colors.black38),
+            BaseText(
+                text: alunoLogado?.endereco.cep ?? "",
+                size: 18,
+                color: Colors.black),
+          ],
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            BaseText(text: "Rua", size: 14, bold: false, color: Colors.black38),
+            BaseText(
+                text: alunoLogado?.endereco.rua ?? "",
+                size: 18,
+                color: Colors.black),
+          ],
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            BaseText(
+                text: "Numero", size: 14, bold: false, color: Colors.black38),
+            BaseText(
+                text: alunoLogado?.endereco.numero ?? "",
+                size: 18,
+                color: Colors.black),
+          ],
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            BaseText(
+                text: "Bairro", size: 14, bold: false, color: Colors.black38),
+            BaseText(
+                text: alunoLogado?.endereco.bairro ?? "",
+                size: 18,
+                color: Colors.black),
+          ],
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            BaseText(
+                text: "Cidade", size: 14, bold: false, color: Colors.black38),
+            BaseText(
+                text: alunoLogado?.endereco.cidade ?? "",
+                size: 18,
+                color: Colors.black),
+          ],
+        ),
+      ],
+    ));
   }
 
   Widget _stepTwo() {
-    return Form(
-      key: _formKey2,
-      child: Column(
-        spacing: 15,
-        children: [
-          TextFormField(
-            controller: _nameController,
-            decoration: InputDecoration(
-              errorStyle: TextStyle(
-                  color: Color(0xFF970C02), fontFamily: "Libre Baskerville"),
-              labelStyle: TextStyle(
-                  color: Colors.black38, fontFamily: "Libre Baskerville"),
-              labelText: 'Rua',
-              prefixIcon: Icon(Icons.person, size: 15),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: Color(0xFFF0733D)),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: Color(0xFFF0733D)),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: Color(0xFFF0733D), width: 2),
-              ),
+    return Column(
+      children: [
+        GestureDetector(
+          onTap: () {
+            setState(() {
+              _imagePath = 'imagem_selecionada.png'; // Simulação
+            });
+          },
+          child: Container(
+            width: 150,
+            height: 150,
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: BorderRadius.circular(10),
             ),
-            validator: (value) => value!.isEmpty ? 'Preencha o nome' : null,
+            child: _imagePath == null
+                ? Icon(Icons.add_a_photo, size: 50, color: Colors.grey[700])
+                : Image.asset(_imagePath!, fit: BoxFit.cover),
           ),
-          TextFormField(
-            controller: _phoneController,
-            decoration: InputDecoration(
-              errorStyle: TextStyle(
-                  color: Color(0xFF970C02), fontFamily: "Libre Baskerville"),
-              labelStyle: TextStyle(
-                  color: Colors.black38, fontFamily: "Libre Baskerville"),
-              labelText: 'Numero',
-              prefixIcon: Icon(Icons.phone, size: 15),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: Color(0xFFF0733D)),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: Color(0xFFF0733D)),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: Color(0xFFF0733D), width: 2),
-              ),
-            ),
-            validator: (value) =>
-                value!.isEmpty ? 'Preencha o número de telefone' : null,
-          ),
-          TextFormField(
-            controller: _emailController,
-            decoration: InputDecoration(
-              errorStyle: TextStyle(
-                  color: Color(0xFF970C02), fontFamily: "Libre Baskerville"),
-              labelStyle: TextStyle(
-                  color: Colors.black38, fontFamily: "Libre Baskerville"),
-              labelText: 'Bairro',
-              prefixIcon: Icon(Icons.email, size: 15),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: Color(0xFFF0733D)),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: Color(0xFFF0733D)),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: Color(0xFFF0733D), width: 2),
-              ),
-            ),
-            validator: (value) =>
-                value!.isEmpty ? 'Preencha o seu e-mail' : null,
-          ),
-          TextFormField(
-            controller: _birthdaydate,
-            decoration: InputDecoration(
-              errorStyle: TextStyle(
-                  color: const Color(0xFF970C02),
-                  fontFamily: "Libre Baskerville"),
-              labelStyle: TextStyle(
-                  color: Colors.black38, fontFamily: "Libre Baskerville"),
-              labelText: 'Cidade',
-              prefixIcon: Icon(Icons.calendar_month, size: 15),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: Color(0xFFF0733D)),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: Color(0xFFF0733D)),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: Color(0xFFF0733D), width: 2),
-              ),
-            ),
-            validator: (value) =>
-                value!.isEmpty ? 'Preencha sua data de nascimento' : null,
-          ),
-        ],
-      ),
+        ),
+        SizedBox(height: 20),
+        BaseText(
+          size: 10,
+          color: Colors.black,
+          text: _imagePath == null
+              ? 'Clique para adicionar uma imagem'
+              : 'Imagem selecionada',
+        ),
+      ],
     );
   }
-
-  // Etapa 2: Upload de imagem
-  // Widget _stepTwo() {
-  //   return Column(
-  //     children: [
-  //       GestureDetector(
-  //         onTap: () {
-  //           setState(() {
-  //             _imagePath = 'imagem_selecionada.png'; // Simulação
-  //           });
-  //         },
-  //         child: Container(
-  //           width: 150,
-  //           height: 150,
-  //           decoration: BoxDecoration(
-  //             color: Colors.grey[300],
-  //             borderRadius: BorderRadius.circular(10),
-  //           ),
-  //           child: _imagePath == null
-  //               ? Icon(Icons.add_a_photo, size: 50, color: Colors.grey[700])
-  //               : Image.asset(_imagePath!, fit: BoxFit.cover),
-  //         ),
-  //       ),
-  //       SizedBox(height: 20),
-  //       BaseText(
-  //         size: 10,
-  //         color: Colors.black,
-  //         text: _imagePath == null
-  //             ? 'Clique para adicionar uma imagem'
-  //             : 'Imagem selecionada',
-  //       ),
-  //     ],
-  //   );
-  // }
 
   Widget _buildStepIndicator(int step) {
     return Container(

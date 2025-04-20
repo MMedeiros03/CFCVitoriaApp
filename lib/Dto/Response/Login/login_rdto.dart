@@ -8,8 +8,12 @@ part 'login_rdto.g.dart';
 class LoginRDTO {
   final String accessToken;
   final String tokenType;
+  final int alunoId;
 
-  LoginRDTO({required this.accessToken, required this.tokenType});
+  LoginRDTO(
+      {required this.accessToken,
+      required this.tokenType,
+      required this.alunoId});
 
   Map<String, dynamic> toJson() => _$LoginRDTOToJson(this);
 

@@ -1,9 +1,7 @@
-import 'dart:core';
-
 import 'package:cfc_vitoria_app/Dto/Response/Servico/servico_rdto.dart';
 import 'package:cfc_vitoria_app/Services/agendamento_service.dart';
 import 'package:cfc_vitoria_app/Services/servico_service.dart';
-import 'package:cfc_vitoria_app/Utils/utils.dart';
+import 'package:cfc_vitoria_app/Utils/storage.dart';
 import 'package:cfc_vitoria_app/Widgets/base_button_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_page_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_snackbar_widget.dart';
@@ -49,13 +47,6 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
   }
 
   Future _inicializar() async {
-    var tokenValido = await Utils.validaToken();
-
-    if (!tokenValido) {
-      Get.toNamed("/login",
-          arguments: "Você precisa fazer o login para criar um agendamento!");
-    }
-
     var serviceServico = await ServicoService().getAll();
 
     setState(() {
@@ -171,8 +162,17 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
         horarioselectedValue!.minute,
       );
 
+      var alunoId = await StorageService.getAlunoId();
+
+      if (alunoId == null) {
+        BaseSnackbar.exibirNotificacao(
+            "Erro", "Não foi possivel identificar o aluno", false);
+
+        return;
+      }
+
       await AgendamentoService().createAgendamento(AgendamentoDTO(
-          alunoId: 1,
+          alunoId: alunoId,
           servicoId: servicoSelected!.id,
           dataHoraAgendamento: dataCompleta,
           observacao: ""));

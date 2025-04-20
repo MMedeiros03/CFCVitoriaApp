@@ -1,3 +1,4 @@
+import 'package:cfc_vitoria_app/Utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
@@ -96,7 +97,11 @@ class HomeCardAnimation extends StatelessWidget {
                     text: "Ver",
                     fontSize: 12,
                     onPressed: () {
-                      Get.toNamed(path);
+                      if (path == "/agendamentos") {
+                        _validarERedirecionar(path);
+                      } else {
+                        Get.toNamed(path);
+                      }
                     },
                   ),
                 ),
@@ -106,5 +111,16 @@ class HomeCardAnimation extends StatelessWidget {
         );
       },
     );
+  }
+
+  Future _validarERedirecionar(path) async {
+    var tokenValido = await Utils.validaToken();
+
+    if (!tokenValido) {
+      Get.toNamed("/login",
+          arguments: "Você precisa fazer o login para visualizar seus dados");
+    } else {
+      Get.offNamed(path);
+    }
   }
 }

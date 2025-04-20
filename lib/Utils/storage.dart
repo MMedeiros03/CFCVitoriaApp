@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class StorageService {
   static const _tokenKey = "";
+  static const _alunoId = "";
   static const _viewedTutorial = "";
 
   static Future<void> remover(String key) async {
@@ -28,6 +29,16 @@ class StorageService {
       final prefs = await SharedPreferences.getInstance();
       return prefs.getString(_tokenKey);
     }
+  }
+
+  static Future<void> setAlunoId(int alunoId) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setInt(_alunoId, alunoId);
+  }
+
+  static Future<int?> getAlunoId() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getInt(_alunoId);
   }
 
   static Future<void> removeToken(bool criptografado) async {

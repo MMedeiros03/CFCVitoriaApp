@@ -56,7 +56,7 @@ class SideBarMenuState extends State<SideBarMenu> {
             icon: Icons.calendar_month_outlined,
             title: "Agendamentos",
             path: "/agendamentos",
-            onTap: _redirectToRegisters,
+            onTap: _validarERedirecionar,
             selected: currentRoute == "/agendamentos",
           ),
           ItemSideBarMenu(
@@ -94,18 +94,33 @@ class SideBarMenuState extends State<SideBarMenu> {
     );
   }
 
+  Future _validarERedirecionar(path) async {
+    var tokenValido = await Utils.validaToken();
+
+    if (mounted) {
+      Scaffold.of(context).closeDrawer();
+    }
+
+    if (!tokenValido) {
+      Get.toNamed("/login",
+          arguments: "Você precisa fazer o login para visualizar seus dados");
+    } else {
+      Get.offNamed(path);
+    }
+  }
+
   _logOutAluno(String path) async {
     await StorageService.removeToken(true);
 
     if (mounted) {
-      Scaffold.of(context).openDrawer();
+      Scaffold.of(context).closeDrawer();
     }
 
     Get.offNamed(path);
   }
 
   _redirectToRegisters(String path) async {
-    Scaffold.of(context).openDrawer();
+    Scaffold.of(context).closeDrawer();
     Get.toNamed(path);
   }
 }
