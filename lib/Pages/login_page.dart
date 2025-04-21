@@ -33,7 +33,7 @@ class LoginPageState extends State<LoginPage> {
     await service.login(
         LoginDTO(login: _nameController.text, password: _nameController.text));
 
-    Get.toNamed("/home");
+    Get.offNamed("/home");
   }
 
   Future redirectCadastro() async {

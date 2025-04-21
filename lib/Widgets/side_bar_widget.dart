@@ -111,12 +111,13 @@ class SideBarMenuState extends State<SideBarMenu> {
 
   _logOutAluno(String path) async {
     await StorageService.removeToken(true);
+    await StorageService.removeAlunoId();
 
     if (mounted) {
       Scaffold.of(context).closeDrawer();
     }
 
-    Get.offNamed(path);
+    Get.toNamed(path);
   }
 
   _redirectToRegisters(String path) async {

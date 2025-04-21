@@ -2,9 +2,9 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StorageService {
-  static const _tokenKey = "";
-  static const _alunoId = "";
-  static const _viewedTutorial = "";
+  static const _tokenKey = "_tokenKey";
+  static const _alunoId = "_alunoId";
+  static const _viewedTutorial = "_viewedTutorial";
 
   static Future<void> remover(String key) async {
     final prefs = await SharedPreferences.getInstance();
@@ -51,6 +51,11 @@ class StorageService {
     }
   }
 
+  static Future<void> removeAlunoId() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove(_alunoId);
+  }
+
   static Future<void> setVisualizedTutorial(bool visualizou) async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(_viewedTutorial, visualizou.toString());
@@ -58,6 +63,9 @@ class StorageService {
 
   static Future<bool> getVisualizedTutorial() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(_viewedTutorial) == "true";
+
+    var teste = prefs.getString(_viewedTutorial);
+
+    return teste == "true";
   }
 }
