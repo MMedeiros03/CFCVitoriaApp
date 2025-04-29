@@ -12,6 +12,7 @@ import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../Dto/Request/Agendamento/agendamento_dto.dart';
+import '../Widgets/doc_card_widget.dart';
 
 class CreateAgendamentoPage extends StatefulWidget {
   const CreateAgendamentoPage({super.key});
@@ -103,6 +104,7 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
                     _buildStepIndicator(0),
                     _buildStepIndicator(1),
                     _buildStepIndicator(2),
+                    _buildStepIndicator(3),
                   ],
                 ),
                 Expanded(
@@ -112,6 +114,7 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
                       _stepOne(),
                       _stepTwo(),
                       _stepTree(),
+                      _stepFor(),
                     ],
                   ),
                 ),
@@ -473,6 +476,50 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
   }
 
   Widget _stepTree() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        BaseText(
+          text:
+              "Por favor, envie as imagens dos documentos solicitados abaixo, garantindo que estejam legíveis e completos.",
+          size: 15,
+          color: Colors.black87,
+        ),
+        const SizedBox(height: 20),
+        Expanded(
+          child: SingleChildScrollView(
+            child: Column(
+              spacing: 20,
+              children: [
+                DocCard(
+                  exibeBotaoCapturaImagem: true,
+                  capturarImagem: _redirect,
+                  tituloDocumento: "CPF (Frente)",
+                ),
+                DocCard(
+                  exibeBotaoCapturaImagem: true,
+                  capturarImagem: _redirect,
+                  tituloDocumento: "CPF (Verso)",
+                ),
+                DocCard(
+                  exibeBotaoCapturaImagem: true,
+                  capturarImagem: _redirect,
+                  tituloDocumento: "CNH (Frente)",
+                ),
+                DocCard(
+                  exibeBotaoCapturaImagem: true,
+                  capturarImagem: _redirect,
+                  tituloDocumento: "CNH (Verso)",
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _stepFor() {
     final alturaTela = MediaQuery.of(context).size.height;
     final larguraTela = MediaQuery.of(context).size.width;
 
@@ -595,6 +642,17 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
               ),
             ],
           );
+  }
+
+  void _redirect() async {
+    final image = await Get.toNamed("captura-imagem");
+
+    if (image != null) {
+      // Aqui você pode salvar, exibir ou enviar a imagem
+      print("OIEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+
+      setState(() {});
+    }
   }
 
   String _calculaDiasParaAgendamento() {

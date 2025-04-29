@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "257674590482",
+    "project_id": "cfcvitoriadocs",
+    "storage_bucket": "cfcvitoriadocs.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:257674590482:android:aa062740178bfae81a1bcb",
+        "android_client_info": {
+          "package_name": "com.example.cfc_vitoria_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCxkCt8YK8P3uMdSkeKp_eeJmSy28SMzzM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

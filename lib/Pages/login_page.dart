@@ -23,9 +23,9 @@ class LoginPageState extends State<LoginPage> {
   bool _isChecked = false;
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController =
-      TextEditingController(text: "admin");
+      TextEditingController(text: "13425212931");
   final TextEditingController _emailController =
-      TextEditingController(text: "admin");
+      TextEditingController(text: "13425212931");
 
   Future login() async {
     LoginService service = LoginService();

@@ -1,5 +1,7 @@
 import 'package:cfc_vitoria_app/Utils/routes.dart';
 import 'package:cfc_vitoria_app/Utils/storage.dart';
+import 'package:cfc_vitoria_app/firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -13,6 +15,10 @@ void main() async {
   runApp(MyApp(
     initialRoute: initialRoute,
   ));
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 }
 
 Future<String> setInitPage() async {
