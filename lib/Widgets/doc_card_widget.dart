@@ -76,6 +76,12 @@ class DocCard extends StatelessWidget {
                           backgroundColor: Color(0xFFF0733D),
                           colorFont: Colors.black,
                         )
+                      else
+                        Icon(
+                          Icons.check_circle_outline,
+                          size: 65,
+                          color: Colors.green,
+                        )
                     ],
                   )
                 ],

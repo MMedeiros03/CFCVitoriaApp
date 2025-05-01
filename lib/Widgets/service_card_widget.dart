@@ -24,17 +24,17 @@ class ServiceCard extends StatelessWidget {
             padding: EdgeInsets.only(right: 0, left: 0, top: 16, bottom: 16),
             child: LayoutBuilder(builder: (context, constraints) {
               return Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   SizedBox(
-                    width: 145,
-                    height: 145,
+                    width: constraints.maxWidth * 0.4,
+                    height: constraints.maxHeight,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
                       child: Image.asset(
                         "assets/image/logo_medeiros.jpg",
-                        fit: BoxFit.fill,
+                        fit: BoxFit.cover,
                       ),
                     ),
                   ),
@@ -47,27 +47,30 @@ class ServiceCard extends StatelessWidget {
                         children: [
                           SizedBox(
                             width: constraints.maxWidth * 0.5,
+                            height: constraints.maxHeight * 0.3,
                             child: BaseText(
                               text: servico.titulo,
-                              size: 16,
+                              size: 17,
                               color: Colors.black,
                             ),
                           ),
                           SizedBox(
                             width: constraints.maxWidth * 0.5,
+                            height: constraints.maxHeight * 0.3,
                             child: BaseText(
                               maxLines: 3,
                               overflow: true,
+                              bold: false,
                               text: servico.descricao,
-                              size: 8,
+                              size: 11,
                               color: Colors.black45,
                             ),
                           ),
                         ],
                       ),
                       BaseButton(
-                        width: 125,
-                        heigth: 40,
+                        width: constraints.maxWidth * 0.35,
+                        heigth: constraints.maxHeight * 0.25,
                         colorFont: Colors.black,
                         backgroundColor: Color(0xFFF0733D),
                         text: "Detalhes",

@@ -1,6 +1,10 @@
+import 'package:cfc_vitoria_app/Dto/App/checklist_documentos_dto.dart';
+import 'package:cfc_vitoria_app/Dto/Request/Documento/documento_dto.dart';
 import 'package:cfc_vitoria_app/Dto/Response/Servico/servico_rdto.dart';
 import 'package:cfc_vitoria_app/Services/agendamento_service.dart';
+import 'package:cfc_vitoria_app/Services/firebase_service.dart';
 import 'package:cfc_vitoria_app/Services/servico_service.dart';
+import 'package:cfc_vitoria_app/Utils/enums.dart';
 import 'package:cfc_vitoria_app/Utils/storage.dart';
 import 'package:cfc_vitoria_app/Widgets/base_button_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_page_widget.dart';
@@ -25,7 +29,8 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
   final ServicoRDTO? servico = Get.arguments as ServicoRDTO?;
 
   bool criandoAgendamento = false;
-
+  List<ChecklistDocumentoDto> checkListDocumentos = [];
+  List<DocumentoDTO> listaDocumentos = [];
   int _currentStep = 0;
   ServicoRDTO? servicoSelected;
   DateTime? horarioselectedValue;
@@ -174,10 +179,21 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
         return;
       }
 
+      for (var documento in checkListDocumentos) {
+        // FirebaseService()
+        //   .uploadImagem(imagem: imagem, caminhoDestino: caminhoDestino);
+
+        listaDocumentos.add(DocumentoDTO(
+            tipoDocumento: documento.tipoDocumento.index,
+            nomeArquivo: "",
+            pathDocumento: ""));
+      }
+
       await AgendamentoService().createAgendamento(AgendamentoDTO(
           alunoId: alunoId,
           servicoId: servicoSelected!.id,
           dataHoraAgendamento: dataCompleta,
+          documentosAluno: listaDocumentos,
           observacao: ""));
 
       setState(() {
@@ -410,8 +426,8 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
                 fontWeight: FontWeight.bold),
           ),
           focusedDay: dataSelecionada,
-          firstDay: DateTime.utc(2025, 1, 1),
-          lastDay: DateTime.utc(2026, 1, 31),
+          firstDay: DateTime.utc(DateTime.now().year, 1, 1),
+          lastDay: DateTime.utc(DateTime.now().year + 1, 1, 31),
           rowHeight: alturaTela * 0.040,
           onDaySelected: _diaSelecionado,
         ),
@@ -476,6 +492,15 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
   }
 
   Widget _stepTree() {
+    final documentoCPFFrente = checkListDocumentos
+        .firstWhereOrNull((x) => x.tipoDocumento == TipoDocumento.cpfFrente);
+    final documentoCPFVerso = checkListDocumentos
+        .firstWhereOrNull((x) => x.tipoDocumento == TipoDocumento.cpfVerso);
+    final documentoCNHFrente = checkListDocumentos
+        .firstWhereOrNull((x) => x.tipoDocumento == TipoDocumento.cnhFrente);
+    final documentoCNHVerso = checkListDocumentos
+        .firstWhereOrNull((x) => x.tipoDocumento == TipoDocumento.cnhVerso);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -492,23 +517,31 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
               spacing: 20,
               children: [
                 DocCard(
-                  exibeBotaoCapturaImagem: true,
-                  capturarImagem: _redirect,
+                  exibeBotaoCapturaImagem: documentoCPFFrente == null,
+                  capturarImagem: () {
+                    _redirect(TipoDocumento.cpfFrente);
+                  },
                   tituloDocumento: "CPF (Frente)",
                 ),
                 DocCard(
-                  exibeBotaoCapturaImagem: true,
-                  capturarImagem: _redirect,
+                  exibeBotaoCapturaImagem: documentoCPFVerso == null,
+                  capturarImagem: () {
+                    _redirect(TipoDocumento.cpfVerso);
+                  },
                   tituloDocumento: "CPF (Verso)",
                 ),
                 DocCard(
-                  exibeBotaoCapturaImagem: true,
-                  capturarImagem: _redirect,
+                  exibeBotaoCapturaImagem: documentoCNHFrente == null,
+                  capturarImagem: () {
+                    _redirect(TipoDocumento.cnhFrente);
+                  },
                   tituloDocumento: "CNH (Frente)",
                 ),
                 DocCard(
-                  exibeBotaoCapturaImagem: true,
-                  capturarImagem: _redirect,
+                  exibeBotaoCapturaImagem: documentoCNHVerso == null,
+                  capturarImagem: () {
+                    _redirect(TipoDocumento.cnhVerso);
+                  },
                   tituloDocumento: "CNH (Verso)",
                 ),
               ],
@@ -644,12 +677,12 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
           );
   }
 
-  void _redirect() async {
+  void _redirect(TipoDocumento tipoDocumento) async {
     final image = await Get.toNamed("captura-imagem");
 
     if (image != null) {
-      // Aqui você pode salvar, exibir ou enviar a imagem
-      print("OIEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+      checkListDocumentos.add(ChecklistDocumentoDto(
+          tipoDocumento: tipoDocumento, documento: image));
 
       setState(() {});
     }
