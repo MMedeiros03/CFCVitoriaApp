@@ -6,7 +6,6 @@ import 'package:cfc_vitoria_app/Widgets/base_button_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_snackbar_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_text_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import '../Widgets/base_page_widget.dart';
 
@@ -18,20 +17,9 @@ class MeusDadosPage extends StatefulWidget {
 }
 
 class MeusDadosPageState extends State<MeusDadosPage> {
-  final imagePicker = ImagePicker();
   File? imageFile;
   bool carregando = true;
   AlunoRDTO? alunoLogado;
-
-  pick(ImageSource source) async {
-    final pickedFile = await imagePicker.pickImage(source: source);
-
-    if (pickedFile != null) {
-      setState(() {
-        imageFile = File(pickedFile.path);
-      });
-    }
-  }
 
   int _currentStep = 0;
 

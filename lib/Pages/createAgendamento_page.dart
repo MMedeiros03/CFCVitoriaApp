@@ -6,6 +6,7 @@ import 'package:cfc_vitoria_app/Services/firebase_service.dart';
 import 'package:cfc_vitoria_app/Services/servico_service.dart';
 import 'package:cfc_vitoria_app/Utils/enums.dart';
 import 'package:cfc_vitoria_app/Utils/storage.dart';
+import 'package:cfc_vitoria_app/Utils/utils.dart';
 import 'package:cfc_vitoria_app/Widgets/base_button_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_page_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_snackbar_widget.dart';
@@ -13,6 +14,7 @@ import 'package:cfc_vitoria_app/Widgets/base_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:path/path.dart' as p;
 import 'package:table_calendar/table_calendar.dart';
 
 import '../Dto/Request/Agendamento/agendamento_dto.dart';
@@ -72,22 +74,6 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
     }
   }
 
-  Future _buscaHorariosDisponiveis() async {
-    setState(() {
-      horarios = [];
-      horarioselectedValue = null;
-      carregandoHorarios = true;
-    });
-
-    var agendamentoService =
-        await AgendamentoService().getHorariosDisponiveis(dataSelecionada);
-
-    setState(() {
-      horarios = agendamentoService;
-      carregandoHorarios = false;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final larguraTela = MediaQuery.of(context).size.width;
@@ -129,27 +115,9 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
                   colorFont: Colors.black,
                   backgroundColor: Color(0xFFF0733D),
                   onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      if (_currentStep == 1) {
-                        if (horarioselectedValue == null) {
-                          BaseSnackbar.exibirNotificacao(
-                              "Erro",
-                              "Obrigatório selecionar uma data e horário para prosseguir!",
-                              false);
-                          return;
-                        }
-                      }
-
-                      if (_currentStep == 2) {
-                        criarAgendamento();
-                      } else {
-                        setState(() {
-                          _currentStep = _currentStep + 1;
-                        });
-                      }
-                    }
+                    _validacoesPorStep();
                   },
-                  text: _currentStep != 2 ? 'Próximo' : 'Finalizar',
+                  text: _currentStep != 3 ? 'Próximo' : 'Finalizar',
                 ),
               ],
             ),
@@ -180,13 +148,18 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
       }
 
       for (var documento in checkListDocumentos) {
-        // FirebaseService()
-        //   .uploadImagem(imagem: imagem, caminhoDestino: caminhoDestino);
+        var documentoRenomeado = await Utils.renomearArquivo(
+            documento.documento!, documento.tipoDocumento.name);
+
+        var pathArquivoFirebase = await FirebaseService().uploadImagem(
+          alunoId: alunoId,
+          imagem: documentoRenomeado,
+        );
 
         listaDocumentos.add(DocumentoDTO(
             tipoDocumento: documento.tipoDocumento.index,
-            nomeArquivo: "",
-            pathDocumento: ""));
+            nomeArquivo: p.basename(documentoRenomeado.path),
+            pathDocumento: pathArquivoFirebase!));
       }
 
       await AgendamentoService().createAgendamento(AgendamentoDTO(
@@ -675,6 +648,74 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
               ),
             ],
           );
+  }
+
+  void _validacoesPorStep() {
+    switch (_currentStep) {
+      case 0:
+        validaStepOne();
+        return;
+      case 1:
+        validaStepTwo();
+        return;
+      case 2:
+        validaStepTree();
+        return;
+      case 3:
+        criarAgendamento();
+        return;
+    }
+  }
+
+  void validaStepOne() {
+    if (_formKey.currentState!.validate()) {
+      setState(() {
+        _currentStep = _currentStep + 1;
+      });
+    }
+
+    return;
+  }
+
+  void validaStepTwo() {
+    if (horarioselectedValue == null) {
+      BaseSnackbar.exibirNotificacao("Erro",
+          "Obrigatório selecionar uma data e horário para prosseguir!", false);
+    } else {
+      setState(() {
+        _currentStep = _currentStep + 1;
+      });
+    }
+  }
+
+  void validaStepTree() {
+    // validar os documentos
+    if (checkListDocumentos.length < 4) {
+      BaseSnackbar.exibirNotificacao(
+          "Erro",
+          "Obrigatório capturar uma imagem de todos os documentos selecionados",
+          false);
+    } else {
+      setState(() {
+        _currentStep = _currentStep + 1;
+      });
+    }
+  }
+
+  Future _buscaHorariosDisponiveis() async {
+    setState(() {
+      horarios = [];
+      horarioselectedValue = null;
+      carregandoHorarios = true;
+    });
+
+    var agendamentoService =
+        await AgendamentoService().getHorariosDisponiveis(dataSelecionada);
+
+    setState(() {
+      horarios = agendamentoService;
+      carregandoHorarios = false;
+    });
   }
 
   void _redirect(TipoDocumento tipoDocumento) async {
