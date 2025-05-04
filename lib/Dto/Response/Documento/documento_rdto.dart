@@ -7,11 +7,15 @@ part 'documento_rdto.g.dart';
 @JsonSerializable()
 class DocumentoRDTO {
   int id;
+  String nomeArquivo;
   String pathDocumento;
+  int tipoDocumento;
 
   DocumentoRDTO({
     required this.id,
     required this.pathDocumento,
+    required this.nomeArquivo,
+    required this.tipoDocumento,
   });
 
   Map<String, dynamic> toJson() => _$DocumentoRDTOToJson(this);

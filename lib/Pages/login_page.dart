@@ -18,7 +18,7 @@ class LoginPage extends StatefulWidget {
 
 class LoginPageState extends State<LoginPage> {
   final String? mensagem = Get.arguments as String?;
-
+  bool _carregando = false;
   int currentStep = 1;
   bool _isChecked = false;
   final _formKey = GlobalKey<FormState>();
@@ -28,10 +28,18 @@ class LoginPageState extends State<LoginPage> {
       TextEditingController(text: "13425212931");
 
   Future login() async {
+    setState(() {
+      _carregando = true;
+    });
+
     LoginService service = LoginService();
 
     await service.login(
         LoginDTO(login: _nameController.text, password: _nameController.text));
+
+    setState(() {
+      _carregando = true;
+    });
 
     Get.offNamed("/home");
   }
@@ -94,101 +102,111 @@ class LoginPageState extends State<LoginPage> {
                             ),
                             color: Color(0xFFE8E8E8),
                           ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              BaseText(
-                                  text: "Login", size: 25, color: Colors.black),
-                              Form(
-                                key: _formKey,
-                                child: Column(
+                          child: _carregando
+                              ? Center(
+                                  child: CircularProgressIndicator(
+                                      color: Colors.black))
+                              : Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    TextFormField(
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontFamily: "Libre Baskerville"),
-                                      controller: _nameController,
-                                      decoration: _buildInputDecoration(
-                                          "Nome", Icons.person),
-                                      validator: (value) => value!.isEmpty
-                                          ? 'Preencha o nome'
-                                          : null,
+                                    BaseText(
+                                        text: "Login",
+                                        size: 25,
+                                        color: Colors.black),
+                                    Form(
+                                      key: _formKey,
+                                      child: Column(
+                                        children: [
+                                          TextFormField(
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontFamily:
+                                                    "Libre Baskerville"),
+                                            controller: _nameController,
+                                            decoration: _buildInputDecoration(
+                                                "Nome", Icons.person),
+                                            validator: (value) => value!.isEmpty
+                                                ? 'Preencha o nome'
+                                                : null,
+                                          ),
+                                          SizedBox(height: 10),
+                                          TextFormField(
+                                            controller: _emailController,
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontFamily:
+                                                    "Libre Baskerville"),
+                                            decoration: _buildInputDecoration(
+                                                "Senha", Icons.lock),
+                                            validator: (value) => value!.isEmpty
+                                                ? 'Preencha a senha'
+                                                : null,
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                     SizedBox(height: 10),
-                                    TextFormField(
-                                      controller: _emailController,
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontFamily: "Libre Baskerville"),
-                                      decoration: _buildInputDecoration(
-                                          "Senha", Icons.lock),
-                                      validator: (value) => value!.isEmpty
-                                          ? 'Preencha a senha'
-                                          : null,
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Checkbox(
+                                              activeColor: Colors.black12,
+                                              checkColor: Colors.green,
+                                              value: _isChecked,
+                                              onChanged: (bool? newValue) {
+                                                setState(() {
+                                                  _isChecked = newValue!;
+                                                });
+                                              },
+                                            ),
+                                            BaseText(
+                                                bold: false,
+                                                text: "Lembrar senha",
+                                                size: 12,
+                                                color: Colors.black),
+                                          ],
+                                        ),
+                                        BaseText(
+                                            onClick: () {},
+                                            bold: false,
+                                            text: "Esqueceu sua senha?",
+                                            size: 11,
+                                            color: Colors.black)
+                                      ],
+                                    ),
+                                    SizedBox(height: 15),
+                                    Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 50),
+                                      child: BaseButton(
+                                        heigth: 50,
+                                        widget: 20,
+                                        onPressed: login,
+                                        text: "Entrar",
+                                        fontSize: 14,
+                                        colorFont: Colors.black,
+                                        backgroundColor: Color(0xFFF0733D),
+                                      ),
+                                    ),
+                                    SizedBox(height: 15),
+                                    Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 50),
+                                      child: BaseButton(
+                                        heigth: 50,
+                                        widget: 20,
+                                        onPressed: redirectCadastro,
+                                        text: "Cadastre-se",
+                                        fontSize: 14,
+                                        colorFont: Colors.black,
+                                        backgroundColor: Color(0xFFF0733D),
+                                      ),
                                     ),
                                   ],
                                 ),
-                              ),
-                              SizedBox(height: 10),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Checkbox(
-                                        activeColor: Colors.black12,
-                                        checkColor: Colors.green,
-                                        value: _isChecked,
-                                        onChanged: (bool? newValue) {
-                                          setState(() {
-                                            _isChecked = newValue!;
-                                          });
-                                        },
-                                      ),
-                                      BaseText(
-                                          bold: false,
-                                          text: "Lembrar senha",
-                                          size: 12,
-                                          color: Colors.black),
-                                    ],
-                                  ),
-                                  BaseText(
-                                      onClick: () {},
-                                      bold: false,
-                                      text: "Esqueceu sua senha?",
-                                      size: 11,
-                                      color: Colors.black)
-                                ],
-                              ),
-                              SizedBox(height: 15),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 50),
-                                child: BaseButton(
-                                  heigth: 50,
-                                  widget: 20,
-                                  onPressed: login,
-                                  text: "Entrar",
-                                  fontSize: 14,
-                                  colorFont: Colors.black,
-                                  backgroundColor: Color(0xFFF0733D),
-                                ),
-                              ),
-                              SizedBox(height: 15),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 50),
-                                child: BaseButton(
-                                  heigth: 50,
-                                  widget: 20,
-                                  onPressed: redirectCadastro,
-                                  text: "Cadastre-se",
-                                  fontSize: 14,
-                                  colorFont: Colors.black,
-                                  backgroundColor: Color(0xFFF0733D),
-                                ),
-                              ),
-                            ],
-                          ),
                         ),
                       )
                     ]),
