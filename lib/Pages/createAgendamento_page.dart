@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:cfc_vitoria_app/Dto/App/checklist_documentos_dto.dart';
 import 'package:cfc_vitoria_app/Dto/Request/Documento/documento_dto.dart';
+import 'package:cfc_vitoria_app/Dto/Response/Documento/documento_aluno_rdto.dart';
 import 'package:cfc_vitoria_app/Dto/Response/Servico/servico_rdto.dart';
 import 'package:cfc_vitoria_app/Services/agendamento_service.dart';
 import 'package:cfc_vitoria_app/Services/firebase_service.dart';
@@ -57,6 +60,8 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
   Future _inicializar() async {
     var serviceServico = await ServicoService().getAll();
 
+    await validarDocumentosAluno();
+
     setState(() {
       carregando = false;
       servicos = serviceServico;
@@ -71,6 +76,18 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
           servicoSelected = servicoSelecionadoDetalhes;
         });
       }
+    }
+  }
+
+  Future validarDocumentosAluno() async {
+    var documentosAluno = await StorageService.getListaDocumentosAluno();
+
+    for (var documento in documentosAluno) {
+      TipoDocumento tipoDocumentoAluno =
+          TipoDocumento.values[documento.tipoDocumento];
+
+      checkListDocumentos
+          .add(ChecklistDocumentoDto(tipoDocumento: tipoDocumentoAluno));
     }
   }
 
@@ -147,6 +164,11 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
         return;
       }
 
+      var listaDocumentosStorage = List<DocumentoAlunoRDTO>() = [];
+
+      checkListDocumentos =
+          checkListDocumentos.where((d) => d.documento != null).toList();
+
       for (var documento in checkListDocumentos) {
         var documentoRenomeado = await Utils.renomearArquivo(
             documento.documento!, documento.tipoDocumento.name);
@@ -159,7 +181,15 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
         listaDocumentos.add(DocumentoDTO(
             tipoDocumento: documento.tipoDocumento.index,
             nomeArquivo: p.basename(documentoRenomeado.path),
-            pathDocumento: pathArquivoFirebase!));
+            pathDocumento: pathArquivoFirebase ?? ""));
+
+        listaDocumentosStorage.add(
+            DocumentoAlunoRDTO(tipoDocumento: documento.tipoDocumento.index));
+      }
+
+      if (listaDocumentosStorage.isNotEmpty) {
+        await StorageService.setListaDocumentosAluno(
+            jsonEncode(listaDocumentosStorage));
       }
 
       await AgendamentoService().createAgendamento(AgendamentoDTO(

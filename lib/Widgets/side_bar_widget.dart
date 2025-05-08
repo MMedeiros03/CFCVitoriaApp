@@ -112,6 +112,8 @@ class SideBarMenuState extends State<SideBarMenu> {
   _logOutAluno(String path) async {
     await StorageService.removeToken(true);
     await StorageService.removeAlunoId();
+    await StorageService.removeProximoAgendamento();
+    await StorageService.removeListaDocumentosAluno();
 
     if (mounted) {
       Scaffold.of(context).closeDrawer();

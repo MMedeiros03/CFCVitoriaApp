@@ -1,10 +1,13 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cfc_vitoria_app/Dto/Response/Agendamento/agendamento_rdto.dart';
+import 'package:cfc_vitoria_app/Utils/storage.dart';
 import 'package:cfc_vitoria_app/Utils/utils.dart';
 import 'package:cfc_vitoria_app/Widgets/base_button_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_page_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import '../Widgets/home_card_animation.dart';
 
 class HomePage extends StatefulWidget {
@@ -19,6 +22,7 @@ class _HomePageState extends State<HomePage>
   late AnimationController _controller;
   bool carregando = true;
   late bool usuarioLogado = false;
+  AgendamentoRDTO? _proximoAgendamento;
 
   @override
   void dispose() {
@@ -36,8 +40,11 @@ class _HomePageState extends State<HomePage>
   _inicializar() async {
     var tokenValido = await Utils.validaToken();
 
+    var proximoAgendamento = await StorageService.getProximoAgendamento();
+
     setState(() {
       usuarioLogado = tokenValido;
+      _proximoAgendamento = proximoAgendamento;
       carregando = false;
     });
   }
@@ -107,7 +114,7 @@ class _HomePageState extends State<HomePage>
                         );
                       }).toList(),
                     ),
-                    if (usuarioLogado)
+                    if (_proximoAgendamento != null)
                       Padding(
                         padding: EdgeInsets.fromLTRB(4, 0, 4, 0),
                         child: Column(
@@ -142,13 +149,16 @@ class _HomePageState extends State<HomePage>
                                           MainAxisAlignment.start,
                                       children: [
                                         BaseText(
-                                          text: "20/10/2025 - 13:30",
+                                          text: DateFormat("dd/MM/yyyy - HH:mm")
+                                              .format(_proximoAgendamento!
+                                                  .dataHoraAgendado),
                                           size: 20,
                                           color: Colors.black,
                                         ),
                                         SizedBox(height: 4),
                                         BaseText(
-                                          text: "Faltam 5 dias para a visita.",
+                                          text:
+                                              _proximoAgendamento!.contagemDias,
                                           size: 12,
                                           color: Colors.black45,
                                         ),
@@ -166,7 +176,8 @@ class _HomePageState extends State<HomePage>
                                       text: "Ver",
                                       fontSize: 14,
                                       onPressed: () {
-                                        Get.toNamed("servico");
+                                        Get.toNamed("/agendamento",
+                                            arguments: _proximoAgendamento);
                                       },
                                     ),
                                   )

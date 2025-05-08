@@ -13,7 +13,7 @@ class AlunoRDTO {
   String telefone;
   String cpf;
   DateTime dataNascimento;
-  EnderecoRDTO endereco;
+  EnderecoRDTO? endereco;
   List<DocumentoRDTO> documentosAluno;
 
   AlunoRDTO(

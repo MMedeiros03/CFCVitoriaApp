@@ -15,7 +15,9 @@ AlunoRDTO _$AlunoRDTOFromJson(Map<String, dynamic> json) => AlunoRDTO(
       documentosAluno: (json['documentosAluno'] as List<dynamic>)
           .map((e) => DocumentoRDTO.fromJson(e as Map<String, dynamic>))
           .toList(),
-      endereco: EnderecoRDTO.fromJson(json['endereco'] as Map<String, dynamic>),
+      endereco: json['endereco'] == null
+          ? null
+          : EnderecoRDTO.fromJson(json['endereco'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$AlunoRDTOToJson(AlunoRDTO instance) => <String, dynamic>{

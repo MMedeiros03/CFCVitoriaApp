@@ -12,7 +12,15 @@ class LoginService extends ApiServiceBase {
       final response = await post('/Login', loginToJson);
       var responseJson = json.decode(response.body);
       var loginResponseDto = LoginRDTO.fromJson(responseJson);
+
       await StorageService.setAlunoId(loginResponseDto.alunoId);
+
+      await StorageService.setProximoAgendamento(
+          loginResponseDto.proximoAgendamentoAluno?.toJsonString() ?? "");
+
+      await StorageService.setListaDocumentosAluno(
+          jsonEncode(loginResponseDto.documentosAluno));
+
       return await StorageService.setToken(loginResponseDto.accessToken, true);
     } catch (e) {
       rethrow;

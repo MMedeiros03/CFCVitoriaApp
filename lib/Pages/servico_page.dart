@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cfc_vitoria_app/Dto/Response/Servico/servico_rdto.dart';
 import 'package:cfc_vitoria_app/Dto/Response/ValorServico/valor_servico_rdto.dart';
+import 'package:cfc_vitoria_app/Utils/utils.dart';
 import 'package:cfc_vitoria_app/Widgets/base_button_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_text_widget.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,18 @@ class ServicoPage extends StatefulWidget {
 
 class ServicoPageState extends State<ServicoPage> {
   final ServicoRDTO servico = Get.arguments as ServicoRDTO;
+
+  Future _validarERedirecionar(path) async {
+    var tokenValido = await Utils.validaToken();
+
+    if (!tokenValido) {
+      Get.toNamed("/login",
+          arguments:
+              "Você precisa fazer o login para criar um novo agendamento");
+    } else {
+      Get.offNamed(path, arguments: servico);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +83,7 @@ class ServicoPageState extends State<ServicoPage> {
                 backgroundColor: Color(0xFFF0733D),
                 colorFont: Colors.black,
                 onPressed: () {
-                  Get.toNamed("/create-agendamento", arguments: servico);
+                  _validarERedirecionar("/create-agendamento");
                 },
                 text: "Tenho interesse",
               ),

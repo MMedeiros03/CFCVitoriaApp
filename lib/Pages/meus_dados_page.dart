@@ -206,7 +206,7 @@ class MeusDadosPageState extends State<MeusDadosPage> {
               BaseText(
                   text: "CEP", size: 14, bold: false, color: Colors.black38),
               BaseText(
-                  text: alunoLogado?.endereco.cep ?? "",
+                  text: alunoLogado?.endereco?.cep ?? "",
                   size: 18,
                   color: Colors.black),
             ],
@@ -217,7 +217,7 @@ class MeusDadosPageState extends State<MeusDadosPage> {
               BaseText(
                   text: "Rua", size: 14, bold: false, color: Colors.black38),
               BaseText(
-                  text: alunoLogado?.endereco.rua ?? "",
+                  text: alunoLogado?.endereco?.rua ?? "",
                   size: 18,
                   color: Colors.black),
             ],
@@ -228,7 +228,7 @@ class MeusDadosPageState extends State<MeusDadosPage> {
               BaseText(
                   text: "Numero", size: 14, bold: false, color: Colors.black38),
               BaseText(
-                  text: alunoLogado?.endereco.numero ?? "",
+                  text: alunoLogado?.endereco?.numero ?? "",
                   size: 18,
                   color: Colors.black),
             ],
@@ -239,7 +239,7 @@ class MeusDadosPageState extends State<MeusDadosPage> {
               BaseText(
                   text: "Bairro", size: 14, bold: false, color: Colors.black38),
               BaseText(
-                  text: alunoLogado?.endereco.bairro ?? "",
+                  text: alunoLogado?.endereco?.bairro ?? "",
                   size: 18,
                   color: Colors.black),
             ],
@@ -250,7 +250,7 @@ class MeusDadosPageState extends State<MeusDadosPage> {
               BaseText(
                   text: "Cidade", size: 14, bold: false, color: Colors.black38),
               BaseText(
-                  text: alunoLogado?.endereco.cidade ?? "",
+                  text: alunoLogado?.endereco?.cidade ?? "",
                   size: 18,
                   color: Colors.black),
             ],
