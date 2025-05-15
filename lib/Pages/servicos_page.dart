@@ -12,15 +12,23 @@ class ServicosPage extends StatefulWidget {
   State<StatefulWidget> createState() => ServicosPageState();
 }
 
-class ServicosPageState extends State<ServicosPage> {
+class ServicosPageState extends State<ServicosPage>
+    with SingleTickerProviderStateMixin {
   List<ServicoRDTO> servicos = [];
   bool carregando = true;
+  late AnimationController _controller;
 
   @override
   void initState() {
     super.initState();
-
+    _controller = AnimationController(vsync: this);
     _inicializar();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   Future _inicializar() async {
@@ -80,6 +88,7 @@ class ServicosPageState extends State<ServicosPage> {
                           width: larguraTela,
                           height: alturaTela * 0.24,
                           child: ServiceCard(
+                            controller: _controller,
                             servico: servico,
                           ),
                         ),

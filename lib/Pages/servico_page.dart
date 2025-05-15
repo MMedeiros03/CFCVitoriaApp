@@ -6,6 +6,7 @@ import 'package:cfc_vitoria_app/Widgets/base_button_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import '../Widgets/base_page_widget.dart';
 
 class ServicoPage extends StatefulWidget {
@@ -15,8 +16,10 @@ class ServicoPage extends StatefulWidget {
   State<StatefulWidget> createState() => ServicoPageState();
 }
 
-class ServicoPageState extends State<ServicoPage> {
+class ServicoPageState extends State<ServicoPage>
+    with SingleTickerProviderStateMixin {
   final ServicoRDTO servico = Get.arguments as ServicoRDTO;
+  late AnimationController _controller;
 
   Future _validarERedirecionar(path) async {
     var tokenValido = await Utils.validaToken();
@@ -31,6 +34,18 @@ class ServicoPageState extends State<ServicoPage> {
   }
 
   @override
+  void initState() {
+    _controller = AnimationController(vsync: this);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final larguraTela = MediaQuery.of(context).size.width;
     final alturaTela = MediaQuery.of(context).size.height;
@@ -41,15 +56,20 @@ class ServicoPageState extends State<ServicoPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             // Imagem
-            ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: Image.asset(
-                "assets/image/logo_medeiros.jpg",
-                width: larguraTela,
-                height: alturaTela * 0.18,
+            SizedBox(
+              height: larguraTela * 0.45,
+              child: Lottie.asset(
+                "assets/animations/LearnAnimation.json",
                 fit: BoxFit.cover,
+                controller: _controller,
+                onLoaded: (composition) {
+                  _controller
+                    ..duration = composition.duration
+                    ..repeat();
+                },
               ),
             ),
+
             SizedBox(height: 20),
 
             // Título

@@ -42,11 +42,10 @@ class AgendamentoService extends ApiServiceBase {
     }
   }
 
-  Future alterarSituacaoAgendamento(
-      AlterarAgendamentoDTO alterarAgendamentoDTO) async {
+  Future excluirAgendamento(AlterarAgendamentoDTO alterarAgendamentoDTO) async {
     try {
-      await post('/Agendamento/AlterarSituacaoAgendamento',
-          alterarAgendamentoDTO.toJson(),
+      await post(
+          '/Agendamento/CancelarAgendamento', alterarAgendamentoDTO.toJson(),
           autoriza: true);
     } catch (e) {
       rethrow;

@@ -20,8 +20,6 @@ class ScheduleCard extends StatelessWidget {
     switch(situacaoAgendamento){
       case "Agendado":
         return container ? Color(0x33FFFF00) : Colors.yellow;
-      case "Confirmado":
-        return container ? Color(0x4700EF24) : Colors.green;
       case "Cancelado":
         return container ? Color(0x33FF0000) : Colors.red;
       default:

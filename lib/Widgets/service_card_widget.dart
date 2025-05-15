@@ -2,16 +2,16 @@ import 'package:cfc_vitoria_app/Dto/Response/Servico/servico_rdto.dart';
 import 'package:cfc_vitoria_app/Widgets/base_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 
 import 'base_button_widget.dart';
 
 class ServiceCard extends StatelessWidget {
-  const ServiceCard({
-    super.key,
-    required this.servico,
-  });
+  const ServiceCard(
+      {super.key, required this.servico, required this.controller});
 
   final ServicoRDTO servico;
+  final AnimationController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -28,16 +28,23 @@ class ServiceCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   SizedBox(
-                    width: constraints.maxWidth * 0.4,
-                    height: constraints.maxHeight,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
-                      child: Image.asset(
-                        "assets/image/logo_medeiros.jpg",
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
+                      width: constraints.maxWidth * 0.4,
+                      height: constraints.maxHeight,
+                      child: Center(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Lottie.asset(
+                            "assets/animations/ServicesAnimation.json",
+                            fit: BoxFit.cover,
+                            controller: controller,
+                            onLoaded: (composition) {
+                              controller
+                                ..duration = composition.duration
+                                ..repeat();
+                            },
+                          ),
+                        ),
+                      )),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.end,

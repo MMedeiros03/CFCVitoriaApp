@@ -26,8 +26,6 @@ class AgendamentoPageState extends State<AgendamentoPage> {
     switch (situacaoAgendamento) {
       case "Agendado":
         return container ? Color(0x33FFFF00) : Colors.yellow;
-      case "Confirmado":
-        return container ? Color(0x4700EF24) : Colors.green;
       case "Cancelado":
         return container ? Color(0x33FF0000) : Colors.red;
       default:
@@ -47,29 +45,15 @@ class AgendamentoPageState extends State<AgendamentoPage> {
     }
   }
 
-  Future<void> alterarSituacaoAgendamento(int acao) async {
+  Future<void> cancelarAgendamento() async {
     try {
-      AlterarAgendamentoDTO alterarAgendamentoDTO = AlterarAgendamentoDTO(
-          agendamentoId: agendamento.id,
-          novaSituacao: acao,
-          dataRemercado: acao == 3 ? DateTime.now() : null);
+      AlterarAgendamentoDTO alterarAgendamentoDTO =
+          AlterarAgendamentoDTO(agendamentoId: agendamento.id);
 
-      await AgendamentoService()
-          .alterarSituacaoAgendamento(alterarAgendamentoDTO);
+      await AgendamentoService().excluirAgendamento(alterarAgendamentoDTO);
 
-      var mensagem = "";
-      var novaSituacaoAgendamento = "";
-
-      switch (acao) {
-        case 1:
-          mensagem = "Agendamento confirmado com sucesso!";
-          novaSituacaoAgendamento = "Confirmado";
-          break;
-        case 2:
-          mensagem = "Agendamento cancelado com sucesso!";
-          novaSituacaoAgendamento = "Cancelado";
-          break;
-      }
+      var mensagem = "Agendamento cancelado com sucesso!";
+      var novaSituacaoAgendamento = "Cancelado";
 
       setState(() {
         agendamento.situacaoAgendamento = novaSituacaoAgendamento;
@@ -82,18 +66,8 @@ class AgendamentoPageState extends State<AgendamentoPage> {
     }
   }
 
-  void mostrarDialogConfirmacao(BuildContext context, int acao) {
-    var mensagemConfirmacao = "";
-
-    switch (acao) {
-      case 1:
-        mensagemConfirmacao =
-            "Realmente confirma sua presença na data deste agendamento?";
-        break;
-      case 2:
-        mensagemConfirmacao = "Realmente deseja cancelar este agendamento?";
-        break;
-    }
+  void mostrarDialogConfirmacao(BuildContext context) {
+    var mensagemConfirmacao = "Realmente deseja cancelar este agendamento?";
 
     showDialog(
       context: context,
@@ -117,7 +91,7 @@ class AgendamentoPageState extends State<AgendamentoPage> {
               colorFont: Colors.black,
               backgroundColor: Color(0xFFF0733D),
               onPressed: () {
-                alterarSituacaoAgendamento(acao);
+                cancelarAgendamento();
                 Navigator.of(context).pop();
               },
             ),
@@ -329,19 +303,7 @@ class AgendamentoPageState extends State<AgendamentoPage> {
                         width: larguraTela * 0.03,
                         colorFont: Colors.black,
                         onPressed: () {
-                          mostrarDialogConfirmacao(context, 1);
-                        },
-                        text: "Confirmar",
-                        backgroundColor: const Color.fromARGB(110, 0, 248, 37),
-                      ),
-                    ),
-                    Expanded(
-                      child: BaseButton(
-                        heigth: alturaTela * 0.06,
-                        width: larguraTela * 0.03,
-                        colorFont: Colors.black,
-                        onPressed: () {
-                          mostrarDialogConfirmacao(context, 2);
+                          mostrarDialogConfirmacao(context);
                         },
                         text: "Cancelar",
                         backgroundColor: const Color.fromARGB(109, 248, 0, 0),
