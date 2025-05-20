@@ -54,7 +54,7 @@ class DocCard extends StatelessWidget {
                               maxLines: 2,
                               overflow: true,
                               text:
-                                  "Capture uma nova foto ou escolha uma imagem da galeria",
+                                  "Capture uma nova imagem do documento solicitado acima",
                               size: 12,
                               color: Colors.black54,
                             ),

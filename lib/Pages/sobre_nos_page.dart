@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cfc_vitoria_app/Widgets/base_snackbar_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_text_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../Widgets/base_page_widget.dart';
 
@@ -114,9 +115,9 @@ class SobreNosPageState extends State<SobreNosPage> {
                       justifyText: true,
                       bold: false,
                       text:
-                          "t is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
+                          "Confira a estrutura completa do nosso CFC, pensada para oferecer conforto e segurança durante o seu aprendizado. Espaço pensado para garantir um ambiente agradável e equipado com tudo o que você precisa para se preparar da melhor forma.",
                       size: 13,
-                      color: Colors.black38),
+                      color: Colors.black45),
                   CarouselSlider(
                     options: CarouselOptions(
                       height: alturaTela * 0.3,
@@ -130,7 +131,7 @@ class SobreNosPageState extends State<SobreNosPage> {
                             width: larguraTela * 0.7,
                             decoration: BoxDecoration(
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(25)),
+                                  BorderRadius.all(Radius.circular(12)),
                               color: Colors.black12,
                             ),
                             child: Center(
@@ -175,9 +176,9 @@ class SobreNosPageState extends State<SobreNosPage> {
                       justifyText: true,
                       bold: false,
                       text:
-                          "t is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
+                          "Nosso CFC está de portas abertas para te receber! Estamos localizados na Av. Sapucaia, número 1899, no bairro Estação do Trem, em Sapucaia do Sul/RS. Funcionamos de segunda a sexta, das 9h às 18h, sempre prontos para te atender com carinho e atenção. Se precisar de um ponto de referência, estamos bem em frente à praça principal. Esperamos sua visita!",
                       size: 13,
-                      color: Colors.black38),
+                      color: Colors.black45),
                 ],
               ),
               InkWell(
@@ -220,9 +221,37 @@ class SobreNosPageState extends State<SobreNosPage> {
                       justifyText: true,
                       bold: false,
                       text:
-                          "t is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
+                          "Se tiver dúvidas, quiser mais informações ou precisar de ajuda com algum serviço, estamos à disposição nos nossos canais de atendimento. É só entrar em contato com a gente pelo WhatsApp, telefone ou redes sociais. Vai ser um prazer falar com você!",
                       size: 13,
-                      color: Colors.black38),
+                      color: Colors.black45),
+                  Row(
+                    spacing: 15,
+                    children: [
+                      Icon(
+                        Icons.public_outlined,
+                        color: Color(0xFFF0733D),
+                        size: 40,
+                      ),
+                      BaseText(
+                          text: "http://www.cfcvitoriasapucaia.com/",
+                          size: 14,
+                          color: Colors.black)
+                    ],
+                  ),
+                  Row(
+                    spacing: 15,
+                    children: [
+                      FaIcon(
+                        FontAwesomeIcons.instagram,
+                        color: Color(0xFFF0733D),
+                        size: 40,
+                      ),
+                      BaseText(
+                          text: "@cfcvitoriasapucaia",
+                          size: 14,
+                          color: Colors.black)
+                    ],
+                  ),
                   Row(
                     spacing: 15,
                     children: [
@@ -246,7 +275,7 @@ class SobreNosPageState extends State<SobreNosPage> {
                         size: 40,
                       ),
                       BaseText(
-                          text: "(12) 912345678", size: 15, color: Colors.black)
+                          text: "(51) 3450-3939", size: 15, color: Colors.black)
                     ],
                   )
                 ],

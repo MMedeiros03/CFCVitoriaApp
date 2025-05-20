@@ -55,66 +55,69 @@ class _HomePageState extends State<HomePage>
     final alturaTela = MediaQuery.of(context).size.height;
 
     return BasePage(
-        child: carregando
-            ? Center(child: CircularProgressIndicator(color: Colors.black))
-            : SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  spacing: 10,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+      child: carregando
+          ? Center(child: CircularProgressIndicator(color: Colors.black))
+          : SingleChildScrollView(
+              child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              spacing: 30,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  spacing: 5,
                   children: [
-                    Row(
-                      spacing: 5,
+                    Icon(
+                      Icons.person_outlined,
+                      size: 55,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Icon(
-                          Icons.person_outlined,
-                          size: 55,
+                        BaseText(
+                          text: "Bem vindo,",
+                          bold: true,
+                          size: 17,
+                          color: Colors.black,
                         ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            BaseText(
-                              text: "Bem vindo,",
-                              bold: true,
-                              size: 17,
-                              color: Colors.black,
-                            ),
-                            BaseText(
-                              text: "aluno!",
-                              bold: false,
-                              size: 17,
-                              color: Colors.black,
-                            ),
-                          ],
-                        )
+                        BaseText(
+                          text: "aluno!",
+                          bold: false,
+                          size: 17,
+                          color: Colors.black,
+                        ),
                       ],
-                    ),
-                    CarouselSlider(
-                      options: CarouselOptions(
-                          height: alturaTela * 0.24,
-                          autoPlay: true,
-                          autoPlayInterval: Duration(seconds: 5)),
-                      items: [1, 2, 3, 4, 5].map((i) {
-                        return Builder(
-                          builder: (BuildContext context) {
-                            return Container(
-                                width: larguraTela,
-                                margin: EdgeInsets.symmetric(horizontal: 5.0),
-                                decoration: BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(8)),
-                                    color: Colors.black12),
-                                child: BaseText(
-                                  text: 'imagem $i',
-                                  size: 16,
-                                  bold: false,
-                                  color: Colors.black,
-                                ));
-                          },
-                        );
-                      }).toList(),
-                    ),
-                    if (_proximoAgendamento != null)
+                    )
+                  ],
+                ),
+                CarouselSlider(
+                  options: CarouselOptions(
+                      height: alturaTela * 0.24,
+                      autoPlay: true,
+                      autoPlayInterval: Duration(seconds: 5)),
+                  items: [1, 2, 3, 4, 5].map((i) {
+                    return Builder(
+                      builder: (BuildContext context) {
+                        return Container(
+                            width: larguraTela,
+                            margin: EdgeInsets.symmetric(horizontal: 5.0),
+                            decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(8)),
+                                color: Colors.black12),
+                            child: BaseText(
+                              text: 'imagem $i',
+                              size: 16,
+                              bold: false,
+                              color: Colors.black,
+                            ));
+                      },
+                    );
+                  }).toList(),
+                ),
+                Column(
+                  spacing: 10,
+                  children: [
+                    if (_proximoAgendamento != null && usuarioLogado)
                       Padding(
                         padding: EdgeInsets.fromLTRB(4, 0, 4, 0),
                         child: Column(
@@ -224,7 +227,9 @@ class _HomePageState extends State<HomePage>
                               'assets/animations/AboutAnimation.json',
                         )),
                   ],
-                ),
-              ));
+                )
+              ],
+            )),
+    );
   }
 }

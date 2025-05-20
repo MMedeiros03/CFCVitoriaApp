@@ -21,54 +21,83 @@ class _FooterWidgetState extends State<FooterWidget> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
-            spacing: 35,
+            spacing: 30,
             children: [
               GestureDetector(
-                onTap: () {
-                  _redirecionarParaPagina("/servicos");
-                },
-                child: Icon(
-                  Icons.book_outlined,
-                  size: 35,
-                ),
-              ),
+                  onTap: () {
+                    _redirecionarParaPagina("/servicos");
+                  },
+                  child: Container(
+                      decoration: BoxDecoration(
+                          color: defineCorPelaRota("/servicos"),
+                          borderRadius: BorderRadius.circular(8)),
+                      child: Padding(
+                        padding: EdgeInsets.all(6),
+                        child: Icon(
+                          Icons.book_outlined,
+                          size: 35,
+                        ),
+                      ))),
               GestureDetector(
-                onTap: () {
-                  _validarERedirecionar("/meusDados");
-                },
-                child: Icon(
-                  Icons.person_outlined,
-                  size: 35,
-                ),
-              ),
+                  onTap: () {
+                    _validarERedirecionar("/meusDados");
+                  },
+                  child: Container(
+                      decoration: BoxDecoration(
+                          color: defineCorPelaRota("/meusDados"),
+                          borderRadius: BorderRadius.circular(8)),
+                      child: Padding(
+                        padding: EdgeInsets.all(6),
+                        child: Icon(
+                          Icons.person_outlined,
+                          size: 35,
+                        ),
+                      ))),
               GestureDetector(
-                onTap: () {
-                  _validarERedirecionar("/create-agendamento");
-                },
-                child: Icon(
-                  Icons.add_box_outlined,
-                  color: Color(0xFFF0733D),
-                  size: 45,
-                ),
-              ),
+                  onTap: () {
+                    _validarERedirecionar("/create-agendamento");
+                  },
+                  child: Container(
+                      decoration: BoxDecoration(
+                          color: defineCorPelaRota("/create-agendamento"),
+                          borderRadius: BorderRadius.circular(8)),
+                      child: Padding(
+                        padding: EdgeInsets.all(6),
+                        child: Icon(
+                          Icons.add_box_outlined,
+                          size: 35,
+                        ),
+                      ))),
               GestureDetector(
-                onTap: () {
-                  _validarERedirecionar("/agendamentos");
-                },
-                child: Icon(
-                  Icons.calendar_today_outlined,
-                  size: 35,
-                ),
-              ),
+                  onTap: () {
+                    _validarERedirecionar("/agendamentos");
+                  },
+                  child: Container(
+                      decoration: BoxDecoration(
+                          color: defineCorPelaRota("/agendamentos"),
+                          borderRadius: BorderRadius.circular(8)),
+                      child: Padding(
+                        padding: EdgeInsets.all(6),
+                        child: Icon(
+                          Icons.calendar_today_outlined,
+                          size: 35,
+                        ),
+                      ))),
               GestureDetector(
-                onTap: () {
-                  _redirecionarParaPagina("/sobreNos");
-                },
-                child: Icon(
-                  Icons.phone_outlined,
-                  size: 35,
-                ),
-              ),
+                  onTap: () {
+                    _redirecionarParaPagina("/sobreNos");
+                  },
+                  child: Container(
+                      decoration: BoxDecoration(
+                          color: defineCorPelaRota("/sobreNos"),
+                          borderRadius: BorderRadius.circular(8)),
+                      child: Padding(
+                        padding: EdgeInsets.all(6),
+                        child: Icon(
+                          Icons.phone_outlined,
+                          size: 35,
+                        ),
+                      ))),
             ],
           ),
         ));
@@ -85,7 +114,17 @@ class _FooterWidgetState extends State<FooterWidget> {
       Get.toNamed("/login",
           arguments: "Você precisa fazer o login para visualizar seus dados");
     } else {
-      Get.offNamed(path);
+      Get.toNamed(path);
+    }
+  }
+
+  Color defineCorPelaRota(String path) {
+    var rotaAtual = Get.currentRoute;
+
+    if (rotaAtual == path) {
+      return Color.fromARGB(108, 240, 115, 61);
+    } else {
+      return Colors.transparent;
     }
   }
 

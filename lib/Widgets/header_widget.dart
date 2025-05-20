@@ -34,8 +34,8 @@ class _HeaderWidgetState extends State<HeaderWidget> {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () async {
-                    await Get.toNamed("/home");
+                  onTap: () {
+                    Get.offAllNamed("/home");
                   },
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),

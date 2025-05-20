@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cfc_vitoria_app/Dto/Response/Requisito/requisito_rdto.dart';
 import 'package:cfc_vitoria_app/Dto/Response/Servico/servico_rdto.dart';
 import 'package:cfc_vitoria_app/Dto/Response/ValorServico/valor_servico_rdto.dart';
 import 'package:cfc_vitoria_app/Utils/utils.dart';
@@ -298,33 +299,38 @@ class ServicoPageState extends State<ServicoPage>
                               ),
                             ),
                             SizedBox(height: 10),
-                            ...[
-                              "Ser maior de 21 anos;",
-                              "Possuir CNH (Carteira Nacional de Habilitação) categoria B, C, D ou E;",
-                              "Não estar cumprindo pena de suspensão do direito de dirigir.",
-                              "Não ter cometido mais de uma infração gravíssima nos últimos 12 meses;",
-                              "Não ter processo de cassação da CNH em andamento;",
-                            ].map((texto) {
-                              return Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 4),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Icon(Icons.circle, size: 5),
-                                    SizedBox(width: 8),
-                                    Expanded(
-                                      child: BaseText(
-                                        text: texto,
-                                        size: 12,
-                                        color: Colors.black,
-                                        bold: false,
-                                      ),
+                            ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: servico.requisitos.length,
+                              itemBuilder: (context, index) {
+                                RequisitoRDTO requisitoRDTO =
+                                    servico.requisitos[index];
+
+                                return LayoutBuilder(
+                                    builder: (context, constraints) {
+                                  return Padding(
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 4),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Icon(Icons.circle, size: 5),
+                                        SizedBox(width: 8),
+                                        Expanded(
+                                          child: BaseText(
+                                            text: requisitoRDTO.descricao,
+                                            size: 12,
+                                            color: Colors.black,
+                                            bold: false,
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
-                              );
-                            }).toList(),
+                                  );
+                                });
+                              },
+                            ),
                           ],
                         ),
                       ),

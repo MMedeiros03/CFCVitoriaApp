@@ -123,7 +123,9 @@ class SideBarMenuState extends State<SideBarMenu> {
   }
 
   _redirectToRegisters(String path) async {
-    Scaffold.of(context).closeDrawer();
+    if (mounted) {
+      Scaffold.of(context).closeDrawer();
+    }
     Get.toNamed(path);
   }
 }
