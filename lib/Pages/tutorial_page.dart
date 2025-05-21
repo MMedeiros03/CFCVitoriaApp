@@ -121,60 +121,65 @@ class TutorialPageState extends State<TutorialPage> {
   Widget build(BuildContext context) {
     final alturaTela = MediaQuery.of(context).size.height;
 
-    return Scaffold(
-      body: Container(
-          color: Color(0xFFE8E8E8),
-          child: Padding(
-            padding: EdgeInsets.only(
-                bottom: alturaTela * 0.03,
-                top: alturaTela * 0.08,
-                left: 20,
-                right: 20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _buildStepIndicator(1),
-                    _buildStepIndicator(2),
-                    _buildStepIndicator(3),
-                  ],
-                ),
-                SizedBox(child: _printContentTutorial()),
-                Row(
+    return PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, result) {
+          Get.offAllNamed("/home");
+        },
+        child: Scaffold(
+          body: Container(
+              color: Color(0xFFE8E8E8),
+              child: Padding(
+                padding: EdgeInsets.only(
+                    bottom: alturaTela * 0.03,
+                    top: alturaTela * 0.08,
+                    left: 20,
+                    right: 20),
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    BaseText(
-                        text: "Pular",
-                        color: currentStep != 3
-                            ? Colors.black38
-                            : Colors.transparent,
-                        size: 12,
-                        onClick: _redirectToHome),
-                    BaseButton(
-                      width: 150,
-                      heigth: 45,
-                      onPressed: () {
-                        if (currentStep != 3) {
-                          setState(() {
-                            currentStep = currentStep + 1;
-                          });
-                        } else {
-                          _redirectToHome();
-                        }
-                      },
-                      fontSize: 12,
-                      text: currentStep == 3 ? "Iniciar" : "Proximo",
-                      backgroundColor: Color(0xFFF0733D),
-                      colorFont: Colors.black,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _buildStepIndicator(1),
+                        _buildStepIndicator(2),
+                        _buildStepIndicator(3),
+                      ],
+                    ),
+                    SizedBox(child: _printContentTutorial()),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        BaseText(
+                            text: "Pular",
+                            color: currentStep != 3
+                                ? Colors.black38
+                                : Colors.transparent,
+                            size: 12,
+                            onClick: _redirectToHome),
+                        BaseButton(
+                          width: 150,
+                          heigth: 45,
+                          onPressed: () {
+                            if (currentStep != 3) {
+                              setState(() {
+                                currentStep = currentStep + 1;
+                              });
+                            } else {
+                              _redirectToHome();
+                            }
+                          },
+                          fontSize: 12,
+                          text: currentStep == 3 ? "Iniciar" : "Proximo",
+                          backgroundColor: Color(0xFFF0733D),
+                          colorFont: Colors.black,
+                        )
+                      ],
                     )
                   ],
-                )
-              ],
-            ),
-          )),
-    );
+                ),
+              )),
+        ));
   }
 }

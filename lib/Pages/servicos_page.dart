@@ -3,6 +3,7 @@ import 'package:cfc_vitoria_app/Services/servico_service.dart';
 import 'package:cfc_vitoria_app/Widgets/base_text_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/service_card_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../Widgets/base_page_widget.dart';
 
 class ServicosPage extends StatefulWidget {
@@ -37,11 +38,15 @@ class ServicosPageState extends State<ServicosPage>
 
       var servicosApi = await service.getAll();
 
+      if (!mounted) return;
+
       setState(() {
         servicos = servicosApi;
         carregando = false;
       });
     } catch (ex) {
+      if (!mounted) return;
+
       setState(() {
         servicos = [];
         carregando = false;
@@ -54,50 +59,55 @@ class ServicosPageState extends State<ServicosPage>
     final alturaTela = MediaQuery.of(context).size.height;
     final larguraTela = MediaQuery.of(context).size.width;
 
-    return BasePage(
-      child: carregando
-          ? Center(
-              child: CircularProgressIndicator(
-                color: Colors.black,
-              ),
-            )
-          : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 20,
-                ),
-                BaseText(
-                  text: " ${servicos.length} Serviços Encontrados",
-                  size: 13,
-                  color: Colors.black,
-                ),
-                SizedBox(
-                  height: 25,
-                ),
-                Expanded(
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: servicos.length,
-                    itemBuilder: (context, index) {
-                      ServicoRDTO servico = servicos[index];
-
-                      return Padding(
-                        padding: EdgeInsets.only(bottom: 25),
-                        child: SizedBox(
-                          width: larguraTela,
-                          height: alturaTela * 0.24,
-                          child: ServiceCard(
-                            controller: _controller,
-                            servico: servico,
-                          ),
-                        ),
-                      );
-                    },
+    return PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, result) {
+          Get.offAllNamed("/home");
+        },
+        child: BasePage(
+          child: carregando
+              ? Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.black,
                   ),
+                )
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: 20,
+                    ),
+                    BaseText(
+                      text: " ${servicos.length} Serviços Encontrados",
+                      size: 13,
+                      color: Colors.black,
+                    ),
+                    SizedBox(
+                      height: 25,
+                    ),
+                    Expanded(
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: servicos.length,
+                        itemBuilder: (context, index) {
+                          ServicoRDTO servico = servicos[index];
+
+                          return Padding(
+                            padding: EdgeInsets.only(bottom: 25),
+                            child: SizedBox(
+                              width: larguraTela,
+                              height: alturaTela * 0.24,
+                              child: ServiceCard(
+                                controller: _controller,
+                                servico: servico,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-    );
+        ));
   }
 }

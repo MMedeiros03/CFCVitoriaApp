@@ -9,6 +9,7 @@ import 'package:cfc_vitoria_app/Widgets/base_card_documento_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_snackbar_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_text_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../Widgets/base_page_widget.dart';
 
@@ -37,11 +38,15 @@ class MeusDadosPageState extends State<MeusDadosPage> {
     try {
       var aluno = await AlunoService().obterDadosAluno();
 
+      if (!mounted) return;
+
       setState(() {
         alunoLogado = aluno;
         carregando = false;
       });
     } catch (e) {
+      if (!mounted) return;
+
       BaseSnackbar.exibirNotificacao(
           "Erro", "Erro ao tentar buscar suas informações.", false);
 
@@ -55,51 +60,57 @@ class MeusDadosPageState extends State<MeusDadosPage> {
   Widget build(BuildContext context) {
     final larguraTela = MediaQuery.of(context).size.width;
 
-    return BasePage(
-      child: carregando
-          ? const Center(child: CircularProgressIndicator(color: Colors.black))
-          : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+    return PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, result) {
+          Get.offAllNamed("/home");
+        },
+        child: BasePage(
+          child: carregando
+              ? const Center(
+                  child: CircularProgressIndicator(color: Colors.black))
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildStepIndicator(0),
-                    _buildStepIndicator(1),
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _buildStepIndicator(0),
+                        _buildStepIndicator(1),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    Expanded(
+                      child: IndexedStack(
+                        index: _currentStep,
+                        children: [
+                          _stepOne(),
+                          _stepTwo(),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: BaseButton(
+                        heigth: 50,
+                        width: larguraTela * 0.4,
+                        colorFont: Colors.black,
+                        backgroundColor: const Color(0xFFF0733D),
+                        onPressed: () {
+                          var step = _currentStep == 0 ? 1 : 0;
+
+                          setState(() {
+                            _currentStep = step;
+                          });
+                        },
+                        text: _currentStep == 0 ? 'Próximo' : 'Voltar',
+                      ),
+                    ),
                   ],
                 ),
-                const SizedBox(height: 20),
-                Expanded(
-                  child: IndexedStack(
-                    index: _currentStep,
-                    children: [
-                      _stepOne(),
-                      _stepTwo(),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: BaseButton(
-                    heigth: 50,
-                    width: larguraTela * 0.4,
-                    colorFont: Colors.black,
-                    backgroundColor: const Color(0xFFF0733D),
-                    onPressed: () {
-                      var step = _currentStep == 0 ? 1 : 0;
-
-                      setState(() {
-                        _currentStep = step;
-                      });
-                    },
-                    text: _currentStep == 0 ? 'Próximo' : 'Voltar',
-                  ),
-                ),
-              ],
-            ),
-    );
+        ));
   }
 
   Widget _stepOne() {

@@ -62,6 +62,8 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
 
     await validarDocumentosAluno();
 
+    if (!mounted) return;
+
     setState(() {
       carregando = false;
       servicos = serviceServico;
@@ -95,50 +97,55 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
   Widget build(BuildContext context) {
     final larguraTela = MediaQuery.of(context).size.width;
 
-    return BasePage(
-      child: criandoAgendamento
-          ? Center(
-              child: CircularProgressIndicator(
-                color: Colors.black,
-              ),
-            )
-          : Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              spacing: 40,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+    return PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, result) {
+          mostrarDialogConfirmacao(context);
+        },
+        child: BasePage(
+          child: criandoAgendamento
+              ? Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.black,
+                  ),
+                )
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  spacing: 40,
                   children: [
-                    _buildStepIndicator(0),
-                    _buildStepIndicator(1),
-                    _buildStepIndicator(2),
-                    _buildStepIndicator(3),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _buildStepIndicator(0),
+                        _buildStepIndicator(1),
+                        _buildStepIndicator(2),
+                        _buildStepIndicator(3),
+                      ],
+                    ),
+                    Expanded(
+                      child: IndexedStack(
+                        index: _currentStep,
+                        children: [
+                          _stepOne(),
+                          _stepTwo(),
+                          _stepTree(),
+                          _stepFor(),
+                        ],
+                      ),
+                    ),
+                    BaseButton(
+                      heigth: 50,
+                      width: larguraTela * 0.4,
+                      colorFont: Colors.black,
+                      backgroundColor: Color(0xFFF0733D),
+                      onPressed: () {
+                        _validacoesPorStep();
+                      },
+                      text: _currentStep != 3 ? 'Próximo' : 'Finalizar',
+                    ),
                   ],
                 ),
-                Expanded(
-                  child: IndexedStack(
-                    index: _currentStep,
-                    children: [
-                      _stepOne(),
-                      _stepTwo(),
-                      _stepTree(),
-                      _stepFor(),
-                    ],
-                  ),
-                ),
-                BaseButton(
-                  heigth: 50,
-                  width: larguraTela * 0.4,
-                  colorFont: Colors.black,
-                  backgroundColor: Color(0xFFF0733D),
-                  onPressed: () {
-                    _validacoesPorStep();
-                  },
-                  text: _currentStep != 3 ? 'Próximo' : 'Finalizar',
-                ),
-              ],
-            ),
-    );
+        ));
   }
 
   Future criarAgendamento() async {
@@ -508,8 +515,10 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         BaseText(
-          text:
-              "Por favor, envie as imagens dos documentos solicitados abaixo, garantindo que estejam legíveis e completos.",
+          text: !(servicoSelected?.exigeCPF ?? true) &&
+                  !(servicoSelected?.exigeCNH ?? true)
+              ? "Este serviço não exige envio de documentação. Clique em próximo para continuar."
+              : "Por favor, envie as imagens dos documentos solicitados abaixo, garantindo que estejam legíveis e completos.",
           size: 15,
           color: Colors.black87,
         ),
@@ -519,34 +528,38 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
             child: Column(
               spacing: 20,
               children: [
-                DocCard(
-                  exibeBotaoCapturaImagem: documentoCPFFrente == null,
-                  capturarImagem: () {
-                    _redirect(TipoDocumento.cpfFrente);
-                  },
-                  tituloDocumento: "CPF (Frente)",
-                ),
-                DocCard(
-                  exibeBotaoCapturaImagem: documentoCPFVerso == null,
-                  capturarImagem: () {
-                    _redirect(TipoDocumento.cpfVerso);
-                  },
-                  tituloDocumento: "CPF (Verso)",
-                ),
-                DocCard(
-                  exibeBotaoCapturaImagem: documentoCNHFrente == null,
-                  capturarImagem: () {
-                    _redirect(TipoDocumento.cnhFrente);
-                  },
-                  tituloDocumento: "CNH (Frente)",
-                ),
-                DocCard(
-                  exibeBotaoCapturaImagem: documentoCNHVerso == null,
-                  capturarImagem: () {
-                    _redirect(TipoDocumento.cnhVerso);
-                  },
-                  tituloDocumento: "CNH (Verso)",
-                ),
+                if (servicoSelected?.exigeCPF ?? true)
+                  DocCard(
+                    exibeBotaoCapturaImagem: documentoCPFFrente == null,
+                    capturarImagem: () {
+                      _redirect(TipoDocumento.cpfFrente);
+                    },
+                    tituloDocumento: "CPF (Frente)",
+                  ),
+                if (servicoSelected?.exigeCPF ?? true)
+                  DocCard(
+                    exibeBotaoCapturaImagem: documentoCPFVerso == null,
+                    capturarImagem: () {
+                      _redirect(TipoDocumento.cpfVerso);
+                    },
+                    tituloDocumento: "CPF (Verso)",
+                  ),
+                if (servicoSelected?.exigeCNH ?? true)
+                  DocCard(
+                    exibeBotaoCapturaImagem: documentoCNHFrente == null,
+                    capturarImagem: () {
+                      _redirect(TipoDocumento.cnhFrente);
+                    },
+                    tituloDocumento: "CNH (Frente)",
+                  ),
+                if (servicoSelected?.exigeCNH ?? true)
+                  DocCard(
+                    exibeBotaoCapturaImagem: documentoCNHVerso == null,
+                    capturarImagem: () {
+                      _redirect(TipoDocumento.cnhVerso);
+                    },
+                    tituloDocumento: "CNH (Verso)",
+                  ),
               ],
             ),
           ),
@@ -719,8 +732,16 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
   }
 
   void validaStepTree() {
-    // validar os documentos
-    if (checkListDocumentos.length < 4) {
+    var exigeCNH = servicoSelected?.exigeCNH ?? true;
+    var exigeCPF = servicoSelected?.exigeCPF ?? true;
+
+    var qtdeDocumentosParaValidar = exigeCNH && exigeCPF
+        ? 4
+        : !exigeCNH && !exigeCPF
+            ? 0
+            : 2;
+
+    if (checkListDocumentos.length < qtdeDocumentosParaValidar) {
       BaseSnackbar.exibirNotificacao(
           "Erro",
           "Obrigatório capturar uma imagem de todos os documentos selecionados",
@@ -774,5 +795,51 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
     });
 
     _buscaHorariosDisponiveis();
+  }
+
+  void mostrarDialogConfirmacao(BuildContext context) {
+    var mensagemConfirmacao = "Realmente deseja cancelar esse agendamento?";
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: BaseText(
+            text: 'Confirmação',
+            size: 18,
+            bold: true,
+            color: Colors.black,
+          ),
+          content: BaseText(
+            text: mensagemConfirmacao,
+            color: Colors.black,
+            bold: false,
+            size: 14,
+          ),
+          actions: [
+            BaseButton(
+              text: "Sim, cancelar",
+              colorFont: Colors.black,
+              backgroundColor: const Color.fromARGB(255, 238, 79, 68),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Get.offAllNamed("/home");
+              },
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            BaseButton(
+              text: "Continuar",
+              backgroundColor: const Color.fromARGB(255, 1, 180, 10),
+              colorFont: Colors.black,
+              onPressed: () {
+                Navigator.of(context).pop(); // Fecha o dialog
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

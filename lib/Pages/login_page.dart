@@ -69,6 +69,7 @@ class LoginPageState extends State<LoginPage> {
     final larguraTela = MediaQuery.of(context).size.width;
 
     return PopScope(
+      canPop: false,
       onPopInvokedWithResult: (didPop, result) {
         Get.offAllNamed("/home");
       },

@@ -26,6 +26,8 @@ class SideBarMenuState extends State<SideBarMenu> {
   _inicializar() async {
     var tokenValido = await Utils.validaToken();
 
+    if (!mounted) return;
+
     setState(() {
       usuarioLogado = tokenValido;
     });
@@ -119,13 +121,13 @@ class SideBarMenuState extends State<SideBarMenu> {
       Scaffold.of(context).closeDrawer();
     }
 
-    Get.toNamed(path);
+    Get.offNamed(path);
   }
 
   _redirectToRegisters(String path) async {
     if (mounted) {
       Scaffold.of(context).closeDrawer();
     }
-    Get.toNamed(path);
+    Get.offNamed(path);
   }
 }

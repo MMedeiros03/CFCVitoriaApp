@@ -42,6 +42,8 @@ class _HomePageState extends State<HomePage>
 
     var proximoAgendamento = await StorageService.getProximoAgendamento();
 
+    if (!mounted) return;
+
     setState(() {
       usuarioLogado = tokenValido;
       _proximoAgendamento = proximoAgendamento;

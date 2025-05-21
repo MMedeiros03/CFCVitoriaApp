@@ -111,10 +111,10 @@ class _FooterWidgetState extends State<FooterWidget> {
     }
 
     if (!tokenValido) {
-      Get.toNamed("/login",
+      Get.offNamed("/login",
           arguments: "Você precisa fazer o login para visualizar seus dados");
     } else {
-      Get.toNamed(path);
+      Get.offNamed(path);
     }
   }
 
@@ -128,8 +128,8 @@ class _FooterWidgetState extends State<FooterWidget> {
     }
   }
 
-  Future<void> _redirecionarParaPagina(String path) async {
-    await Get.toNamed(path);
+  void _redirecionarParaPagina(String path) {
+    Get.offNamed(path);
     return;
   }
 }
