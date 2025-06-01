@@ -24,6 +24,8 @@ class AgendamentoPageState extends State<AgendamentoPage> {
     var situacaoAgendamento = agendamento.situacaoAgendamento;
 
     switch (situacaoAgendamento) {
+      case "Finalizado":
+        return container ? Color(0x3315FF00) : const Color(0xFF3BFF3B);
       case "Agendado":
         return container ? Color(0x33FFFF00) : Colors.yellow;
       case "Cancelado":

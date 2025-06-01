@@ -1,5 +1,6 @@
 import 'package:cfc_vitoria_app/Pages/agendamento_page.dart';
 import 'package:cfc_vitoria_app/Pages/cadastro_aluno_page.dart';
+import 'package:cfc_vitoria_app/Pages/campanha_page.dart';
 import 'package:cfc_vitoria_app/Pages/captura_imagem_doc_page.dart';
 import 'package:cfc_vitoria_app/Pages/login_page.dart';
 import 'package:cfc_vitoria_app/Pages/meus_dados_page.dart';
@@ -95,6 +96,13 @@ class Routes {
       GetPage(
           name: '/captura-imagem',
           page: () => CapturaImagemDocPage(),
+          arguments: "",
+          transitionDuration: Duration(milliseconds: 100),
+          transition: Transition.fade,
+          opaque: true),
+      GetPage(
+          name: '/campanha',
+          page: () => CampanhaPage(),
           arguments: "",
           transitionDuration: Duration(milliseconds: 100),
           transition: Transition.fade,

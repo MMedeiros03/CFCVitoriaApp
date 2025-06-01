@@ -725,9 +725,16 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
       BaseSnackbar.exibirNotificacao("Erro",
           "Obrigatório selecionar uma data e horário para prosseguir!", false);
     } else {
-      setState(() {
-        _currentStep = _currentStep + 1;
-      });
+      if (horarioselectedValue!.isBefore(DateTime.now())) {
+        BaseSnackbar.exibirNotificacao(
+            "Erro",
+            "Não é possivel agendar para uma data anterior ao dia de hoje.",
+            false);
+      } else {
+        setState(() {
+          _currentStep = _currentStep + 1;
+        });
+      }
     }
   }
 
@@ -782,10 +789,21 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
 
   String _calculaDiasParaAgendamento() {
     final hoje = DateTime.now();
-    final diasDiferenca = dataSelecionada.difference(hoje).inDays;
-    return diasDiferenca > 0
-        ? "Faltam $diasDiferenca dias para a visita!"
-        : "Sua visita é hoje!";
+    final hojeSemHora = DateTime(hoje.year, hoje.month, hoje.day);
+    final dataSelecionadaSemHora = DateTime(
+        dataSelecionada.year, dataSelecionada.month, dataSelecionada.day);
+
+    final diasDiferenca = dataSelecionadaSemHora.difference(hojeSemHora).inDays;
+
+    if (diasDiferenca == 0) {
+      return "Sua visita é hoje!";
+    } else if (diasDiferenca == 1) {
+      return "Sua visita é amanhã!";
+    } else if (diasDiferenca > 1) {
+      return "Faltam $diasDiferenca dias para a visita!";
+    } else {
+      return "Sua visita já passou!";
+    }
   }
 
   _diaSelecionado(DateTime diaSelecinado, DateTime diaFocado) {

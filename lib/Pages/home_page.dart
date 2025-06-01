@@ -1,8 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cfc_vitoria_app/Dto/Response/Agendamento/agendamento_rdto.dart';
+import 'package:cfc_vitoria_app/Dto/Response/Campanha/campanha_rdto.dart';
+import 'package:cfc_vitoria_app/Services/campanha_service.dart';
 import 'package:cfc_vitoria_app/Utils/storage.dart';
 import 'package:cfc_vitoria_app/Utils/utils.dart';
 import 'package:cfc_vitoria_app/Widgets/base_button_widget.dart';
+import 'package:cfc_vitoria_app/Widgets/base_card_campanha_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_page_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_text_widget.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +26,7 @@ class _HomePageState extends State<HomePage>
   bool carregando = true;
   late bool usuarioLogado = false;
   AgendamentoRDTO? _proximoAgendamento;
+  late List<CampanhaRDTO> _campanhas;
 
   @override
   void dispose() {
@@ -40,12 +44,15 @@ class _HomePageState extends State<HomePage>
   _inicializar() async {
     var tokenValido = await Utils.validaToken();
 
+    var campanhas = await CampanhaService().obterCampanhas();
+
     var proximoAgendamento = await StorageService.getProximoAgendamento();
 
     if (!mounted) return;
 
     setState(() {
       usuarioLogado = tokenValido;
+      _campanhas = campanhas;
       _proximoAgendamento = proximoAgendamento;
       carregando = false;
     });
@@ -93,25 +100,17 @@ class _HomePageState extends State<HomePage>
                 ),
                 CarouselSlider(
                   options: CarouselOptions(
+                      enableInfiniteScroll: false,
+                      autoPlay: _campanhas.length > 1,
                       height: alturaTela * 0.24,
-                      autoPlay: true,
+                      viewportFraction: _campanhas.length > 1 ? 0.9 : 1,
                       autoPlayInterval: Duration(seconds: 5)),
-                  items: [1, 2, 3, 4, 5].map((i) {
+                  items: _campanhas.map((i) {
                     return Builder(
                       builder: (BuildContext context) {
-                        return Container(
-                            width: larguraTela,
-                            margin: EdgeInsets.symmetric(horizontal: 5.0),
-                            decoration: BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(8)),
-                                color: Colors.black12),
-                            child: BaseText(
-                              text: 'imagem $i',
-                              size: 16,
-                              bold: false,
-                              color: Colors.black,
-                            ));
+                        return BaseCardCampanha(
+                          campanha: i,
+                        );
                       },
                     );
                   }).toList(),
