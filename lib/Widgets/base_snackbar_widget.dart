@@ -13,4 +13,13 @@ class BaseSnackbar {
             ? const Color.fromARGB(207, 70, 172, 74)
             : const Color.fromARGB(207, 173, 30, 30));
   }
+
+  static SnackbarController exibirDica(String mensagem) {
+    return Get.snackbar("Dica", mensagem,
+        snackPosition: SnackPosition.TOP,
+        duration: Duration(seconds: 4),
+        margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        colorText: Colors.black,
+        backgroundColor: const Color.fromARGB(207, 240, 224, 2));
+  }
 }

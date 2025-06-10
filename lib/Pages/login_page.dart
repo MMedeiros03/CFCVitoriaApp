@@ -210,7 +210,11 @@ class LoginPageState extends State<LoginPage> {
                                             ],
                                           ),
                                           BaseText(
-                                              onClick: () {},
+                                              onClick: () {
+                                                BaseSnackbar.exibirDica(
+                                                  "Os oito primeiros digitos do seu cpf.",
+                                                );
+                                              },
                                               bold: false,
                                               text: "Esqueceu sua senha?",
                                               size: 11,
