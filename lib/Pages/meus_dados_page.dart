@@ -4,6 +4,7 @@ import 'package:cfc_vitoria_app/Dto/Response/Aluno/aluno_rdto.dart';
 import 'package:cfc_vitoria_app/Dto/Response/Documento/documento_rdto.dart';
 import 'package:cfc_vitoria_app/Services/aluno_service.dart';
 import 'package:cfc_vitoria_app/Utils/enums.dart';
+import 'package:cfc_vitoria_app/Utils/utils.dart';
 import 'package:cfc_vitoria_app/Widgets/base_button_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_card_documento_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_snackbar_widget.dart';
@@ -150,7 +151,9 @@ class MeusDadosPageState extends State<MeusDadosPage> {
               BaseText(
                   text: "CPF", size: 14, bold: false, color: Colors.black38),
               BaseText(
-                  text: alunoLogado?.cpf ?? "", size: 18, color: Colors.black),
+                  text: Utils.formataCpf(alunoLogado?.cpf ?? ""),
+                  size: 18,
+                  color: Colors.black),
             ],
           ),
           Column(
@@ -162,7 +165,7 @@ class MeusDadosPageState extends State<MeusDadosPage> {
                   bold: false,
                   color: Colors.black38),
               BaseText(
-                  text: alunoLogado?.telefone ?? "",
+                  text: Utils.formataNumeroCelular(alunoLogado?.telefone ?? ""),
                   size: 18,
                   color: Colors.black),
             ],
@@ -272,37 +275,52 @@ class MeusDadosPageState extends State<MeusDadosPage> {
   }
 
   Widget _stepTwo() {
+    final documentos = alunoLogado?.documentosAluno ?? [];
+
+    if (documentos.isEmpty) {
+      return BaseText(
+        text: "Nenhum documento vinculado a este aluno.",
+        size: 14,
+        color: Colors.black,
+      );
+    }
+
     return ListView.builder(
       shrinkWrap: true,
-      itemCount: alunoLogado?.documentosAluno.length,
+      itemCount: documentos.length,
       itemBuilder: (context, index) {
-        DocumentoRDTO documento = alunoLogado!.documentosAluno[index];
+        DocumentoRDTO documento = documentos[index];
 
         return Padding(
-            padding: EdgeInsets.only(bottom: 25),
-            child: BaseCardDocumento(
-              nomeArquivo: documento.nomeArquivo,
-              tipoDocumento: TipoDocumento.values[documento.tipoDocumento],
-            ));
+          padding: EdgeInsets.only(bottom: 25),
+          child: BaseCardDocumento(
+            nomeArquivo: documento.nomeArquivo,
+            tipoDocumento: TipoDocumento.values[documento.tipoDocumento],
+          ),
+        );
       },
     );
   }
 
   Widget _buildStepIndicator(int step) {
+    bool isSelected = _currentStep == step;
+
     return InkWell(
       onTap: () {
         setState(() {
           _currentStep = step;
         });
       },
-      child: Container(
-        width: 70,
+      child: AnimatedContainer(
+        margin: EdgeInsets.symmetric(horizontal: 5),
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+        width: isSelected ? 70 : 20,
         height: 20,
         decoration: BoxDecoration(
-            color: Color(0xFFF0733D),
-            shape: _currentStep == step ? BoxShape.rectangle : BoxShape.circle,
-            borderRadius:
-                _currentStep == step ? BorderRadius.circular(12) : null),
+          color: Color(0xFFF0733D),
+          borderRadius: BorderRadius.circular(isSelected ? 12 : 50),
+        ),
       ),
     );
   }

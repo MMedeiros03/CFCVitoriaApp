@@ -52,6 +52,8 @@ dependencies:
   camera: ^0.11.0+1
   path: ^1.9.0
   cached_network_image: ^3.4.1
+  mask_text_input_formatter: ^2.9.0
+
 
 dev_dependencies:
   flutter_test:
@@ -101,10 +103,13 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-     - family: Libre Baskerville
-       fonts:
-        - asset: assets/fonts/LibreBaskerville-Regular.ttf
-        - asset: assets/fonts/LibreBaskerville-Bold.ttf
+    - family: SFPro
+      fonts: 
+        - asset: assets/fonts/SF-Pro-Display-Black.otf
+        - asset: assets/fonts/SF-Pro-Display-Bold.otf
+        - asset: assets/fonts/SF-Pro-Display-Light.otf
+        - asset: assets/fonts/SF-Pro-Display-Medium.otf
+        - asset: assets/fonts/SF-Pro-Display-Regular.otf
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package

@@ -11,7 +11,7 @@ ServicoRDTO _$ServicoRDTOFromJson(Map<String, dynamic> json) => ServicoRDTO(
       titulo: json['titulo'] as String,
       descricao: json['descricao'] as String,
       pathImage: json['pathImage'] as String,
-      anosValidade: (json['anosValidade'] as num).toInt(),
+      anosValidade: json['anosValidade'] as String,
       exigeCPF: json['exigeCPF'] as bool,
       exigeCNH: json['exigeCNH'] as bool,
       valorServico: (json['valorServico'] as num).toDouble(),

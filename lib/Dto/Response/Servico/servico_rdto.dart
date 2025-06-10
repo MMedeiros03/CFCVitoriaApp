@@ -12,7 +12,7 @@ class ServicoRDTO {
   String titulo;
   String descricao;
   String pathImage;
-  int anosValidade;
+  String anosValidade;
   bool exigeCPF;
   bool exigeCNH;
   double valorServico;

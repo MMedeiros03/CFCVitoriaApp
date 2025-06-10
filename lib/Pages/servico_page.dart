@@ -88,7 +88,7 @@ class ServicoPageState extends State<ServicoPage>
               text: servico.descricao,
               alignText: false,
               justifyText: true,
-              size: 13,
+              size: 14,
               bold: false,
               color: Colors.black87,
             ),
@@ -132,36 +132,44 @@ class ServicoPageState extends State<ServicoPage>
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            Row(
-                              spacing: 10,
-                              children: [
-                                Icon(
-                                  Icons.schedule_outlined,
-                                  color: Color(0xFFF0733D),
-                                  size: 40,
-                                ),
-                                BaseText(
-                                    text:
-                                        "Duração : ${servico.anosValidade} horas",
-                                    size: 16,
-                                    color: Colors.black)
-                              ],
-                            ),
-                            Row(
-                              spacing: 10,
-                              children: [
-                                Icon(
-                                  Icons.calendar_month_outlined,
-                                  color: Color(0xFFF0733D),
-                                  size: 40,
-                                ),
-                                BaseText(
-                                    text:
-                                        "Validade : ${servico.anosValidade} anos",
-                                    size: 16,
-                                    color: Colors.black)
-                              ],
-                            ),
+                            LayoutBuilder(builder: (context, constraints) {
+                              return Row(
+                                spacing: 10,
+                                children: [
+                                  Icon(
+                                    Icons.schedule_outlined,
+                                    color: Color(0xFFF0733D),
+                                    size: 40,
+                                  ),
+                                  SizedBox(
+                                      width: constraints.maxWidth * 0.8,
+                                      child: BaseText(
+                                          maxLines: 2,
+                                          text: "Validade : ${servico.anosValidade} anos",
+                                          size: 16,
+                                          color: Colors.black))
+                                ],
+                              );
+                            }),
+                            LayoutBuilder(builder: (context, constraints) {
+                              return Row(
+                                spacing: 10,
+                                children: [
+                                  Icon(
+                                    Icons.calendar_month_outlined,
+                                    color: Color(0xFFF0733D),
+                                    size: 40,
+                                  ),
+                                  SizedBox(
+                                      width: constraints.maxWidth * 0.8,
+                                      child: BaseText(
+                                          maxLines: 2,
+                                          text: "Validade : ${servico.anosValidade} anos",
+                                          size: 16,
+                                          color: Colors.black))
+                                ],
+                              );
+                            }),
                             LayoutBuilder(builder: (context, constraints) {
                               return Row(
                                 spacing: 10,
@@ -243,7 +251,7 @@ class ServicoPageState extends State<ServicoPage>
                                               maxLines: 2,
                                               overflow: true,
                                               text: valorServico.descricao,
-                                              size: 14,
+                                              size: 16,
                                               color: Colors.black,
                                             ),
                                           ),
@@ -320,7 +328,7 @@ class ServicoPageState extends State<ServicoPage>
                                         Expanded(
                                           child: BaseText(
                                             text: requisitoRDTO.descricao,
-                                            size: 12,
+                                            size: 16,
                                             color: Colors.black,
                                             bold: false,
                                           ),

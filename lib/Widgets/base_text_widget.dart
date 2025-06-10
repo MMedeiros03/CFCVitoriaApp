@@ -36,7 +36,7 @@ class BaseText extends StatelessWidget {
                     : TextAlign.start,
             style: TextStyle(
                 fontSize: size,
-                fontFamily: "Libre Baskerville",
+                fontFamily: "SFPro",
                 fontWeight: bold ? FontWeight.bold : FontWeight.w400,
                 decoration: TextDecoration.none,
                 overflow: overflow ? TextOverflow.ellipsis : null,
@@ -52,7 +52,7 @@ class BaseText extends StatelessWidget {
               style: TextStyle(
                   fontSize: size,
                   overflow: overflow ? TextOverflow.ellipsis : null,
-                  fontFamily: "Libre Baskerville",
+                  fontFamily: "SFPro",
                   fontWeight: bold ? FontWeight.bold : FontWeight.w400,
                   decoration: TextDecoration.none,
                   color: color),

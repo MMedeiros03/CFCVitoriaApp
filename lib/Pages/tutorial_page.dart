@@ -16,20 +16,24 @@ class TutorialPageState extends State<TutorialPage> {
   int currentStep = 1;
 
   Widget _buildStepIndicator(int step) {
+    bool isSelected = currentStep == step;
+
     return InkWell(
       onTap: () {
         setState(() {
           currentStep = step;
         });
       },
-      child: Container(
-        width: currentStep == step ? 70 : 40,
+      child: AnimatedContainer(
+        margin: EdgeInsets.symmetric(horizontal: 5),
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+        width: isSelected ? 70 : 20,
         height: 20,
         decoration: BoxDecoration(
-            color: Color(0xFFF0733D),
-            shape: currentStep == step ? BoxShape.rectangle : BoxShape.circle,
-            borderRadius:
-                currentStep == step ? BorderRadius.circular(12) : null),
+          color: Color(0xFFF0733D),
+          borderRadius: BorderRadius.circular(isSelected ? 12 : 50),
+        ),
       ),
     );
   }

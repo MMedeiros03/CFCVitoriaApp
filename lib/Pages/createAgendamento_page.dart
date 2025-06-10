@@ -225,6 +225,8 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
   }
 
   Widget _buildStepIndicator(int step) {
+    bool isSelected = _currentStep == step;
+
     return InkWell(
       onTap: () {
         if (_formKey.currentState!.validate()) {
@@ -233,14 +235,16 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
           });
         }
       },
-      child: Container(
-        width: 70,
+      child: AnimatedContainer(
+        margin: EdgeInsets.symmetric(horizontal: 5),
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+        width: isSelected ? 70 : 20,
         height: 20,
         decoration: BoxDecoration(
-            color: Color(0xFFF0733D),
-            shape: _currentStep == step ? BoxShape.rectangle : BoxShape.circle,
-            borderRadius:
-                _currentStep == step ? BorderRadius.circular(12) : null),
+          color: Color(0xFFF0733D),
+          borderRadius: BorderRadius.circular(isSelected ? 12 : 50),
+        ),
       ),
     );
   }

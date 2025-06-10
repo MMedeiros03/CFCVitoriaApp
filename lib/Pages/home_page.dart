@@ -203,7 +203,8 @@ class _HomePageState extends State<HomePage>
                         pathAnimation: 'assets/animations/LearnAnimation.json',
                       ),
                     ),
-                    if (!usuarioLogado)
+                    if (!usuarioLogado ||
+                        (usuarioLogado && _proximoAgendamento == null))
                       SizedBox(
                         width: larguraTela,
                         height: alturaTela * 0.12,

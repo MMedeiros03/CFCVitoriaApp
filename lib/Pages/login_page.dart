@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 import '../Widgets/base_text_widget.dart';
 
@@ -21,27 +22,37 @@ class LoginPageState extends State<LoginPage> {
   bool _carregando = false;
   int currentStep = 1;
   bool _isChecked = false;
+  bool _obscurePassword = true;
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _nameController =
-      TextEditingController(text: "13425212931");
-  final TextEditingController _emailController =
-      TextEditingController(text: "13425212931");
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+
+  final _cpfFormatter = MaskTextInputFormatter(
+    mask: '###.###.###-##',
+    filter: {"#": RegExp(r'[0-9]')},
+    type: MaskAutoCompletionType.lazy,
+  );
 
   Future login() async {
     setState(() {
       _carregando = true;
     });
 
-    LoginService service = LoginService();
+    try {
+      LoginService service = LoginService();
+      await service.login(LoginDTO(
+          login: _nameController.text, password: _emailController.text));
+      Get.offNamed("/home");
+    } catch (ex) {
+      setState(() {
+        _carregando = false;
+      });
 
-    await service.login(
-        LoginDTO(login: _nameController.text, password: _nameController.text));
-
-    setState(() {
-      _carregando = true;
-    });
-
-    Get.offNamed("/home");
+      BaseSnackbar.exibirNotificacao(
+          "Erro!",
+          "Houve um erro durante o login. Revise suas credenciais e tente novamente!",
+          false);
+    }
   }
 
   Future redirectCadastro() async {
@@ -125,13 +136,14 @@ class LoginPageState extends State<LoginPage> {
                                         child: Column(
                                           children: [
                                             TextFormField(
+                                              inputFormatters: [_cpfFormatter],
                                               style: TextStyle(
                                                   color: Colors.black,
                                                   fontFamily:
                                                       "Libre Baskerville"),
                                               controller: _nameController,
                                               decoration: _buildInputDecoration(
-                                                  "Nome", Icons.person),
+                                                  "CPF", Icons.assignment_ind),
                                               validator: (value) =>
                                                   value!.isEmpty
                                                       ? 'Preencha o nome'
@@ -140,12 +152,31 @@ class LoginPageState extends State<LoginPage> {
                                             SizedBox(height: 10),
                                             TextFormField(
                                               controller: _emailController,
+                                              obscureText: _obscurePassword,
                                               style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontFamily:
-                                                      "Libre Baskerville"),
+                                                color: Colors.black,
+                                                fontFamily: "Libre Baskerville",
+                                              ),
                                               decoration: _buildInputDecoration(
-                                                  "Senha", Icons.lock),
+                                                "Senha",
+                                                Icons.lock,
+                                              ).copyWith(
+                                                suffixIcon: IconButton(
+                                                  icon: Icon(
+                                                    _obscurePassword
+                                                        ? Icons.visibility_off
+                                                        : Icons.visibility,
+                                                    color: Colors.grey,
+                                                    size: 20,
+                                                  ),
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      _obscurePassword =
+                                                          !_obscurePassword;
+                                                    });
+                                                  },
+                                                ),
+                                              ),
                                               validator: (value) =>
                                                   value!.isEmpty
                                                       ? 'Preencha a senha'

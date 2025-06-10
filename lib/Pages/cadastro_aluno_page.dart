@@ -1,11 +1,16 @@
 import 'package:cfc_vitoria_app/Dto/Request/Aluno/aluno_dto.dart';
 import 'package:cfc_vitoria_app/Dto/Request/Endereco/endereco_dto.dart';
+import 'package:cfc_vitoria_app/Dto/Request/Login/login_dto.dart';
 import 'package:cfc_vitoria_app/Services/aluno_service.dart';
+import 'package:cfc_vitoria_app/Services/cep_service.dart';
+import 'package:cfc_vitoria_app/Services/login_service.dart';
+import 'package:cfc_vitoria_app/Utils/utils.dart';
 import 'package:cfc_vitoria_app/Widgets/base_button_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_snackbar_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class CadastroAlunoPage extends StatefulWidget {
   const CadastroAlunoPage({super.key});
@@ -16,13 +21,23 @@ class CadastroAlunoPage extends StatefulWidget {
 
 class CadastroAlunoPageState extends State<CadastroAlunoPage> {
   final String? mensagem = Get.arguments as String?;
-
+  final FocusNode _focusNode = FocusNode();
   bool carregando = false;
-
   int _currentStep = 0;
-
   final _formKeyAluno = GlobalKey<FormState>();
   final _formKeyEndereco = GlobalKey<FormState>();
+
+  final _cpfFormatter = MaskTextInputFormatter(
+    mask: '###.###.###-##',
+    filter: {"#": RegExp(r'[0-9]')},
+    type: MaskAutoCompletionType.lazy,
+  );
+
+  final _phoneMaskFormatter = MaskTextInputFormatter(
+    mask: '(##) #####-####',
+    filter: {"#": RegExp(r'[0-9]')},
+    type: MaskAutoCompletionType.lazy,
+  );
 
   final TextEditingController _nomeController = TextEditingController();
   final TextEditingController _cpfController = TextEditingController();
@@ -65,15 +80,14 @@ class CadastroAlunoPageState extends State<CadastroAlunoPage> {
         BaseSnackbar.exibirNotificacao(
             "Sucesso!", "Cadastrado com sucesso!", true);
 
-        Get.offNamed("/login");
+        login();
       } else {
         BaseSnackbar.exibirNotificacao("Erro!",
             "Preencha todos os campos para realizar seu cadastro!", false);
+        setState(() {
+          carregando = false;
+        });
       }
-
-      setState(() {
-        carregando = false;
-      });
     } catch (ex) {
       BaseSnackbar.exibirNotificacao(
           "Erro!", "Houve um erro ao tentar fazer seu cadastro!", false);
@@ -84,23 +98,103 @@ class CadastroAlunoPageState extends State<CadastroAlunoPage> {
     }
   }
 
+  Future login() async {
+    try {
+      LoginService service = LoginService();
+      var senha = Utils.cpfParaSenha(_cpfController.text);
+      await service
+          .login(LoginDTO(login: _cpfController.value.text, password: senha));
+      setState(() {
+        carregando = false;
+      });
+      Get.offNamed("/home");
+    } catch (ex) {
+      setState(() {
+        carregando = false;
+      });
+
+      BaseSnackbar.exibirNotificacao(
+          "Erro!",
+          "Houve um erro durante o login. Revise suas credenciais e tente novamente!",
+          false);
+
+      Get.offNamed("/login");
+    }
+  }
+
+  Future _buscarEnderecoPorCep() async {
+    if ("" == _cepController.value.text) {
+      _ruaController.text = "";
+      _bairroController.text = "";
+      _cidadeController.text = "";
+      _estadoController.text = "";
+
+      return;
+    }
+
+    setState(() {
+      carregando = true;
+    });
+
+    var endereco =
+        await CepService.buscarEnderecoPorCEP(_cepController.value.text);
+
+    if (endereco != null) {
+      _ruaController.text = endereco.logradouro;
+      _bairroController.text = endereco.bairro;
+      _cidadeController.text = endereco.localidade;
+      _estadoController.text = endereco.uf;
+    } else {
+      BaseSnackbar.exibirNotificacao(
+          "Erro!",
+          "Não foi possivel obter o endereço pelo CEP informado. Preencha manualmente!",
+          false);
+    }
+
+    setState(() {
+      carregando = false;
+    });
+  }
+
   Widget _buildStepIndicator(int step) {
+    bool isSelected = _currentStep == step;
+
     return InkWell(
       onTap: () {
-        setState(() {
-          _currentStep = step;
-        });
+        if (_formKeyAluno.currentState!.validate()) {
+          setState(() {
+            _currentStep = step;
+          });
+        }
       },
-      child: Container(
-        width: 70,
+      child: AnimatedContainer(
+        margin: EdgeInsets.symmetric(horizontal: 5),
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+        width: isSelected ? 70 : 20,
         height: 20,
         decoration: BoxDecoration(
-            color: Color(0xFFF0733D),
-            shape: _currentStep == step ? BoxShape.rectangle : BoxShape.circle,
-            borderRadius:
-                _currentStep == step ? BorderRadius.circular(12) : null),
+          color: Color(0xFFF0733D),
+          borderRadius: BorderRadius.circular(isSelected ? 12 : 50),
+        ),
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode.addListener(() {
+      if (!_focusNode.hasFocus) {
+        _buscarEnderecoPorCep();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
   }
 
   @override
@@ -233,6 +327,7 @@ class CadastroAlunoPageState extends State<CadastroAlunoPage> {
           ),
           SizedBox(height: 10),
           TextFormField(
+            inputFormatters: [_cpfFormatter],
             controller: _cpfController,
             style:
                 TextStyle(color: Colors.black, fontFamily: "Libre Baskerville"),
@@ -260,6 +355,23 @@ class CadastroAlunoPageState extends State<CadastroAlunoPage> {
           SizedBox(height: 10),
           TextFormField(
             controller: _dataNascimentoController,
+            readOnly: true,
+            onTap: () async {
+              DateTime? dataSelecionada = await showDatePicker(
+                context: context,
+                initialDate: DateTime.now(),
+                firstDate: DateTime(1900),
+                lastDate: DateTime.now(),
+              );
+
+              if (dataSelecionada != null) {
+                String dataFormatada =
+                    "${dataSelecionada.day.toString().padLeft(2, '0')}/"
+                    "${dataSelecionada.month.toString().padLeft(2, '0')}/"
+                    "${dataSelecionada.year}";
+                _dataNascimentoController.text = dataFormatada;
+              }
+            },
             style:
                 TextStyle(color: Colors.black, fontFamily: "Libre Baskerville"),
             decoration: InputDecoration(
@@ -306,11 +418,22 @@ class CadastroAlunoPageState extends State<CadastroAlunoPage> {
                 borderSide: BorderSide(color: Color(0xFFF0733D), width: 2),
               ),
             ),
-            validator: (value) =>
-                value!.isEmpty ? 'Preencha o campo Email' : null,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Preencha o campo Email';
+              }
+
+              var ehValido = Utils.ehEmailValido(value);
+
+              if (!ehValido) {
+                return 'Email inválido';
+              }
+              return null;
+            },
           ),
           SizedBox(height: 10),
           TextFormField(
+            inputFormatters: [_phoneMaskFormatter],
             controller: _telefoneController,
             style:
                 TextStyle(color: Colors.black, fontFamily: "Libre Baskerville"),
@@ -332,8 +455,16 @@ class CadastroAlunoPageState extends State<CadastroAlunoPage> {
                 borderSide: BorderSide(color: Color(0xFFF0733D), width: 2),
               ),
             ),
-            validator: (value) =>
-                value!.isEmpty ? 'Preencha o campo Telefone' : null,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Preencha o campo Telefone';
+              }
+              final telefoneRegex = RegExp(r'^\(\d{2}\) \d{5}-\d{4}$');
+              if (!telefoneRegex.hasMatch(value)) {
+                return 'Informe um número de telefone válido';
+              }
+              return null;
+            },
           ),
         ],
       ),
@@ -347,6 +478,7 @@ class CadastroAlunoPageState extends State<CadastroAlunoPage> {
         spacing: 5,
         children: [
           TextFormField(
+            focusNode: _focusNode,
             style:
                 TextStyle(color: Colors.black, fontFamily: "Libre Baskerville"),
             controller: _cepController,

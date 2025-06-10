@@ -23,7 +23,7 @@ void main() async {
 
   await FirebaseAppCheck.instance.activate(
     androidProvider: AndroidProvider.debug,
-    appleProvider: AppleProvider.debug, // se for usar iOS também
+    appleProvider: AppleProvider.debug,
   );
 }
 
