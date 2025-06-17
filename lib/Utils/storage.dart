@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class StorageService {
   static const _tokenKey = "_tokenKey";
   static const _alunoId = "_alunoId";
+  static const _alunoNome = "_alunoNome";
   static const _viewedTutorial = "_viewedTutorial";
   static const _proximoAgendamento = "_proximoAgendamento";
   static const _listaDocumentosAluno = "_listaDocumentosAluno";
@@ -45,6 +46,16 @@ class StorageService {
   static Future<int?> getAlunoId() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getInt(_alunoId);
+  }
+
+  static Future<void> setAlunoNome(String alunoNome) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_alunoNome, alunoNome);
+  }
+
+  static Future<String?> getAlunoNome() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_alunoNome);
   }
 
   static Future<void> removeToken(bool criptografado) async {

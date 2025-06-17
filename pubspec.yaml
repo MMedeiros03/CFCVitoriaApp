@@ -88,8 +88,22 @@ flutter:
     - assets/animations/LearnAnimation.json
     - assets/animations/AlertAnimation.json
     - assets/animations/LoadingAnimation.json
-    - assets/animations/ServicesAnimation.json
+    - assets/animations/ServiceAnimation0.json
+    - assets/animations/ServiceAnimation1.json
+    - assets/animations/ServiceAnimation2.json
+    - assets/animations/ServiceAnimation3.json
+    - assets/animations/ServiceAnimation4.json
+    - assets/animations/ServiceAnimation5.json
+    - assets/animations/ServiceAnimation6.json
+    - assets/animations/ServiceAnimation7.json
+    - assets/animations/ServiceAnimation8.json
     - assets/image/localizacao.png
+    - assets/image/cfc1.jpeg
+    - assets/image/cfc2.jpeg
+    - assets/image/cfc3.jpeg
+    - assets/image/cfc4.jpeg
+    - assets/image/cfc5.jpeg
+    - assets/image/cfc6.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

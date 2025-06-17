@@ -27,6 +27,7 @@ class _HomePageState extends State<HomePage>
   late bool usuarioLogado = false;
   AgendamentoRDTO? _proximoAgendamento;
   late List<CampanhaRDTO> _campanhas;
+  String _nomeAluno = "";
 
   @override
   void dispose() {
@@ -48,12 +49,15 @@ class _HomePageState extends State<HomePage>
 
     var proximoAgendamento = await StorageService.getProximoAgendamento();
 
+    var nomeAluno = await StorageService.getAlunoNome();
+
     if (!mounted) return;
 
     setState(() {
       usuarioLogado = tokenValido;
       _campanhas = campanhas;
       _proximoAgendamento = proximoAgendamento;
+      _nomeAluno = nomeAluno ?? "";
       carregando = false;
     });
   }
@@ -89,7 +93,7 @@ class _HomePageState extends State<HomePage>
                           color: Colors.black,
                         ),
                         BaseText(
-                          text: "aluno!",
+                          text: usuarioLogado ? "aluno $_nomeAluno!" : "aluno!",
                           bold: false,
                           size: 17,
                           color: Colors.black,
@@ -100,7 +104,7 @@ class _HomePageState extends State<HomePage>
                 ),
                 CarouselSlider(
                   options: CarouselOptions(
-                      enableInfiniteScroll: false,
+                      enableInfiniteScroll: _campanhas.length > 1,
                       autoPlay: _campanhas.length > 1,
                       height: alturaTela * 0.24,
                       viewportFraction: _campanhas.length > 1 ? 0.9 : 1,

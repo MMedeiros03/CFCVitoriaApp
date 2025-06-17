@@ -10,6 +10,7 @@ LoginRDTO _$LoginRDTOFromJson(Map<String, dynamic> json) => LoginRDTO(
       accessToken: json['accessToken'] as String,
       tokenType: json['tokenType'] as String,
       alunoId: (json['alunoId'] as num).toInt(),
+      nomeAluno: json['nomeAluno'] as String,
       proximoAgendamentoAluno: json['proximoAgendamentoAluno'] == null
           ? null
           : AgendamentoRDTO.fromJson(
@@ -23,6 +24,7 @@ Map<String, dynamic> _$LoginRDTOToJson(LoginRDTO instance) => <String, dynamic>{
       'accessToken': instance.accessToken,
       'tokenType': instance.tokenType,
       'alunoId': instance.alunoId,
+      'nomeAluno': instance.nomeAluno,
       'proximoAgendamentoAluno': instance.proximoAgendamentoAluno,
       'documentosAluno': instance.documentosAluno,
     };

@@ -11,6 +11,7 @@ class LoginRDTO {
   final String accessToken;
   final String tokenType;
   final int alunoId;
+  final String nomeAluno;
   final AgendamentoRDTO? proximoAgendamentoAluno;
   final List<DocumentoAlunoRDTO> documentosAluno;
 
@@ -18,6 +19,7 @@ class LoginRDTO {
     required this.accessToken,
     required this.tokenType,
     required this.alunoId,
+    required this.nomeAluno,
     this.proximoAgendamentoAluno,
     required this.documentosAluno,
   });

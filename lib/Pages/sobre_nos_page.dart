@@ -27,6 +27,15 @@ class SobreNosPageState extends State<SobreNosPage> {
     }
   }
 
+  final List<String> imagensCfc = [
+    'assets/image/cfc1.jpeg',
+    'assets/image/cfc2.jpeg',
+    'assets/image/cfc3.jpeg',
+    'assets/image/cfc4.jpeg',
+    'assets/image/cfc5.jpeg',
+    'assets/image/cfc6.jpeg',
+  ];
+
   @override
   Widget build(BuildContext context) {
     final larguraTela = MediaQuery.of(context).size.width;
@@ -130,23 +139,24 @@ class SobreNosPageState extends State<SobreNosPage> {
                           autoPlay: true,
                           autoPlayInterval: Duration(seconds: 5),
                         ),
-                        items: [1, 2, 3].map((i) {
+                        items: imagensCfc.map((i) {
                           return Builder(
                             builder: (BuildContext context) {
                               return Container(
-                                width: larguraTela * 0.7,
-                                decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(12)),
-                                  color: Colors.black12,
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    'Imagem $i',
-                                    style: TextStyle(fontSize: 16.0),
+                                  width: larguraTela * 0.7,
+                                  decoration: BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(12)),
+                                    color: Colors.black12,
                                   ),
-                                ),
-                              );
+                                  child: ClipRRect(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(12)),
+                                    child: Image.asset(
+                                      fit: BoxFit.cover,
+                                      i,
+                                    ),
+                                  ));
                             },
                           );
                         }).toList(),
@@ -261,13 +271,13 @@ class SobreNosPageState extends State<SobreNosPage> {
                       Row(
                         spacing: 15,
                         children: [
-                          Icon(
-                            Icons.email,
+                          FaIcon(
+                            FontAwesomeIcons.facebook,
                             color: Color(0xFFF0733D),
                             size: 40,
                           ),
                           BaseText(
-                              text: "cfcvitoria2025@gmail.com",
+                              text: "cfcvitoriasapucaia",
                               size: 15,
                               color: Colors.black)
                         ],
@@ -275,8 +285,8 @@ class SobreNosPageState extends State<SobreNosPage> {
                       Row(
                         spacing: 15,
                         children: [
-                          Icon(
-                            Icons.phone,
+                          FaIcon(
+                            FontAwesomeIcons.whatsapp,
                             color: Color(0xFFF0733D),
                             size: 40,
                           ),

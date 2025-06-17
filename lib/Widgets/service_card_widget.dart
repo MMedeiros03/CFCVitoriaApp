@@ -8,13 +8,19 @@ import 'base_button_widget.dart';
 
 class ServiceCard extends StatelessWidget {
   const ServiceCard(
-      {super.key, required this.servico, required this.controller});
+      {super.key,
+      required this.index,
+      required this.servico,
+      required this.controller});
 
+  final int index;
   final ServicoRDTO servico;
   final AnimationController controller;
 
   @override
   Widget build(BuildContext context) {
+    String animationPath = "assets/animations/ServiceAnimation$index.json";
+
     return Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(16)),
@@ -34,7 +40,7 @@ class ServiceCard extends StatelessWidget {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(20),
                           child: Lottie.asset(
-                            "assets/animations/ServicesAnimation.json",
+                            animationPath,
                             fit: BoxFit.cover,
                             controller: controller,
                             onLoaded: (composition) {

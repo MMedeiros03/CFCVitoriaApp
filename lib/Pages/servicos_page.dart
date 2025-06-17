@@ -98,6 +98,7 @@ class ServicosPageState extends State<ServicosPage>
                               width: larguraTela,
                               height: alturaTela * 0.24,
                               child: ServiceCard(
+                                index: index,
                                 controller: _controller,
                                 servico: servico,
                               ),

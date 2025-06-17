@@ -10,6 +10,7 @@ import 'package:cfc_vitoria_app/Widgets/base_snackbar_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class CadastroAlunoPage extends StatefulWidget {
@@ -29,6 +30,12 @@ class CadastroAlunoPageState extends State<CadastroAlunoPage> {
 
   final _cpfFormatter = MaskTextInputFormatter(
     mask: '###.###.###-##',
+    filter: {"#": RegExp(r'[0-9]')},
+    type: MaskAutoCompletionType.lazy,
+  );
+
+  final _dataFormatter = MaskTextInputFormatter(
+    mask: '##/##/####',
     filter: {"#": RegExp(r'[0-9]')},
     type: MaskAutoCompletionType.lazy,
   );
@@ -63,12 +70,15 @@ class CadastroAlunoPageState extends State<CadastroAlunoPage> {
 
       if (_formKeyAluno.currentState!.validate() &&
           _formKeyEndereco.currentState!.validate()) {
+        DateTime dataNascimento =
+            DateFormat('dd/MM/yyyy').parse(_dataNascimentoController.text);
+
         await service.cadastrarAluno(AlunoDTO(
             nome: _nomeController.value.text,
             email: _emailController.value.text,
             telefone: _telefoneController.value.text,
             cpf: _cpfController.value.text,
-            dataNascimento: DateTime.now(),
+            dataNascimento: dataNascimento,
             endereco: EnderecoDTO(
                 cep: _cepController.value.text,
                 rua: _ruaController.value.text,
@@ -355,23 +365,8 @@ class CadastroAlunoPageState extends State<CadastroAlunoPage> {
           SizedBox(height: 10),
           TextFormField(
             controller: _dataNascimentoController,
-            readOnly: true,
-            onTap: () async {
-              DateTime? dataSelecionada = await showDatePicker(
-                context: context,
-                initialDate: DateTime.now(),
-                firstDate: DateTime(1900),
-                lastDate: DateTime.now(),
-              );
-
-              if (dataSelecionada != null) {
-                String dataFormatada =
-                    "${dataSelecionada.day.toString().padLeft(2, '0')}/"
-                    "${dataSelecionada.month.toString().padLeft(2, '0')}/"
-                    "${dataSelecionada.year}";
-                _dataNascimentoController.text = dataFormatada;
-              }
-            },
+            inputFormatters: [_dataFormatter],
+            keyboardType: TextInputType.number,
             style:
                 TextStyle(color: Colors.black, fontFamily: "Libre Baskerville"),
             decoration: InputDecoration(

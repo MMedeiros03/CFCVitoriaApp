@@ -15,6 +15,8 @@ class LoginService extends ApiServiceBase {
 
       await StorageService.setAlunoId(loginResponseDto.alunoId);
 
+      await StorageService.setAlunoNome(loginResponseDto.nomeAluno);
+
       await StorageService.setProximoAgendamento(
           loginResponseDto.proximoAgendamentoAluno?.toJsonString() ?? "");
 
