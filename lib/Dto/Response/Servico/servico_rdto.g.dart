@@ -14,6 +14,9 @@ ServicoRDTO _$ServicoRDTOFromJson(Map<String, dynamic> json) => ServicoRDTO(
       anosValidade: json['anosValidade'] as String,
       exigeCPF: json['exigeCPF'] as bool,
       exigeCNH: json['exigeCNH'] as bool,
+      exigeRG: json['exigeRG'] as bool,
+      exigeBO: json['exigeBO'] as bool,
+      exigeComprovanteResidencia: json['exigeComprovanteResidencia'] as bool,
       valorServico: (json['valorServico'] as num).toDouble(),
       requisitos: (json['requisitos'] as List<dynamic>)
           .map((e) => RequisitoRDTO.fromJson(e as Map<String, dynamic>))
@@ -32,6 +35,9 @@ Map<String, dynamic> _$ServicoRDTOToJson(ServicoRDTO instance) =>
       'anosValidade': instance.anosValidade,
       'exigeCPF': instance.exigeCPF,
       'exigeCNH': instance.exigeCNH,
+      'exigeRG': instance.exigeRG,
+      'exigeBO': instance.exigeBO,
+      'exigeComprovanteResidencia': instance.exigeComprovanteResidencia,
       'valorServico': instance.valorServico,
       'valorServicos': instance.valorServicos,
       'requisitos': instance.requisitos,

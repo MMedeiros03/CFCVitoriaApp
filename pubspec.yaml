@@ -97,6 +97,8 @@ flutter:
     - assets/animations/ServiceAnimation6.json
     - assets/animations/ServiceAnimation7.json
     - assets/animations/ServiceAnimation8.json
+    - assets/animations/ConfirmAnimation.json
+    - assets/animations/CancelAnimation.json
     - assets/image/localizacao.png
     - assets/image/cfc1.jpeg
     - assets/image/cfc2.jpeg

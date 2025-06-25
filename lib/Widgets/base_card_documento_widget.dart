@@ -22,6 +22,14 @@ class BaseCardDocumento extends StatelessWidget {
         return "CPF - Verso";
       case TipoDocumento.cnhVerso:
         return "CNH - VERSO";
+      case TipoDocumento.rgFrente:
+        return "RG - Frente";
+      case TipoDocumento.rgVerso:
+        return "RG - VERSO";
+      case TipoDocumento.boletimOcorrencia:
+        return "Boletim de Ocorrência (Oficial)";
+      case TipoDocumento.comprovanteResidencia:
+        return "Comprovante de Residência";
     }
   }
 

@@ -1,3 +1,5 @@
+import 'package:cfc_vitoria_app/Pages/agendamento_cancelado_page.dart';
+import 'package:cfc_vitoria_app/Pages/agendamento_marcado_page.dart';
 import 'package:cfc_vitoria_app/Pages/agendamento_page.dart';
 import 'package:cfc_vitoria_app/Pages/cadastro_aluno_page.dart';
 import 'package:cfc_vitoria_app/Pages/campanha_page.dart';
@@ -103,6 +105,20 @@ class Routes {
       GetPage(
           name: '/campanha',
           page: () => CampanhaPage(),
+          arguments: "",
+          transitionDuration: Duration(milliseconds: 100),
+          transition: Transition.fade,
+          opaque: true),
+      GetPage(
+          name: '/agendamento_marcado',
+          page: () => AgendamentoMarcadoPage(),
+          arguments: "",
+          transitionDuration: Duration(milliseconds: 100),
+          transition: Transition.fade,
+          opaque: true),
+      GetPage(
+          name: '/agendamento_cancelado',
+          page: () => AgendamentoCanceladoPage(),
           arguments: "",
           transitionDuration: Duration(milliseconds: 100),
           transition: Transition.fade,

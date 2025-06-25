@@ -54,14 +54,13 @@ class AgendamentoPageState extends State<AgendamentoPage> {
 
       await AgendamentoService().excluirAgendamento(alterarAgendamentoDTO);
 
-      var mensagem = "Agendamento cancelado com sucesso!";
       var novaSituacaoAgendamento = "Cancelado";
 
       setState(() {
         agendamento.situacaoAgendamento = novaSituacaoAgendamento;
       });
 
-      BaseSnackbar.exibirNotificacao('Sucesso', mensagem, true);
+      Get.offNamed("/agendamento_cancelado");
     } catch (e) {
       BaseSnackbar.exibirNotificacao(
           'Erro', "Erro ao tentar alterar situação do agendamento!", false);

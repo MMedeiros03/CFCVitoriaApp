@@ -36,7 +36,7 @@ class _BasePageState extends State<BasePage> {
     return Scaffold(
         drawer: const SideBarMenu(),
         floatingActionButtonLocation: CustomFABLocation(
-          xOffset: -(larguraTela * 0.02),
+          xOffset: -(larguraTela * 0.80),
           yOffset: -(alturaTela * 0.070),
         ),
         floatingActionButton: FloatingActionButton(

@@ -15,6 +15,9 @@ class ServicoRDTO {
   String anosValidade;
   bool exigeCPF;
   bool exigeCNH;
+  bool exigeRG;
+  bool exigeBO;
+  bool exigeComprovanteResidencia;
   double valorServico;
   List<ValorServicoRDTO> valorServicos;
   List<RequisitoRDTO> requisitos;
@@ -27,6 +30,9 @@ class ServicoRDTO {
       required this.anosValidade,
       required this.exigeCPF,
       required this.exigeCNH,
+      required this.exigeRG,
+      required this.exigeBO,
+      required this.exigeComprovanteResidencia,
       required this.valorServico,
       required this.requisitos,
       required this.valorServicos});

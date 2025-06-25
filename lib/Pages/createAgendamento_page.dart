@@ -210,10 +210,7 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
         criandoAgendamento = false;
       });
 
-      BaseSnackbar.exibirNotificacao(
-          "Sucesso", "Agendamento criado com sucesso!", true);
-
-      Get.offNamed("/agendamentos");
+      Get.offNamed("/agendamento_marcado");
     } catch (e) {
       setState(() {
         criandoAgendamento = false;
@@ -515,6 +512,15 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
     final documentoCNHVerso = checkListDocumentos
         .firstWhereOrNull((x) => x.tipoDocumento == TipoDocumento.cnhVerso);
 
+    final documentoRGFrente = checkListDocumentos
+        .firstWhereOrNull((x) => x.tipoDocumento == TipoDocumento.rgFrente);
+    final documentoRGVerso = checkListDocumentos
+        .firstWhereOrNull((x) => x.tipoDocumento == TipoDocumento.rgVerso);
+    final documentoBO = checkListDocumentos.firstWhereOrNull(
+        (x) => x.tipoDocumento == TipoDocumento.boletimOcorrencia);
+    final documentoComprovante = checkListDocumentos.firstWhereOrNull(
+        (x) => x.tipoDocumento == TipoDocumento.comprovanteResidencia);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -563,6 +569,38 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
                       _redirect(TipoDocumento.cnhVerso);
                     },
                     tituloDocumento: "CNH (Verso)",
+                  ),
+                if (servicoSelected?.exigeRG ?? true)
+                  DocCard(
+                    exibeBotaoCapturaImagem: documentoRGFrente == null,
+                    capturarImagem: () {
+                      _redirect(TipoDocumento.rgFrente);
+                    },
+                    tituloDocumento: "RG (Frente)",
+                  ),
+                if (servicoSelected?.exigeRG ?? true)
+                  DocCard(
+                    exibeBotaoCapturaImagem: documentoRGVerso == null,
+                    capturarImagem: () {
+                      _redirect(TipoDocumento.rgVerso);
+                    },
+                    tituloDocumento: "RG (Verso)",
+                  ),
+                if (servicoSelected?.exigeBO ?? true)
+                  DocCard(
+                    exibeBotaoCapturaImagem: documentoBO == null,
+                    capturarImagem: () {
+                      _redirect(TipoDocumento.boletimOcorrencia);
+                    },
+                    tituloDocumento: "Boletim de Ocorrência (OFICIAL)",
+                  ),
+                if (servicoSelected?.exigeComprovanteResidencia ?? true)
+                  DocCard(
+                    exibeBotaoCapturaImagem: documentoComprovante == null,
+                    capturarImagem: () {
+                      _redirect(TipoDocumento.comprovanteResidencia);
+                    },
+                    tituloDocumento: "Comprovante de Residência",
                   ),
               ],
             ),
