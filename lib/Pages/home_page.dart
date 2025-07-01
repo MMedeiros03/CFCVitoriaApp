@@ -8,6 +8,7 @@ import 'package:cfc_vitoria_app/Widgets/base_button_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_card_campanha_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_page_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_text_widget.dart';
+import 'package:cfc_vitoria_app/Widgets/termo_uso_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -50,6 +51,14 @@ class _HomePageState extends State<HomePage>
     var proximoAgendamento = await StorageService.getProximoAgendamento();
 
     var nomeAluno = await StorageService.getAlunoNome();
+
+    var aceitouTermo = await StorageService.getAceitouTermo();
+
+    if (!aceitouTermo) {
+      if (mounted) {
+        abrirTermoResponsabilidade(context);
+      }
+    }
 
     if (!mounted) return;
 
@@ -236,6 +245,16 @@ class _HomePageState extends State<HomePage>
                 )
               ],
             )),
+    );
+  }
+
+  void abrirTermoResponsabilidade(BuildContext context) {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return TermoUso();
+      },
     );
   }
 }

@@ -6,6 +6,7 @@ import 'package:cfc_vitoria_app/Utils/utils.dart';
 import 'package:cfc_vitoria_app/Widgets/base_button_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_text_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import '../Widgets/base_page_widget.dart';
@@ -136,16 +137,17 @@ class ServicoPageState extends State<ServicoPage>
                               return Row(
                                 spacing: 10,
                                 children: [
-                                  Icon(
-                                    Icons.schedule_outlined,
+                                  FaIcon(
+                                    FontAwesomeIcons.moneyBill1,
                                     color: Color(0xFFF0733D),
-                                    size: 40,
+                                    size: 30,
                                   ),
                                   SizedBox(
                                       width: constraints.maxWidth * 0.8,
                                       child: BaseText(
                                           maxLines: 2,
-                                          text: "Validade : ${servico.anosValidade} anos",
+                                          text:
+                                              "Valores atualizados conforme Órgão do Estado",
                                           size: 16,
                                           color: Colors.black))
                                 ],
@@ -164,7 +166,8 @@ class ServicoPageState extends State<ServicoPage>
                                       width: constraints.maxWidth * 0.8,
                                       child: BaseText(
                                           maxLines: 2,
-                                          text: "Validade : ${servico.anosValidade} anos",
+                                          text:
+                                              "Validade : ${servico.anosValidade}",
                                           size: 16,
                                           color: Colors.black))
                                 ],
@@ -202,7 +205,7 @@ class ServicoPageState extends State<ServicoPage>
                                     width: constraints.maxWidth * 0.8,
                                     child: BaseText(
                                         maxLines: 2,
-                                        text: "Certificado integrado ao DETRAN",
+                                        text: "Serviço integrado ao DETRAN",
                                         size: 16,
                                         color: Colors.black),
                                   )

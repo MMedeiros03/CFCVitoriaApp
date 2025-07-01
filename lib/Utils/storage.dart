@@ -12,6 +12,7 @@ class StorageService {
   static const _viewedTutorial = "_viewedTutorial";
   static const _proximoAgendamento = "_proximoAgendamento";
   static const _listaDocumentosAluno = "_listaDocumentosAluno";
+  static const _aceitouTermo = "_aceitouTermo";
 
   static Future<void> remover(String key) async {
     final prefs = await SharedPreferences.getInstance();
@@ -153,5 +154,18 @@ class StorageService {
     } catch (ex) {
       return [];
     }
+  }
+
+  static Future<void> setAceitouTermo(bool aceitou) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_aceitouTermo, aceitou);
+  }
+
+  static Future<bool> getAceitouTermo() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    var aceitouTermo = prefs.getBool(_aceitouTermo);
+
+    return aceitouTermo ?? false;
   }
 }
