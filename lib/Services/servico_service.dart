@@ -12,7 +12,7 @@ class ServicoService extends ApiServiceBase {
         return ServicoRDTO.fromJson(responseJson[i]);
       });
     } catch (e) {
-      rethrow;
+      return [];
     }
   }
 }

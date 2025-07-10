@@ -12,7 +12,7 @@ class CampanhaService extends ApiServiceBase {
         return CampanhaRDTO.fromJson(responseJson[i]);
       });
     } catch (e) {
-      rethrow;
+      return [];
     }
   }
 }

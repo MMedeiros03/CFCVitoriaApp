@@ -12,6 +12,7 @@ class LoginRDTO {
   final String tokenType;
   final int alunoId;
   final String nomeAluno;
+  final bool solicitouResetSenha;
   final AgendamentoRDTO? proximoAgendamentoAluno;
   final List<DocumentoAlunoRDTO> documentosAluno;
 
@@ -20,6 +21,7 @@ class LoginRDTO {
     required this.tokenType,
     required this.alunoId,
     required this.nomeAluno,
+    required this.solicitouResetSenha,
     this.proximoAgendamentoAluno,
     required this.documentosAluno,
   });

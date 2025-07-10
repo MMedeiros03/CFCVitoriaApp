@@ -8,6 +8,7 @@ import 'package:cfc_vitoria_app/Widgets/base_button_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_card_campanha_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_page_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_text_widget.dart';
+import 'package:cfc_vitoria_app/Widgets/reset_senha_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/termo_uso_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -54,9 +55,17 @@ class _HomePageState extends State<HomePage>
 
     var aceitouTermo = await StorageService.getAceitouTermo();
 
+    var resetarSenha = await StorageService.getSolicitouResetSenha();
+
     if (!aceitouTermo) {
       if (mounted) {
         abrirTermoResponsabilidade(context);
+      }
+    }
+
+    if (resetarSenha) {
+      if (mounted) {
+        abrirResetSenha(context);
       }
     }
 
@@ -111,23 +120,24 @@ class _HomePageState extends State<HomePage>
                     )
                   ],
                 ),
-                CarouselSlider(
-                  options: CarouselOptions(
-                      enableInfiniteScroll: _campanhas.length > 1,
-                      autoPlay: _campanhas.length > 1,
-                      height: alturaTela * 0.24,
-                      viewportFraction: _campanhas.length > 1 ? 0.9 : 1,
-                      autoPlayInterval: Duration(seconds: 5)),
-                  items: _campanhas.map((i) {
-                    return Builder(
-                      builder: (BuildContext context) {
-                        return BaseCardCampanha(
-                          campanha: i,
-                        );
-                      },
-                    );
-                  }).toList(),
-                ),
+                if (_campanhas.isNotEmpty)
+                  CarouselSlider(
+                    options: CarouselOptions(
+                        enableInfiniteScroll: _campanhas.length > 1,
+                        autoPlay: _campanhas.length > 1,
+                        height: alturaTela * 0.24,
+                        viewportFraction: _campanhas.length > 1 ? 0.9 : 1,
+                        autoPlayInterval: Duration(seconds: 5)),
+                    items: _campanhas.map((i) {
+                      return Builder(
+                        builder: (BuildContext context) {
+                          return BaseCardCampanha(
+                            campanha: i,
+                          );
+                        },
+                      );
+                    }).toList(),
+                  ),
                 Column(
                   spacing: 10,
                   children: [
@@ -254,6 +264,16 @@ class _HomePageState extends State<HomePage>
       context: context,
       builder: (BuildContext context) {
         return TermoUso();
+      },
+    );
+  }
+
+  void abrirResetSenha(BuildContext context) {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return ResetSenha();
       },
     );
   }

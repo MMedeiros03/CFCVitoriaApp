@@ -13,6 +13,9 @@ class LoginService extends ApiServiceBase {
       var responseJson = json.decode(response.body);
       var loginResponseDto = LoginRDTO.fromJson(responseJson);
 
+      await StorageService.setSolicitouResetSenha(
+          loginResponseDto.solicitouResetSenha);
+
       await StorageService.setAlunoId(loginResponseDto.alunoId);
 
       await StorageService.setAlunoNome(loginResponseDto.nomeAluno);
