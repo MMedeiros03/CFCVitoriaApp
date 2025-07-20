@@ -22,8 +22,7 @@ void main() async {
   );
 
   await FirebaseAppCheck.instance.activate(
-    androidProvider: AndroidProvider.debug,
-    appleProvider: AppleProvider.debug,
+    androidProvider: AndroidProvider.playIntegrity,
   );
 }
 

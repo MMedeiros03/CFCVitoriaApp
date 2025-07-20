@@ -63,7 +63,7 @@ class _HomePageState extends State<HomePage>
       }
     }
 
-    if (resetarSenha) {
+    if (resetarSenha && tokenValido) {
       if (mounted) {
         abrirResetSenha(context);
       }

@@ -20,6 +20,8 @@ class AgendamentoPage extends StatefulWidget {
 class AgendamentoPageState extends State<AgendamentoPage> {
   final AgendamentoRDTO agendamento = Get.arguments as AgendamentoRDTO;
 
+  bool carregando = false;
+
   Color defineCorPorSituacao(bool container) {
     var situacaoAgendamento = agendamento.situacaoAgendamento;
 
@@ -48,6 +50,10 @@ class AgendamentoPageState extends State<AgendamentoPage> {
   }
 
   Future<void> cancelarAgendamento() async {
+    setState(() {
+      carregando = true;
+    });
+
     try {
       AlterarAgendamentoDTO alterarAgendamentoDTO =
           AlterarAgendamentoDTO(agendamentoId: agendamento.id);
@@ -57,11 +63,16 @@ class AgendamentoPageState extends State<AgendamentoPage> {
       var novaSituacaoAgendamento = "Cancelado";
 
       setState(() {
+        carregando = false;
         agendamento.situacaoAgendamento = novaSituacaoAgendamento;
       });
 
       Get.offNamed("/agendamento_cancelado");
     } catch (e) {
+      setState(() {
+        carregando = true;
+      });
+
       BaseSnackbar.exibirNotificacao(
           'Erro', "Erro ao tentar alterar situação do agendamento!", false);
     }
@@ -119,203 +130,219 @@ class AgendamentoPageState extends State<AgendamentoPage> {
     final alturaTela = MediaQuery.of(context).size.height;
 
     return BasePage(
-        child: SingleChildScrollView(
-      child: Column(
-        spacing: 20,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                spacing: 10,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  BaseText(text: "Situação", size: 12, color: Colors.black38),
-                  Container(
-                    width: larguraTela * 0.4,
-                    decoration: BoxDecoration(
-                        color: defineCorPorSituacao(true),
-                        borderRadius: BorderRadius.circular(25)),
-                    child: Padding(
-                      padding: EdgeInsets.all(8),
-                      child: Row(
-                        spacing: 10,
-                        children: [
-                          Icon(
-                            Icons.circle,
-                            color: defineCorPorSituacao(false),
-                          ),
-                          BaseText(
-                              bold: true,
-                              text: agendamento.situacaoAgendamento,
-                              size: 13,
-                              color: Colors.black)
-                        ],
-                      ),
+        child: carregando
+            ? Center(
+                child: CircularProgressIndicator(
+                  color: Colors.black,
+                ),
+              )
+            : SingleChildScrollView(
+                child: Column(
+                  spacing: 20,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          spacing: 10,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            BaseText(
+                                text: "Situação",
+                                size: 12,
+                                color: Colors.black38),
+                            Container(
+                              width: larguraTela * 0.4,
+                              decoration: BoxDecoration(
+                                  color: defineCorPorSituacao(true),
+                                  borderRadius: BorderRadius.circular(25)),
+                              child: Padding(
+                                padding: EdgeInsets.all(8),
+                                child: Row(
+                                  spacing: 10,
+                                  children: [
+                                    Icon(
+                                      Icons.circle,
+                                      color: defineCorPorSituacao(false),
+                                    ),
+                                    BaseText(
+                                        bold: true,
+                                        text: agendamento.situacaoAgendamento,
+                                        size: 13,
+                                        color: Colors.black)
+                                  ],
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ],
                     ),
-                  )
-                ],
-              ),
-            ],
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            spacing: 10,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              BaseText(text: "Seriço", size: 12, color: Colors.black38),
-              Container(
-                height: alturaTela * 0.2,
-                width: larguraTela,
-                decoration: BoxDecoration(
-                    color: const Color.fromARGB(70, 226, 226, 226),
-                    borderRadius: BorderRadius.circular(25)),
-                child: Padding(
-                  padding: EdgeInsets.all(8),
-                  child: LayoutBuilder(
-                    builder: (context, constraints) {
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Icon(
-                            Icons.book_outlined,
-                            size: 65,
-                            color: Color(0xFFF0733D),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      spacing: 10,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        BaseText(
+                            text: "Seriço", size: 12, color: Colors.black38),
+                        Container(
+                          height: alturaTela * 0.2,
+                          width: larguraTela,
+                          decoration: BoxDecoration(
+                              color: const Color.fromARGB(70, 226, 226, 226),
+                              borderRadius: BorderRadius.circular(25)),
+                          child: Padding(
+                            padding: EdgeInsets.all(8),
+                            child: LayoutBuilder(
+                              builder: (context, constraints) {
+                                return Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Icon(
+                                      Icons.book_outlined,
+                                      size: 65,
+                                      color: Color(0xFFF0733D),
+                                    ),
+                                    Column(
+                                      spacing: 5,
+                                      children: [
+                                        SizedBox(
+                                          width: constraints.maxWidth * 0.5,
+                                          child: BaseText(
+                                            text: agendamento.servico.titulo,
+                                            size: 25,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: constraints.maxWidth * 0.5,
+                                          child: BaseText(
+                                            maxLines: 4,
+                                            overflow: true,
+                                            text: agendamento.servico.descricao,
+                                            size: 12,
+                                            color: Colors.black45,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Column(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        BaseButton(
+                                          heigth: 30,
+                                          width: constraints.maxWidth * 0.25,
+                                          onPressed: () {
+                                            Get.toNamed("servico",
+                                                arguments: agendamento.servico);
+                                          },
+                                          text: "Ver",
+                                          backgroundColor: Color(0xFFF0733D),
+                                          colorFont: Colors.black,
+                                        )
+                                      ],
+                                    )
+                                  ],
+                                );
+                              },
+                            ),
                           ),
-                          Column(
-                            spacing: 5,
-                            children: [
-                              SizedBox(
-                                width: constraints.maxWidth * 0.5,
-                                child: BaseText(
-                                  text: agendamento.servico.titulo,
+                        )
+                      ],
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      spacing: 15,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        BaseText(
+                            text: "Data/Hora Agendada",
+                            size: 12,
+                            color: Colors.black38),
+                        Column(
+                          children: [
+                            Row(
+                              children: [
+                                BaseText(
+                                  text: DateFormat("dd/MM/yyyy")
+                                      .format(agendamento.dataHoraAgendado),
                                   size: 25,
                                   color: Colors.black,
                                 ),
-                              ),
-                              SizedBox(
-                                width: constraints.maxWidth * 0.5,
-                                child: BaseText(
-                                  maxLines: 4,
-                                  overflow: true,
-                                  text: agendamento.servico.descricao,
-                                  size: 12,
-                                  color: Colors.black45,
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                BaseText(
+                                  text: agendamento.contagemDias,
+                                  bold: false,
+                                  size: 15,
+                                  color: Colors.black38,
+                                ),
+                              ],
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      spacing: 15,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        BaseText(
+                            text: "Local de Atendimento",
+                            size: 12,
+                            color: Colors.black38),
+                        InkWell(
+                          onTap: _openGoogleMaps,
+                          child: SizedBox(
+                            width: larguraTela,
+                            height: alturaTela * 0.2,
+                            child: Image.asset(
+                              fit: BoxFit.cover,
+                              "assets/image/localizacao.png",
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                    if (agendamento.situacaoAgendamento == "Agendado")
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        spacing: 15,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          BaseText(
+                              text: "Ações", size: 12, color: Colors.black38),
+                          Row(
+                            spacing: 10,
+                            children: [
+                              Expanded(
+                                child: BaseButton(
+                                  heigth: alturaTela * 0.06,
+                                  width: larguraTela * 0.03,
+                                  colorFont: Colors.black,
+                                  onPressed: () {
+                                    mostrarDialogConfirmacao(context);
+                                  },
+                                  text: "Cancelar",
+                                  backgroundColor:
+                                      const Color.fromARGB(109, 248, 0, 0),
                                 ),
                               ),
                             ],
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              BaseButton(
-                                heigth: 30,
-                                width: constraints.maxWidth * 0.25,
-                                onPressed: () {
-                                  Get.toNamed("servico",
-                                      arguments: agendamento.servico);
-                                },
-                                text: "Ver",
-                                backgroundColor: Color(0xFFF0733D),
-                                colorFont: Colors.black,
-                              )
-                            ],
                           )
                         ],
-                      );
-                    },
-                  ),
-                ),
-              )
-            ],
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            spacing: 15,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              BaseText(
-                  text: "Data/Hora Agendada", size: 12, color: Colors.black38),
-              Column(
-                children: [
-                  Row(
-                    children: [
-                      BaseText(
-                        text: DateFormat("dd/MM/yyyy")
-                            .format(agendamento.dataHoraAgendado),
-                        size: 25,
-                        color: Colors.black,
                       ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      BaseText(
-                        text: agendamento.contagemDias,
-                        bold: false,
-                        size: 15,
-                        color: Colors.black38,
-                      ),
-                    ],
-                  ),
-                ],
-              )
-            ],
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            spacing: 15,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              BaseText(
-                  text: "Local de Atendimento",
-                  size: 12,
-                  color: Colors.black38),
-              InkWell(
-                onTap: _openGoogleMaps,
-                child: SizedBox(
-                  width: larguraTela,
-                  height: alturaTela * 0.2,
-                  child: Image.asset(
-                    fit: BoxFit.cover,
-                    "assets/image/localizacao.png",
-                  ),
-                ),
-              )
-            ],
-          ),
-          if (agendamento.situacaoAgendamento == "Agendado")
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              spacing: 15,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                BaseText(text: "Ações", size: 12, color: Colors.black38),
-                Row(
-                  spacing: 10,
-                  children: [
-                    Expanded(
-                      child: BaseButton(
-                        heigth: alturaTela * 0.06,
-                        width: larguraTela * 0.03,
-                        colorFont: Colors.black,
-                        onPressed: () {
-                          mostrarDialogConfirmacao(context);
-                        },
-                        text: "Cancelar",
-                        backgroundColor: const Color.fromARGB(109, 248, 0, 0),
-                      ),
-                    ),
                   ],
-                )
-              ],
-            ),
-        ],
-      ),
-    ));
+                ),
+              ));
   }
 }

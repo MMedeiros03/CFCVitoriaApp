@@ -101,7 +101,7 @@ class TermoUsoState extends State<TermoUso> {
                         text:
                             'Durante o uso do aplicativo, poderão ser coletados os seguintes dados pessoais: \n\n'
                             'Informações de cadastro: nome completo, e-mail, telefone, CPF e endereço; \n'
-                            'Imagens de documentos: o usuário poderá enviar fotos ou digitalizações de documentos necessários para o processo de matrícula ou atendimento na autoescola. \n\n'
+                            'Anexo de documentos: o usuário poderá enviar fotos ou digitalizações de documentos necessários para o processo de matrícula ou atendimento na autoescola. \n\n'
                             'Esses dados são utilizados exclusivamente para fins operacionais da autoescola, como identificação do aluno, validação de informações e agilização do processo de atendimento e matrícula.',
                         size: 13,
                         color: Colors.black,
@@ -147,8 +147,8 @@ class TermoUsoState extends State<TermoUso> {
                         bold: false,
                         text: 'O usuário é responsável: \n\n'
                             'Pela veracidade das informações fornecidas no aplicativo; \n'
-                            'Por manter seus dados de acesso seguros e atualizados; \n'
-                            'Pelo uso adequado da plataforma, respeitando as leis e este termo. \n\n'
+                            'Por não compartilhar seus dados de acesso com terceiros; \n'
+                            'Por manter seus dados cadastrais atualizados; \n'
                             'Não nos responsabilizamos por informações inseridas de forma equivocada ou pelo uso indevido do aplicativo.',
                         size: 13,
                         color: Colors.black,
@@ -189,7 +189,7 @@ class TermoUsoState extends State<TermoUso> {
                         justifyText: true,
                         bold: false,
                         text:
-                            'Seus dados serão armazenados pelo tempo necessário para a prestação dos serviços, ou conforme exigido por lei. Você poderá, a qualquer momento, solicitar a exclusão ou correção dos seus dados pessoais, conforme previsto na Lei Geral de Proteção de Dados (LGPD - Lei nº 13.709/2018).',
+                            'Seus dados serão armazenados pelo tempo necessário para a prestação dos serviços, ou conforme exigido por lei. Você poderá, a qualquer momento, solicitar a  correção ou exclusão dos seus dados pessoais, conforme previsto na Lei Geral de Proteção de Dados (LGPD - Lei nº 13.709/2018).',
                         size: 13,
                         color: Colors.black,
                       ),
@@ -209,7 +209,7 @@ class TermoUsoState extends State<TermoUso> {
                         justifyText: true,
                         bold: false,
                         text:
-                            'Em caso de dúvidas ou solicitações sobre o uso de seus dados, entre em contato conosco através do WhatsAppp: +55 51 3450-3939',
+                            'Em caso de dúvidas ou solicitações de atualizações cadastrais, entre em contato conosco através do WhatsAppp: +55 51 3450-3939',
                         size: 13,
                         color: Colors.black,
                       ),

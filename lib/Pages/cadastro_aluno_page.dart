@@ -23,6 +23,8 @@ class CadastroAlunoPage extends StatefulWidget {
 class CadastroAlunoPageState extends State<CadastroAlunoPage> {
   final String? mensagem = Get.arguments as String?;
   final FocusNode _focusNode = FocusNode();
+  final FocusNode _focusNodeCpf = FocusNode();
+  bool _cpfValido = false;
   bool carregando = false;
   int _currentStep = 0;
   final _formKeyAluno = GlobalKey<FormState>();
@@ -42,6 +44,12 @@ class CadastroAlunoPageState extends State<CadastroAlunoPage> {
 
   final _phoneMaskFormatter = MaskTextInputFormatter(
     mask: '(##) #####-####',
+    filter: {"#": RegExp(r'[0-9]')},
+    type: MaskAutoCompletionType.lazy,
+  );
+
+  final _cepMaskFormatter = MaskTextInputFormatter(
+    mask: '#####-###',
     filter: {"#": RegExp(r'[0-9]')},
     type: MaskAutoCompletionType.lazy,
   );
@@ -108,6 +116,21 @@ class CadastroAlunoPageState extends State<CadastroAlunoPage> {
     }
   }
 
+  void validarCpf() {
+    if (_cpfController.text == "") return;
+
+    var cpfValido = Utils.validarCpf(_cpfController.text);
+
+    setState(() {
+      _cpfValido = cpfValido;
+    });
+
+    if (!cpfValido) {
+      BaseSnackbar.exibirNotificacao("Erro!", "Informe um CPF válido", false);
+      return;
+    }
+  }
+
   Future login() async {
     try {
       LoginService service = LoginService();
@@ -155,6 +178,11 @@ class CadastroAlunoPageState extends State<CadastroAlunoPage> {
       _cidadeController.text = endereco.localidade;
       _estadoController.text = endereco.uf;
     } else {
+      _ruaController.text = "";
+      _bairroController.text = "";
+      _cidadeController.text = "";
+      _estadoController.text = "";
+
       BaseSnackbar.exibirNotificacao(
           "Erro!",
           "Não foi possivel obter o endereço pelo CEP informado. Preencha manualmente!",
@@ -194,6 +222,13 @@ class CadastroAlunoPageState extends State<CadastroAlunoPage> {
   @override
   void initState() {
     super.initState();
+
+    _focusNodeCpf.addListener(() {
+      if (!_focusNodeCpf.hasFocus) {
+        validarCpf();
+      }
+    });
+
     _focusNode.addListener(() {
       if (!_focusNode.hasFocus) {
         _buscarEnderecoPorCep();
@@ -204,6 +239,7 @@ class CadastroAlunoPageState extends State<CadastroAlunoPage> {
   @override
   void dispose() {
     _focusNode.dispose();
+    _focusNodeCpf.dispose();
     super.dispose();
   }
 
@@ -272,20 +308,22 @@ class CadastroAlunoPageState extends State<CadastroAlunoPage> {
                                         MediaQuery.of(context).size.width * 0.4,
                                     colorFont: Colors.black,
                                     backgroundColor: Color(0xFFF0733D),
-                                    onPressed: () {
-                                      if (_currentStep == 0 &&
-                                          _formKeyAluno.currentState!
-                                              .validate()) {
-                                        setState(() {
-                                          _currentStep += 1;
-                                        });
-                                      } else if (_currentStep == 1) {
-                                        if (_formKeyEndereco.currentState!
-                                            .validate()) {
-                                          createAluno();
-                                        }
-                                      }
-                                    },
+                                    onPressed: _cpfValido
+                                        ? () {
+                                            if (_currentStep == 0 &&
+                                                _formKeyAluno.currentState!
+                                                    .validate()) {
+                                              setState(() {
+                                                _currentStep += 1;
+                                              });
+                                            } else if (_currentStep == 1) {
+                                              if (_formKeyEndereco.currentState!
+                                                  .validate()) {
+                                                createAluno();
+                                              }
+                                            }
+                                          }
+                                        : null,
                                     text: _currentStep != 1
                                         ? 'Próximo'
                                         : 'Finalizar',
@@ -337,6 +375,7 @@ class CadastroAlunoPageState extends State<CadastroAlunoPage> {
           ),
           SizedBox(height: 10),
           TextFormField(
+            focusNode: _focusNodeCpf,
             inputFormatters: [_cpfFormatter],
             controller: _cpfController,
             style:
@@ -473,10 +512,12 @@ class CadastroAlunoPageState extends State<CadastroAlunoPage> {
         spacing: 5,
         children: [
           TextFormField(
+            inputFormatters: [_cepMaskFormatter],
             focusNode: _focusNode,
             style:
                 TextStyle(color: Colors.black, fontFamily: "Libre Baskerville"),
             controller: _cepController,
+            keyboardType: TextInputType.number,
             decoration: InputDecoration(
               labelStyle: TextStyle(
                   color: Colors.black38, fontFamily: "Libre Baskerville"),

@@ -1,3 +1,4 @@
+import 'package:cfc_vitoria_app/Dto/App/checklist_senha_dto.dart';
 import 'package:cfc_vitoria_app/Services/aluno_service.dart';
 import 'package:cfc_vitoria_app/Utils/storage.dart';
 import 'package:cfc_vitoria_app/Widgets/base_button_widget.dart';
@@ -21,6 +22,15 @@ class ResetSenhaState extends State<ResetSenha> {
       TextEditingController();
   bool _obscurePasswordNovaSenha = true;
   bool _obscurePasswordConfirma = true;
+  bool _senhaValidada = false;
+
+  ChecklistSenhaDto checklistSenhaDto = ChecklistSenhaDto(
+    caracterEspecial: false,
+    letraMaiuscula: false,
+    letraMinuscula: false,
+    minimoCaracteres: false,
+    minimoNumero: false,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -54,8 +64,12 @@ class ResetSenhaState extends State<ResetSenha> {
                 Form(
                   key: _formKey,
                   child: Column(
+                    spacing: 16,
                     children: [
                       TextFormField(
+                        onChanged: (value) {
+                          validarForcaNovaSenha(value);
+                        },
                         controller: _novaSenhaController,
                         obscureText: _obscurePasswordNovaSenha,
                         style: const TextStyle(
@@ -86,8 +100,10 @@ class ResetSenhaState extends State<ResetSenha> {
                             ? 'Preencha a senha'
                             : null,
                       ),
-                      const SizedBox(height: 16),
                       TextFormField(
+                        onChanged: (value) {
+                          validaConfirmarSenha();
+                        },
                         controller: _confirmaSenhaController,
                         obscureText: _obscurePasswordConfirma,
                         style: const TextStyle(
@@ -114,10 +130,123 @@ class ResetSenhaState extends State<ResetSenha> {
                             },
                           ),
                         ),
-                        validator: (value) => (value == null || value.isEmpty)
-                            ? 'Confirme a senha'
-                            : null,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Campo obrigatório';
+                          }
+                          if (value != _novaSenhaController.text) {
+                            return 'As senhas precisam ser iguais';
+                          }
+                          return null;
+                        },
                       ),
+                      Column(spacing: 8, children: [
+                        Row(
+                          spacing: 5,
+                          children: [
+                            checklistSenhaDto.minimoCaracteres
+                                ? Icon(
+                                    Icons.check_circle_outline,
+                                    size: 20,
+                                    color: Colors.green,
+                                  )
+                                : Icon(
+                                    Icons.cancel_outlined,
+                                    size: 20,
+                                    color: Colors.red,
+                                  ),
+                            BaseText(
+                                bold: false,
+                                text: "Mínimo de 8 caracteres",
+                                size: 14,
+                                color: Colors.black45)
+                          ],
+                        ),
+                        Row(
+                          spacing: 5,
+                          children: [
+                            checklistSenhaDto.letraMaiuscula
+                                ? Icon(
+                                    Icons.check_circle_outline,
+                                    size: 20,
+                                    color: Colors.green,
+                                  )
+                                : Icon(
+                                    Icons.cancel_outlined,
+                                    size: 20,
+                                    color: Colors.red,
+                                  ),
+                            BaseText(
+                                bold: false,
+                                text: "Pelo menos uma letra maiúscula",
+                                size: 14,
+                                color: Colors.black45)
+                          ],
+                        ),
+                        Row(
+                          spacing: 5,
+                          children: [
+                            checklistSenhaDto.letraMinuscula
+                                ? Icon(
+                                    Icons.check_circle_outline,
+                                    size: 20,
+                                    color: Colors.green,
+                                  )
+                                : Icon(
+                                    Icons.cancel_outlined,
+                                    size: 20,
+                                    color: Colors.red,
+                                  ),
+                            BaseText(
+                                bold: false,
+                                text: "Pelo menos uma letra minúscula",
+                                size: 14,
+                                color: Colors.black45)
+                          ],
+                        ),
+                        Row(
+                          spacing: 5,
+                          children: [
+                            checklistSenhaDto.minimoNumero
+                                ? Icon(
+                                    Icons.check_circle_outline,
+                                    size: 20,
+                                    color: Colors.green,
+                                  )
+                                : Icon(
+                                    Icons.cancel_outlined,
+                                    size: 20,
+                                    color: Colors.red,
+                                  ),
+                            BaseText(
+                                bold: false,
+                                text: "Pelo menos um número",
+                                size: 14,
+                                color: Colors.black45)
+                          ],
+                        ),
+                        Row(
+                          spacing: 5,
+                          children: [
+                            checklistSenhaDto.caracterEspecial
+                                ? Icon(
+                                    Icons.check_circle_outline,
+                                    size: 20,
+                                    color: Colors.green,
+                                  )
+                                : Icon(
+                                    Icons.cancel_outlined,
+                                    size: 20,
+                                    color: Colors.red,
+                                  ),
+                            BaseText(
+                                bold: false,
+                                text: "Pelo menos um carácter especial",
+                                size: 14,
+                                color: Colors.black45)
+                          ],
+                        )
+                      ]),
                     ],
                   ),
                 ),
@@ -127,16 +256,46 @@ class ResetSenhaState extends State<ResetSenha> {
         ),
         actions: [
           BaseButton(
-            showButton: true,
-            text: "Confirmar",
-            colorFont: Colors.black,
-            backgroundColor: Color(0xFFF0733D),
-            onPressed: () {
-              confirmaResetSenha();
-            },
-          ),
+              showButton: true,
+              text: "Confirmar",
+              colorFont: Colors.black,
+              backgroundColor: Color(0xFFF0733D),
+              onPressed: _senhaValidada
+                  ? () {
+                      confirmaResetSenha();
+                    }
+                  : null),
         ],
       );
+    });
+  }
+
+  void validaConfirmarSenha() {
+    if (checklistSenhaDto.minimoCaracteres == true &&
+        checklistSenhaDto.caracterEspecial == true &&
+        checklistSenhaDto.letraMaiuscula == true &&
+        checklistSenhaDto.letraMinuscula == true &&
+        _formKey.currentState!.validate() &&
+        checklistSenhaDto.minimoNumero == true) {
+      setState(() {
+        _senhaValidada = true;
+      });
+    }
+  }
+
+  void validarForcaNovaSenha(String senha) {
+    final regexLetraMinuscula = RegExp(r'^(?=.*[a-z])');
+    final regexLetraMaiuscula = RegExp(r'^(?=.*[A-Z])');
+    final regexMinimoNumero = RegExp(r'^(?=.*\d)');
+    final regexCaracterEspecial = RegExp(r'^(?=.*[\W_])');
+
+    setState(() {
+      checklistSenhaDto.letraMinuscula = regexLetraMinuscula.hasMatch(senha);
+      checklistSenhaDto.letraMaiuscula = regexLetraMaiuscula.hasMatch(senha);
+      checklistSenhaDto.minimoNumero = regexMinimoNumero.hasMatch(senha);
+      checklistSenhaDto.caracterEspecial =
+          regexCaracterEspecial.hasMatch(senha);
+      checklistSenhaDto.minimoCaracteres = senha.length >= 8;
     });
   }
 

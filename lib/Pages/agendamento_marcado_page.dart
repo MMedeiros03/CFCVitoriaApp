@@ -2,6 +2,7 @@ import 'package:cfc_vitoria_app/Widgets/base_button_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 
 class AgendamentoMarcadoPage extends StatefulWidget {
@@ -14,6 +15,8 @@ class AgendamentoMarcadoPage extends StatefulWidget {
 class AgendamentoMarcadoState extends State<AgendamentoMarcadoPage>
     with SingleTickerProviderStateMixin {
   double _opacity = 0.0;
+
+  final DateTime dataHoraAgendamento = Get.arguments as DateTime;
 
   @override
   void initState() {
@@ -139,8 +142,10 @@ class AgendamentoMarcadoState extends State<AgendamentoMarcadoPage>
                                                         size: 18,
                                                         color: Colors.black),
                                                     BaseText(
-                                                        text:
-                                                            "17/06/2025 ás 14:30",
+                                                        text: DateFormat(
+                                                                "dd/MM/yyyy - HH:mm")
+                                                            .format(
+                                                                dataHoraAgendamento),
                                                         bold: false,
                                                         size: 16,
                                                         color: Colors.black),

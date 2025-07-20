@@ -210,7 +210,7 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
         criandoAgendamento = false;
       });
 
-      Get.offNamed("/agendamento_marcado");
+      Get.offNamed("/agendamento_marcado", arguments: dataCompleta);
     } catch (e) {
       setState(() {
         criandoAgendamento = false;
