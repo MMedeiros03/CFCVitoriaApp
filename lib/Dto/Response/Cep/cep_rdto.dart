@@ -1,7 +1,4 @@
-
 import 'package:json_annotation/json_annotation.dart';
-
-part 'cep_rdto.g.dart';
 
 @JsonSerializable()
 class CepRDTO {
