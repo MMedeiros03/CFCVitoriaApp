@@ -6,11 +6,13 @@ part 'documento_dto.g.dart';
 
 @JsonSerializable()
 class DocumentoDTO {
+  int alunoId;
   int tipoDocumento;
   String nomeArquivo;
   String pathDocumento;
 
   DocumentoDTO({
+    required this.alunoId,
     required this.tipoDocumento,
     required this.nomeArquivo,
     required this.pathDocumento,

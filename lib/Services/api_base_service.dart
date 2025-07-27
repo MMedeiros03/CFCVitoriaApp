@@ -3,11 +3,12 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:cfc_vitoria_app/Utils/storage.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
 class ApiServiceBase {
-  String baseUrl = "https://cfcvitoria-production.up.railway.app/api";
+  String baseUrl = dotenv.env['API_URL']!;
   final _timeout = const Duration(seconds: 30);
 
   Future<Response> post(String endpoint, Map<String, dynamic> body,

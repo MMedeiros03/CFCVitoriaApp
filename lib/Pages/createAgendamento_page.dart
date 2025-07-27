@@ -1,11 +1,9 @@
-import 'dart:convert';
-
 import 'package:cfc_vitoria_app/Dto/App/checklist_documentos_dto.dart';
 import 'package:cfc_vitoria_app/Dto/Request/Documento/documento_dto.dart';
-import 'package:cfc_vitoria_app/Dto/Response/Documento/documento_aluno_rdto.dart';
 import 'package:cfc_vitoria_app/Dto/Response/Servico/servico_rdto.dart';
 import 'package:cfc_vitoria_app/Services/agendamento_service.dart';
-import 'package:cfc_vitoria_app/Services/firebase_service.dart';
+import 'package:cfc_vitoria_app/Services/aluno_service.dart';
+import 'package:cfc_vitoria_app/Services/supabase_storage.dart';
 import 'package:cfc_vitoria_app/Services/servico_service.dart';
 import 'package:cfc_vitoria_app/Utils/enums.dart';
 import 'package:cfc_vitoria_app/Utils/storage.dart';
@@ -32,7 +30,7 @@ class CreateAgendamentoPage extends StatefulWidget {
 
 class AgendamentoPageState extends State<CreateAgendamentoPage> {
   final ServicoRDTO? servico = Get.arguments as ServicoRDTO?;
-
+  Set<TipoDocumento> documentosCarregando = {};
   bool criandoAgendamento = false;
   List<ChecklistDocumentoDto> checkListDocumentos = [];
   List<DocumentoDTO> listaDocumentos = [];
@@ -171,39 +169,10 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
         return;
       }
 
-      var listaDocumentosStorage = List<DocumentoAlunoRDTO>() = [];
-
-      checkListDocumentos =
-          checkListDocumentos.where((d) => d.documento != null).toList();
-
-      for (var documento in checkListDocumentos) {
-        var documentoRenomeado = await Utils.renomearArquivo(
-            documento.documento!, documento.tipoDocumento.name);
-
-        var pathArquivoFirebase = await FirebaseService().uploadImagem(
-          alunoId: alunoId,
-          imagem: documentoRenomeado,
-        );
-
-        listaDocumentos.add(DocumentoDTO(
-            tipoDocumento: documento.tipoDocumento.index,
-            nomeArquivo: p.basename(documentoRenomeado.path),
-            pathDocumento: pathArquivoFirebase ?? ""));
-
-        listaDocumentosStorage.add(
-            DocumentoAlunoRDTO(tipoDocumento: documento.tipoDocumento.index));
-      }
-
-      if (listaDocumentosStorage.isNotEmpty) {
-        await StorageService.setListaDocumentosAluno(
-            jsonEncode(listaDocumentosStorage));
-      }
-
       await AgendamentoService().createAgendamento(AgendamentoDTO(
           alunoId: alunoId,
           servicoId: servicoSelected!.id,
           dataHoraAgendamento: dataCompleta,
-          documentosAluno: listaDocumentos,
           observacao: ""));
 
       setState(() {
@@ -544,6 +513,8 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
                     capturarImagem: () {
                       _redirect(TipoDocumento.cpfFrente);
                     },
+                    carregando:
+                        documentosCarregando.contains(TipoDocumento.cpfFrente),
                     tituloDocumento: "CPF (Frente)",
                   ),
                 if (servicoSelected?.exigeCPF ?? true)
@@ -552,6 +523,8 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
                     capturarImagem: () {
                       _redirect(TipoDocumento.cpfVerso);
                     },
+                    carregando:
+                        documentosCarregando.contains(TipoDocumento.cpfVerso),
                     tituloDocumento: "CPF (Verso)",
                   ),
                 if (servicoSelected?.exigeCNH ?? true)
@@ -560,6 +533,8 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
                     capturarImagem: () {
                       _redirect(TipoDocumento.cnhFrente);
                     },
+                    carregando:
+                        documentosCarregando.contains(TipoDocumento.cnhFrente),
                     tituloDocumento: "CNH (Frente)",
                   ),
                 if (servicoSelected?.exigeCNH ?? true)
@@ -568,6 +543,8 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
                     capturarImagem: () {
                       _redirect(TipoDocumento.cnhVerso);
                     },
+                    carregando:
+                        documentosCarregando.contains(TipoDocumento.cnhVerso),
                     tituloDocumento: "CNH (Verso)",
                   ),
                 if (servicoSelected?.exigeRG ?? true)
@@ -576,6 +553,8 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
                     capturarImagem: () {
                       _redirect(TipoDocumento.rgFrente);
                     },
+                    carregando:
+                        documentosCarregando.contains(TipoDocumento.rgFrente),
                     tituloDocumento: "RG (Frente)",
                   ),
                 if (servicoSelected?.exigeRG ?? true)
@@ -584,6 +563,8 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
                     capturarImagem: () {
                       _redirect(TipoDocumento.rgVerso);
                     },
+                    carregando:
+                        documentosCarregando.contains(TipoDocumento.rgVerso),
                     tituloDocumento: "RG (Verso)",
                   ),
                 if (servicoSelected?.exigeBO ?? true)
@@ -592,6 +573,8 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
                     capturarImagem: () {
                       _redirect(TipoDocumento.boletimOcorrencia);
                     },
+                    carregando: documentosCarregando
+                        .contains(TipoDocumento.boletimOcorrencia),
                     tituloDocumento: "Boletim de Ocorrência (OFICIAL)",
                   ),
                 if (servicoSelected?.exigeComprovanteResidencia ?? true)
@@ -600,6 +583,8 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
                     capturarImagem: () {
                       _redirect(TipoDocumento.comprovanteResidencia);
                     },
+                    carregando: documentosCarregando
+                        .contains(TipoDocumento.comprovanteResidencia),
                     tituloDocumento: "Comprovante de Residência",
                   ),
               ],
@@ -821,11 +806,40 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
   void _redirect(TipoDocumento tipoDocumento) async {
     final image = await Get.toNamed("captura-imagem");
 
-    if (image != null) {
-      checkListDocumentos.add(ChecklistDocumentoDto(
-          tipoDocumento: tipoDocumento, documento: image));
+    setState(() {
+      documentosCarregando.add(tipoDocumento);
+    });
 
-      setState(() {});
+    if (image != null) {
+      var alunoId = await StorageService.getAlunoId();
+
+      var documentoRenomeado =
+          await Utils.renomearArquivo(image, tipoDocumento.name);
+
+      var pathArquivoSupabase = await SupaBaseStorage().uploadImagem(
+        alunoId: alunoId!,
+        imagem: documentoRenomeado,
+      );
+
+      if (pathArquivoSupabase != null) {
+        await AlunoService().cadastrarDocumentoAluno(DocumentoDTO(
+            alunoId: alunoId,
+            tipoDocumento: tipoDocumento.index,
+            nomeArquivo: p.basename(documentoRenomeado.path),
+            pathDocumento: pathArquivoSupabase));
+
+        checkListDocumentos.add(ChecklistDocumentoDto(
+            tipoDocumento: tipoDocumento, documento: image));
+      } else {
+        BaseSnackbar.exibirNotificacao(
+            "Erro!",
+            "Houve um erro ao fazer upload da imagem. Tente novamente mais tarde ou entre em contato com o CFC.",
+            false);
+      }
+
+      setState(() {
+        documentosCarregando.remove(tipoDocumento);
+      });
     }
   }
 

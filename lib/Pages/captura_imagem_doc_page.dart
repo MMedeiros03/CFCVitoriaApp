@@ -45,20 +45,16 @@ class CapturaImagemDocPageState extends State<CapturaImagemDocPage> {
   Future<void> capturarImagem() async {
     if (!controller!.value.isInitialized) return;
 
-    try {
-      final XFile imagem = await controller!.takePicture();
+    final XFile imagem = await controller!.takePicture();
 
-      File imagemArquivo = File(imagem.path);
+    File imagemArquivo = File(imagem.path);
 
-      setState(() {
-        imagemCapturada = imagemArquivo;
-      });
+    setState(() {
+      imagemCapturada = imagemArquivo;
+    });
 
-      if (mounted) {
-        mostrarPopup(context, imagemArquivo);
-      }
-    } catch (e) {
-      print('Erro ao capturar imagem: $e');
+    if (mounted) {
+      mostrarPopup(context, imagemArquivo);
     }
   }
 

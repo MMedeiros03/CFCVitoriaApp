@@ -1,14 +1,14 @@
 import 'package:cfc_vitoria_app/Utils/routes.dart';
 import 'package:cfc_vitoria_app/Utils/storage.dart';
-import 'package:cfc_vitoria_app/firebase_options.dart';
-import 'package:firebase_app_check/firebase_app_check.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
+  await dotenv.load();
   WidgetsFlutterBinding.ensureInitialized();
   Intl.defaultLocale = 'pt_BR';
   initializeDateFormatting('pt_BR', null);
@@ -17,13 +17,10 @@ void main() async {
     initialRoute: initialRoute,
   ));
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  var supabaseUrl = dotenv.env['SUPABASE_URL']!;
+  var supabasekey = dotenv.env['SUPABASE_KEY']!;
 
-  await FirebaseAppCheck.instance.activate(
-    androidProvider: AndroidProvider.playIntegrity,
-  );
+  await Supabase.initialize(url: supabaseUrl, anonKey: supabasekey);
 }
 
 Future<String> setInitPage() async {

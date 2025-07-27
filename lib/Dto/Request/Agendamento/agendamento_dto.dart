@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:cfc_vitoria_app/Dto/Request/Documento/documento_dto.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'agendamento_dto.g.dart';
@@ -11,14 +10,13 @@ class AgendamentoDTO {
   int servicoId;
   DateTime dataHoraAgendamento;
   String observacao;
-  List<DocumentoDTO> documentosAluno = [];
 
-  AgendamentoDTO(
-      {required this.alunoId,
-      required this.servicoId,
-      required this.dataHoraAgendamento,
-      required this.observacao,
-      required this.documentosAluno});
+  AgendamentoDTO({
+    required this.alunoId,
+    required this.servicoId,
+    required this.dataHoraAgendamento,
+    required this.observacao,
+  });
 
   Map<String, dynamic> toJson() => _$AgendamentoDTOToJson(this);
 
