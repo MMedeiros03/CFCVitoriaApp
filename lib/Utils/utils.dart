@@ -12,7 +12,7 @@ class Utils {
 
     var tokenSalvo = await StorageService.getToken(true);
 
-    if (tokenSalvo == null) {
+    if (tokenSalvo == null || tokenSalvo == "") {
       return false;
     }
 

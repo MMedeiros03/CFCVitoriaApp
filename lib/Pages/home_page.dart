@@ -7,6 +7,7 @@ import 'package:cfc_vitoria_app/Utils/utils.dart';
 import 'package:cfc_vitoria_app/Widgets/base_button_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_card_campanha_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_page_widget.dart';
+import 'package:cfc_vitoria_app/Widgets/base_snackbar_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_text_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/reset_senha_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/termo_uso_widget.dart';
@@ -45,39 +46,54 @@ class _HomePageState extends State<HomePage>
   }
 
   _inicializar() async {
-    var tokenValido = await Utils.validaToken();
+    try {
+      var tokenValido = await Utils.validaToken();
 
-    var campanhas = await CampanhaService().obterCampanhas();
+      var campanhas = await CampanhaService().obterCampanhas();
 
-    var proximoAgendamento = await StorageService.getProximoAgendamento();
+      var proximoAgendamento = await StorageService.getProximoAgendamento();
 
-    var nomeAluno = await StorageService.getAlunoNome();
+      var nomeAluno = await StorageService.getAlunoNome();
 
-    var aceitouTermo = await StorageService.getAceitouTermo();
+      var aceitouTermo = await StorageService.getAceitouTermo();
 
-    var resetarSenha = await StorageService.getSolicitouResetSenha();
+      var resetarSenha = await StorageService.getSolicitouResetSenha();
 
-    if (!aceitouTermo) {
-      if (mounted) {
-        abrirTermoResponsabilidade(context);
+      if (!aceitouTermo) {
+        if (mounted) {
+          abrirTermoResponsabilidade(context);
+        }
       }
-    }
 
-    if (resetarSenha && tokenValido) {
-      if (mounted) {
-        abrirResetSenha(context);
+      if (resetarSenha && tokenValido) {
+        if (mounted) {
+          abrirResetSenha(context);
+        }
       }
+
+      if (!mounted) return;
+
+      setState(() {
+        usuarioLogado = tokenValido;
+        _campanhas = campanhas;
+        _proximoAgendamento = proximoAgendamento;
+        _nomeAluno = nomeAluno ?? "";
+        carregando = false;
+      });
+    } catch (e) {
+      BaseSnackbar.exibirNotificacao(
+          "Erro",
+          "Houve um erro na inicialização. Entre em contato com o suporte!",
+          false);
+
+      setState(() {
+        usuarioLogado = false;
+        _campanhas = [];
+        _proximoAgendamento = null;
+        _nomeAluno = "";
+        carregando = false;
+      });
     }
-
-    if (!mounted) return;
-
-    setState(() {
-      usuarioLogado = tokenValido;
-      _campanhas = campanhas;
-      _proximoAgendamento = proximoAgendamento;
-      _nomeAluno = nomeAluno ?? "";
-      carregando = false;
-    });
   }
 
   @override

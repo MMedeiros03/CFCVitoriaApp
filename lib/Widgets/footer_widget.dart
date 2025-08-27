@@ -13,94 +13,51 @@ class _FooterWidgetState extends State<FooterWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.all(14),
-        child: Container(
-          decoration: BoxDecoration(
-              color: Colors.black12,
-              borderRadius: BorderRadius.all(Radius.circular(12))),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            spacing: 30,
-            children: [
-              GestureDetector(
-                  onTap: () {
-                    _redirecionarParaPagina("/servicos");
-                  },
-                  child: Container(
-                      decoration: BoxDecoration(
-                          color: defineCorPelaRota("/servicos"),
-                          borderRadius: BorderRadius.circular(8)),
-                      child: Padding(
-                        padding: EdgeInsets.all(6),
-                        child: Icon(
-                          Icons.book_outlined,
-                          size: 35,
-                        ),
-                      ))),
-              GestureDetector(
-                  onTap: () {
-                    _validarERedirecionar("/meusDados");
-                  },
-                  child: Container(
-                      decoration: BoxDecoration(
-                          color: defineCorPelaRota("/meusDados"),
-                          borderRadius: BorderRadius.circular(8)),
-                      child: Padding(
-                        padding: EdgeInsets.all(6),
-                        child: Icon(
-                          Icons.person_outlined,
-                          size: 35,
-                        ),
-                      ))),
-              GestureDetector(
-                  onTap: () {
-                    _validarERedirecionar("/create-agendamento");
-                  },
-                  child: Container(
-                      decoration: BoxDecoration(
-                          color: defineCorPelaRota("/create-agendamento"),
-                          borderRadius: BorderRadius.circular(8)),
-                      child: Padding(
-                        padding: EdgeInsets.all(6),
-                        child: Icon(
-                          Icons.add_box_outlined,
-                          size: 35,
-                        ),
-                      ))),
-              GestureDetector(
-                  onTap: () {
-                    _validarERedirecionar("/agendamentos");
-                  },
-                  child: Container(
-                      decoration: BoxDecoration(
-                          color: defineCorPelaRota("/agendamentos"),
-                          borderRadius: BorderRadius.circular(8)),
-                      child: Padding(
-                        padding: EdgeInsets.all(6),
-                        child: Icon(
-                          Icons.calendar_today_outlined,
-                          size: 35,
-                        ),
-                      ))),
-              GestureDetector(
-                  onTap: () {
-                    _redirecionarParaPagina("/sobreNos");
-                  },
-                  child: Container(
-                      decoration: BoxDecoration(
-                          color: defineCorPelaRota("/sobreNos"),
-                          borderRadius: BorderRadius.circular(8)),
-                      child: Padding(
-                        padding: EdgeInsets.all(6),
-                        child: Icon(
-                          Icons.phone_outlined,
-                          size: 35,
-                        ),
-                      ))),
-            ],
-          ),
-        ));
+      padding: const EdgeInsets.all(14),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.black12,
+          borderRadius: const BorderRadius.all(Radius.circular(12)),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            _buildItem(
+                Icons.book_outlined, "/servicos", _redirecionarParaPagina),
+            _buildItem(
+                Icons.person_outlined, "/meusDados", _validarERedirecionar),
+            _buildItem(Icons.add_box_outlined, "/create-agendamento",
+                _validarERedirecionar),
+            _buildItem(Icons.calendar_today_outlined, "/agendamentos",
+                _validarERedirecionar),
+            _buildItem(
+                Icons.phone_outlined, "/sobreNos", _redirecionarParaPagina),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildItem(IconData icon, String rota, Function(String) onTap) {
+    final larguraTela = MediaQuery.of(context).size.width;
+
+    return Expanded(
+      child: GestureDetector(
+          onTap: () => onTap(rota),
+          child: Padding(
+            padding: EdgeInsets.all(6),
+            child: Container(
+              decoration: BoxDecoration(
+                color: defineCorPelaRota(rota),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: AspectRatio(
+                aspectRatio: 1,
+                child: Icon(icon, size: larguraTela * 0.07),
+              ),
+            ),
+          )),
+    );
   }
 
   Future _validarERedirecionar(path) async {

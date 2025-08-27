@@ -56,8 +56,12 @@ class StorageService {
   }
 
   static Future<String?> getAlunoNome() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(_alunoNome);
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      return prefs.getString(_alunoNome);
+    } catch (e) {
+      return "";
+    }
   }
 
   static Future<void> removeToken(bool criptografado) async {
