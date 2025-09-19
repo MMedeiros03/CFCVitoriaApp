@@ -752,11 +752,22 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
       BaseSnackbar.exibirNotificacao("Erro",
           "Obrigatório selecionar uma data e horário para prosseguir!", false);
     } else {
-      if (horarioselectedValue!.isBefore(DateTime.now())) {
+      var dataCerta = DateTime(
+        horarioselectedValue!.year,
+        horarioselectedValue!.month,
+        horarioselectedValue!.day,
+        horarioselectedValue!.hour,
+        horarioselectedValue!.minute,
+        horarioselectedValue!.second,
+      );
+      final agora = DateTime.now();
+
+      if (dataCerta.isBefore(agora)) {
         BaseSnackbar.exibirNotificacao(
-            "Erro",
-            "Não é possivel agendar para uma data anterior ao dia de hoje.",
-            false);
+          "Erro",
+          "Não é possível agendar para uma data e horário que já passaram.",
+          false,
+        );
       } else {
         setState(() {
           _currentStep = _currentStep + 1;

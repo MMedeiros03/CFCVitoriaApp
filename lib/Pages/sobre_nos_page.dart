@@ -28,10 +28,9 @@ class SobreNosPageState extends State<SobreNosPage> {
   }
 
   final List<String> imagensCfc = [
-    'assets/image/cfc1.jpeg',
+    'assets/image/cfc1.jpg',
     'assets/image/cfc2.jpeg',
     'assets/image/cfc3.jpeg',
-    'assets/image/cfc4.jpeg',
     'assets/image/cfc5.jpeg',
     'assets/image/cfc6.jpeg',
   ];

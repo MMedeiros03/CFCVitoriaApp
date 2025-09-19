@@ -100,10 +100,9 @@ flutter:
     - assets/animations/ConfirmAnimation.json
     - assets/animations/CancelAnimation.json
     - assets/image/localizacao.png
-    - assets/image/cfc1.jpeg
+    - assets/image/cfc1.jpg
     - assets/image/cfc2.jpeg
     - assets/image/cfc3.jpeg
-    - assets/image/cfc4.jpeg
     - assets/image/cfc5.jpeg
     - assets/image/cfc6.jpeg
     - .env
