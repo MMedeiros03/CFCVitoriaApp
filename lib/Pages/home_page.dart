@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cfc_vitoria_app/Dto/Response/Agendamento/agendamento_rdto.dart';
 import 'package:cfc_vitoria_app/Dto/Response/Campanha/campanha_rdto.dart';
+import 'package:cfc_vitoria_app/Services/agendamento_service.dart';
 import 'package:cfc_vitoria_app/Services/campanha_service.dart';
 import 'package:cfc_vitoria_app/Utils/storage.dart';
 import 'package:cfc_vitoria_app/Utils/utils.dart';
@@ -51,7 +52,9 @@ class _HomePageState extends State<HomePage>
 
       var campanhas = await CampanhaService().obterCampanhas();
 
-      var proximoAgendamento = await StorageService.getProximoAgendamento();
+      var proximoAgendamento = tokenValido
+          ? await AgendamentoService().obterProximoAgendamento()
+          : null;
 
       var nomeAluno = await StorageService.getAlunoNome();
 
@@ -159,31 +162,37 @@ class _HomePageState extends State<HomePage>
                   children: [
                     if (_proximoAgendamento != null && usuarioLogado)
                       Padding(
-                        padding: EdgeInsets.fromLTRB(4, 0, 4, 0),
+                        padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          spacing: 10,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            BaseText(
-                                text: "Próximo Agendamento ",
+                            Padding(
+                              padding: const EdgeInsets.only(left: 6),
+                              child: BaseText(
+                                text: "Próximo Agendamento",
                                 size: 20,
                                 bold: true,
-                                color: Colors.black),
+                                color: Colors.black,
+                              ),
+                            ),
+                            const SizedBox(height: 10),
                             Container(
                               width: larguraTela,
-                              height: alturaTela * 0.1,
+                              height: alturaTela * 0.115,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(16),
                               ),
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Icon(
                                     Icons.calendar_month_outlined,
                                     size: 50,
-                                    color: Color(0xFFF0733D),
+                                    color: const Color(0xFFF0733D),
                                   ),
-                                  SizedBox(width: 8),
+                                  const SizedBox(width: 12),
                                   Expanded(
                                     child: Column(
                                       crossAxisAlignment:
@@ -198,14 +207,14 @@ class _HomePageState extends State<HomePage>
                                           size: 20,
                                           color: Colors.black,
                                         ),
-                                        SizedBox(height: 4),
+                                        const SizedBox(height: 4),
                                         BaseText(
                                           text:
                                               _proximoAgendamento!.contagemDias,
                                           size: 12,
                                           color: Colors.black45,
                                         ),
-                                        SizedBox(height: 8),
+                                        const SizedBox(height: 8),
                                       ],
                                     ),
                                   ),
@@ -215,15 +224,17 @@ class _HomePageState extends State<HomePage>
                                       width: 65,
                                       heigth: 35,
                                       colorFont: Colors.black,
-                                      backgroundColor: Color(0xFFF0733D),
+                                      backgroundColor: const Color(0xFFF0733D),
                                       text: "Ver",
                                       fontSize: 14,
                                       onPressed: () {
-                                        Get.toNamed("/agendamento",
-                                            arguments: _proximoAgendamento);
+                                        Get.toNamed(
+                                          "/agendamento",
+                                          arguments: _proximoAgendamento,
+                                        );
                                       },
                                     ),
-                                  )
+                                  ),
                                 ],
                               ),
                             ),

@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:cfc_vitoria_app/Dto/Response/Agendamento/agendamento_rdto.dart';
 import 'package:cfc_vitoria_app/Dto/Response/Documento/documento_aluno_rdto.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -13,7 +12,6 @@ class LoginRDTO {
   final int alunoId;
   final String nomeAluno;
   final bool solicitouResetSenha;
-  final AgendamentoRDTO? proximoAgendamentoAluno;
   final List<DocumentoAlunoRDTO> documentosAluno;
 
   LoginRDTO({
@@ -22,7 +20,6 @@ class LoginRDTO {
     required this.alunoId,
     required this.nomeAluno,
     required this.solicitouResetSenha,
-    this.proximoAgendamentoAluno,
     required this.documentosAluno,
   });
 

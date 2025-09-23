@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:cfc_vitoria_app/Dto/Response/Agendamento/agendamento_rdto.dart';
 import 'package:cfc_vitoria_app/Dto/Response/Documento/documento_aluno_rdto.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,7 +9,6 @@ class StorageService {
   static const _alunoId = "_alunoId";
   static const _alunoNome = "_alunoNome";
   static const _viewedTutorial = "_viewedTutorial";
-  static const _proximoAgendamento = "_proximoAgendamento";
   static const _listaDocumentosAluno = "_listaDocumentosAluno";
   static const _aceitouTermo = "_aceitouTermo";
   static const _solicitouResetSenha = "_solicitouResetSenha";
@@ -90,53 +88,6 @@ class StorageService {
     var teste = prefs.getString(_viewedTutorial);
 
     return teste == "true";
-  }
-
-  static Future<void> removeProximoAgendamento() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove(_proximoAgendamento);
-  }
-
-  static Future<void> setProximoAgendamento(
-      String jsonProximoAgendamento) async {
-    final prefs = await SharedPreferences.getInstance();
-
-    await prefs.remove(_proximoAgendamento);
-
-    await prefs.setString(_proximoAgendamento, jsonProximoAgendamento);
-  }
-
-  static Future<AgendamentoRDTO?> getProximoAgendamento() async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-
-      var proximoAgendamento = prefs.getString(_proximoAgendamento);
-
-      if (proximoAgendamento != null && proximoAgendamento != "") {
-        var agendamentoJson = json.decode(proximoAgendamento);
-
-        var proximoAgendamentoAluno = AgendamentoRDTO.fromJson(agendamentoJson);
-
-        var dataCerta = DateTime(
-          proximoAgendamentoAluno.dataHoraAgendado.year,
-          proximoAgendamentoAluno.dataHoraAgendado.month,
-          proximoAgendamentoAluno.dataHoraAgendado.day,
-          proximoAgendamentoAluno.dataHoraAgendado.hour,
-          proximoAgendamentoAluno.dataHoraAgendado.minute,
-          proximoAgendamentoAluno.dataHoraAgendado.second,
-        );
-
-        if (dataCerta.isBefore(DateTime.now())) {
-          return null;
-        }
-
-        return proximoAgendamentoAluno;
-      }
-
-      return null;
-    } catch (ex) {
-      return null;
-    }
   }
 
   static Future<void> removeListaDocumentosAluno() async {

@@ -20,9 +20,6 @@ class LoginService extends ApiServiceBase {
 
       await StorageService.setAlunoNome(loginResponseDto.nomeAluno);
 
-      await StorageService.setProximoAgendamento(
-          loginResponseDto.proximoAgendamentoAluno?.toJsonString() ?? "");
-
       await StorageService.setListaDocumentosAluno(
           jsonEncode(loginResponseDto.documentosAluno));
 

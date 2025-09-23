@@ -12,10 +12,6 @@ LoginRDTO _$LoginRDTOFromJson(Map<String, dynamic> json) => LoginRDTO(
       alunoId: (json['alunoId'] as num).toInt(),
       nomeAluno: json['nomeAluno'] as String,
       solicitouResetSenha: json['solicitouResetSenha'] as bool,
-      proximoAgendamentoAluno: json['proximoAgendamentoAluno'] == null
-          ? null
-          : AgendamentoRDTO.fromJson(
-              json['proximoAgendamentoAluno'] as Map<String, dynamic>),
       documentosAluno: (json['documentosAluno'] as List<dynamic>)
           .map((e) => DocumentoAlunoRDTO.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -27,6 +23,5 @@ Map<String, dynamic> _$LoginRDTOToJson(LoginRDTO instance) => <String, dynamic>{
       'alunoId': instance.alunoId,
       'nomeAluno': instance.nomeAluno,
       'solicitouResetSenha': instance.solicitouResetSenha,
-      'proximoAgendamentoAluno': instance.proximoAgendamentoAluno,
       'documentosAluno': instance.documentosAluno,
     };

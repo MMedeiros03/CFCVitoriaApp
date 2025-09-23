@@ -82,11 +82,8 @@ class SobreNosPageState extends State<SobreNosPage> {
                             child: BaseText(
                               justifyText: true,
                               bold: false,
-                              maxLines: 10,
                               text:
-                                  "O CFC Vitoria é uma autoescola comprometida com a formação de condutores responsáveis, seguros, conscientes do seu papel no trânsito. Localizado na parte central de Sapucaia do Sul, o CFC Vitoria oferece atendimento personalizado, instrutores qualificados e estrutura acolhedora para garantir que cada aluno receba uma formação completa e de qualidade.\n"
-                                  "Nosso compromisso vai além de preparar motoristas para obter a habilitação. Trabalhamos para formar cidadãos que compreendem a importância da segurança, do respeito às leis e da realização para a conquista da CNH.\n"
-                                  "Seja para sua primeira habilitação ou para demais serviços, o CFC Vitoria é a escolha certa para quem busca confiança, agilidade e um ensino humanizado. Oferecendo serviços com excelência e contribuindo para um trânsito mais seguro para todos.",
+                                  "O CFC Vitoria é uma autoescola comprometida com a formação de condutores responsáveis, seguros, conscientes do seu papel no trânsito. Localizado na parte central de Sapucaia do Sul, o CFC Vitoria oferece atendimento personalizado, instrutores qualificados e estrutura acolhedora para garantir que cada aluno receba uma formação completa e de qualidade.\n",
                               size: 13,
                               color: Colors.black38,
                             ),
@@ -101,6 +98,15 @@ class SobreNosPageState extends State<SobreNosPage> {
                         ],
                       );
                     },
+                  ),
+                  BaseText(
+                    justifyText: true,
+                    bold: false,
+                    text:
+                        "Nosso compromisso vai além de preparar motoristas para obter a habilitação. Trabalhamos para formar cidadãos que compreendem a importância da segurança, do respeito às leis e da realização para a conquista da CNH.\n"
+                        "Seja para sua primeira habilitação ou para demais serviços, o CFC Vitoria é a escolha certa para quem busca confiança, agilidade e um ensino humanizado. Oferecendo serviços com excelência e contribuindo para um trânsito mais seguro para todos.",
+                    size: 13,
+                    color: Colors.black38,
                   ),
                 ],
               ),
