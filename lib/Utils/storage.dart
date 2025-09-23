@@ -117,6 +117,19 @@ class StorageService {
 
         var proximoAgendamentoAluno = AgendamentoRDTO.fromJson(agendamentoJson);
 
+        var dataCerta = DateTime(
+          proximoAgendamentoAluno.dataHoraAgendado.year,
+          proximoAgendamentoAluno.dataHoraAgendado.month,
+          proximoAgendamentoAluno.dataHoraAgendado.day,
+          proximoAgendamentoAluno.dataHoraAgendado.hour,
+          proximoAgendamentoAluno.dataHoraAgendado.minute,
+          proximoAgendamentoAluno.dataHoraAgendado.second,
+        );
+
+        if (dataCerta.isBefore(DateTime.now())) {
+          return null;
+        }
+
         return proximoAgendamentoAluno;
       }
 

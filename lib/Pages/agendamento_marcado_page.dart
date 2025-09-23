@@ -113,7 +113,7 @@ class AgendamentoMarcadoState extends State<AgendamentoMarcadoPage>
                                             BaseText(
                                                 justifyText: true,
                                                 text:
-                                                    "Mal podemos esperar para te receber aqui no CFC no horário agendado!Já estamos super empolgados e com tudo pronto para te dar toda a atenção que você merece!",
+                                                    "Mal podemos esperar para te receber aqui no CFC no horário agendado! Já estamos aguardando para você vir, realizar a foto para sua carteira e receber toda a atenção que você merece!",
                                                 bold: false,
                                                 size: 16,
                                                 color: Colors.black),

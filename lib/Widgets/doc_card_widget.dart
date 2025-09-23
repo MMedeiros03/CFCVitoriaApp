@@ -48,6 +48,7 @@ class DocCard extends StatelessWidget {
                     children: [
                       BaseText(
                         text: tituloDocumento,
+                        overflow: true,
                         size: 20,
                         color: Colors.black,
                       ),

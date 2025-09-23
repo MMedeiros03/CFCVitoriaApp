@@ -219,7 +219,8 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
     final larguraTela = MediaQuery.of(context).size.width;
     final alturaTela = MediaQuery.of(context).size.height;
 
-    return Column(
+    return SingleChildScrollView(
+        child: Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -365,13 +366,14 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
             ],
           )
       ],
-    );
+    ));
   }
 
   Widget _stepTwo() {
     final alturaTela = MediaQuery.of(context).size.height;
 
-    return Column(
+    return SingleChildScrollView(
+        child: Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         BaseText(
@@ -468,7 +470,7 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
             },
           ),
       ],
-    );
+    ));
   }
 
   Widget _stepTree() {
@@ -601,8 +603,9 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
 
     return horarioselectedValue == null
         ? SizedBox()
-        : Column(
-            spacing: 20,
+        : SingleChildScrollView(
+            child: Column(
+            spacing: 25,
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -690,7 +693,7 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
                       size: 12,
                       color: Colors.black38),
                   Column(
-                    spacing: 15,
+                    spacing: 8,
                     children: [
                       Row(
                         children: [
@@ -716,8 +719,18 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
                   )
                 ],
               ),
+              Column(
+                children: [
+                  BaseText(
+                    text:
+                        'Atenção! Ao realizar o agendamento, você devera comparecer no CFC para realizar assinaturas e foto (para sua CNH) Para outras duvidas, entre em contato pelo Whatsapp.',
+                    size: 16,
+                    color: Colors.black87,
+                  ),
+                ],
+              ),
             ],
-          );
+          ));
   }
 
   void _validacoesPorStep() {

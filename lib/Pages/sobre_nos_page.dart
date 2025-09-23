@@ -78,20 +78,22 @@ class SobreNosPageState extends State<SobreNosPage> {
                         children: [
                           SizedBox(
                             width: constraints.maxWidth *
-                                0.5, // Define um max-width para o texto
+                                0.55, // Define um max-width para o texto
                             child: BaseText(
                               justifyText: true,
                               bold: false,
                               maxLines: 10,
                               text:
-                                  "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model.",
+                                  "O CFC Vitoria é uma autoescola comprometida com a formação de condutores responsáveis, seguros, conscientes do seu papel no trânsito. Localizado na parte central de Sapucaia do Sul, o CFC Vitoria oferece atendimento personalizado, instrutores qualificados e estrutura acolhedora para garantir que cada aluno receba uma formação completa e de qualidade.\n"
+                                  "Nosso compromisso vai além de preparar motoristas para obter a habilitação. Trabalhamos para formar cidadãos que compreendem a importância da segurança, do respeito às leis e da realização para a conquista da CNH.\n"
+                                  "Seja para sua primeira habilitação ou para demais serviços, o CFC Vitoria é a escolha certa para quem busca confiança, agilidade e um ensino humanizado. Oferecendo serviços com excelência e contribuindo para um trânsito mais seguro para todos.",
                               size: 13,
                               color: Colors.black38,
                             ),
                           ),
                           Spacer(), // Empurra a imagem para o final da linha
                           Image.asset(
-                            "assets/image/logo_cfc.jpg",
+                            "assets/image/logo_transparente.png",
                             width: constraints.maxWidth * 0.4,
                             height: 100,
                             fit: BoxFit.contain,
@@ -100,6 +102,74 @@ class SobreNosPageState extends State<SobreNosPage> {
                       );
                     },
                   ),
+                ],
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      BaseText(
+                        color: Colors.black,
+                        text: "Missão",
+                        size: 28,
+                      ),
+                      SizedBox(width: 10),
+                      Expanded(
+                        child: Container(
+                          height: 2,
+                          color: Color(0xFFF0733D),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  Column(
+                    spacing: 20,
+                    children: [
+                      BaseText(
+                          justifyText: true,
+                          bold: false,
+                          text:
+                              "Formar condutores conscientes, responsáveis e preparados, contribuindo para um trânsito mais seguro e humanizado. Oferecemos ensino de qualidade, aliado a valores éticos e ao respeito às leis de trânsito, para que cada aluno desenvolva, não apenas as habilidades técnicas para conduzir um veículo, mas também uma postura cidadã.",
+                          size: 13,
+                          color: Colors.black45),
+                    ],
+                  )
+                ],
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      BaseText(
+                        color: Colors.black,
+                        text: "Visão",
+                        size: 28,
+                      ),
+                      SizedBox(width: 10),
+                      Expanded(
+                        child: Container(
+                          height: 2,
+                          color: Color(0xFFF0733D),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  Column(
+                    spacing: 20,
+                    children: [
+                      BaseText(
+                          justifyText: true,
+                          bold: false,
+                          text:
+                              "Ser como o Centro de Formação de Condutores referência na região, pela excelência no ensino, inovação nos métodos de aprendizagem, compromisso com a formação de motoristas.",
+                          size: 13,
+                          color: Colors.black45),
+                    ],
+                  )
                 ],
               ),
               Column(
@@ -134,7 +204,7 @@ class SobreNosPageState extends State<SobreNosPage> {
                           color: Colors.black45),
                       CarouselSlider(
                         options: CarouselOptions(
-                          height: alturaTela * 0.3,
+                          height: alturaTela * 0.33,
                           autoPlay: true,
                           autoPlayInterval: Duration(seconds: 5),
                         ),
