@@ -41,6 +41,10 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
   List<ServicoRDTO> servicos = [];
   bool carregando = true;
   bool carregandoHorarios = true;
+
+  bool _aulasPraticas = false;
+  bool _aulasTeoricas = false;
+
   final _formKey = GlobalKey<FormState>();
 
   List<DateTime> horarios = [];
@@ -119,6 +123,7 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
                         _buildStepIndicator(1),
                         _buildStepIndicator(2),
                         _buildStepIndicator(3),
+                        _buildStepIndicator(4),
                       ],
                     ),
                     Expanded(
@@ -129,6 +134,7 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
                           _stepTwo(),
                           _stepTree(),
                           _stepFor(),
+                          _stepFive()
                         ],
                       ),
                     ),
@@ -174,7 +180,10 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
           alunoId: alunoId,
           servicoId: servicoSelected!.id,
           dataHoraAgendamento: dataCompleta,
-          observacao: ""));
+          observacao: "",
+          aulasPraticas: _aulasPraticas,
+          aulasTeoricas: _aulasTeoricas
+      ));
 
       setState(() {
         criandoAgendamento = false;
@@ -598,7 +607,55 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
     );
   }
 
-  Widget _stepFor() {
+  Widget _stepFor(){
+
+    return SingleChildScrollView(
+        child: Column(
+          spacing: 25,
+          children: [
+            BaseText(
+                text: "Por favor, informe quais modalidades de aula voce deseja ter conosco: ",
+                size: 16,
+                color: Colors.black
+            ),
+            Form(
+                child: Column(
+                  children: [
+                    CheckboxListTile(
+                      title: const BaseText(text: "Aulas práticas", size: 20, color: Colors.black, bold: false,),
+                      value: _aulasPraticas,
+                      onChanged: (value) {
+                        setState(() {
+                          _aulasPraticas = value ?? false;
+                        });
+                      },
+                      checkColor: Colors.black,
+                      activeColor: Color(0xFFF0733D),
+                      controlAffinity: ListTileControlAffinity.leading,
+                      contentPadding: EdgeInsets.zero,
+                    ),
+                    CheckboxListTile(
+                      title: const BaseText(text: "Aulas teóricas", size: 20, color: Colors.black, bold: false,),
+                      value: _aulasTeoricas,
+                      onChanged: (value) {
+                        setState(() {
+                          _aulasTeoricas = value ?? false;
+                        });
+                      },
+                      checkColor: Colors.black,
+                      activeColor: Color(0xFFF0733D),
+                      controlAffinity: ListTileControlAffinity.leading,
+                      contentPadding: EdgeInsets.zero,
+                    ),
+                  ],
+                )
+            )
+          ],
+        )
+    );
+  }
+
+  Widget _stepFive() {
     final larguraTela = MediaQuery.of(context).size.width;
 
     return horarioselectedValue == null
@@ -743,6 +800,9 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
         validaStepTree();
         return;
       case 3:
+        validaStepFor();
+        return;
+      case 4:
         criarAgendamento();
         return;
     }
@@ -807,6 +867,19 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
         _currentStep = _currentStep + 1;
       });
     }
+  }
+
+  void validaStepFor(){
+      if(!_aulasPraticas && !_aulasTeoricas){
+        BaseSnackbar.exibirNotificacao(
+            "Erro",
+            "Obrigatório selecionar pelo menos uma modalidade de aula.",
+            false);
+      }else{
+        setState(() {
+          _currentStep = _currentStep + 1;
+        });
+      }
   }
 
   Future _buscaHorariosDisponiveis() async {

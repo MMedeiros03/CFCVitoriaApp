@@ -13,6 +13,8 @@ AgendamentoDTO _$AgendamentoDTOFromJson(Map<String, dynamic> json) =>
       dataHoraAgendamento:
           DateTime.parse(json['dataHoraAgendamento'] as String),
       observacao: json['observacao'] as String,
+      aulasTeoricas: json['aulasTeoricas'] as bool,
+      aulasPraticas: json['aulasPraticas'] as bool,
     );
 
 Map<String, dynamic> _$AgendamentoDTOToJson(AgendamentoDTO instance) =>
@@ -21,4 +23,6 @@ Map<String, dynamic> _$AgendamentoDTOToJson(AgendamentoDTO instance) =>
       'servicoId': instance.servicoId,
       'dataHoraAgendamento': instance.dataHoraAgendamento.toIso8601String(),
       'observacao': instance.observacao,
+      'aulasPraticas': instance.aulasPraticas,
+      'aulasTeoricas': instance.aulasTeoricas,
     };
