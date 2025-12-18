@@ -181,77 +181,74 @@ class AgendamentoPageState extends State<AgendamentoPage> {
                       ],
                     ),
                     Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      spacing: 10,
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      spacing: 20,
                       children: [
                         BaseText(
                             text: "Seriço", size: 12, color: Colors.black38),
                         Container(
-                          height: alturaTela * 0.2,
                           width: larguraTela,
                           decoration: BoxDecoration(
-                              color: const Color.fromARGB(70, 226, 226, 226),
-                              borderRadius: BorderRadius.circular(25)),
-                          child: Padding(
-                            padding: EdgeInsets.all(8),
-                            child: LayoutBuilder(
-                              builder: (context, constraints) {
-                                return Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Icon(
-                                      Icons.book_outlined,
-                                      size: 65,
-                                      color: Color(0xFFF0733D),
-                                    ),
-                                    Column(
-                                      spacing: 5,
-                                      children: [
-                                        SizedBox(
-                                          width: constraints.maxWidth * 0.5,
-                                          child: BaseText(
-                                            text: agendamento.servico.titulo,
-                                            size: 25,
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: constraints.maxWidth * 0.5,
-                                          child: BaseText(
-                                            maxLines: 4,
-                                            overflow: true,
-                                            text: agendamento.servico.descricao,
-                                            size: 12,
-                                            color: Colors.black45,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Column(
-                                      mainAxisAlignment: MainAxisAlignment.end,
+                            color: const Color.fromARGB(70, 226, 226, 226),
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                          padding: const EdgeInsets.all(12),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Icon(
+                                    Icons.book_outlined,
+                                    size: 65,
+                                    color: const Color(0xFFF0733D),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Column(
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.end,
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        BaseButton(
-                                          heigth: 30,
-                                          width: constraints.maxWidth * 0.25,
-                                          onPressed: () {
-                                            Get.toNamed("servico",
-                                                arguments: agendamento.servico);
-                                          },
-                                          text: "Ver",
-                                          backgroundColor: Color(0xFFF0733D),
-                                          colorFont: Colors.black,
-                                        )
+                                        BaseText(
+                                          text: agendamento.servico.titulo,
+                                          size: 20,
+                                          color: Colors.black,
+                                          bold: true,
+                                          maxLines: 2,
+                                          overflow: true,
+                                        ),
+                                        const SizedBox(height: 6),
+                                        BaseText(
+                                          maxLines: 4,
+                                          overflow: true,
+                                          text: agendamento.servico.descricao,
+                                          size: 12,
+                                          color: Colors.black45,
+                                        ),
                                       ],
-                                    )
-                                  ],
-                                );
-                              },
-                            ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 12),
+                              Align(
+                                alignment: Alignment.bottomRight,
+                                child: BaseButton(
+                                  heigth: 32,
+                                  width: 90,
+                                  onPressed: () {
+                                    Get.toNamed("servico",
+                                        arguments: agendamento.servico);
+                                  },
+                                  text: "Ver",
+                                  backgroundColor: const Color(0xFFF0733D),
+                                  colorFont: Colors.black,
+                                  fontSize: 13,
+                                ),
+                              ),
+                            ],
                           ),
                         )
                       ],

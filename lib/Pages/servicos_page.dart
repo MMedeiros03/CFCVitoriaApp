@@ -96,7 +96,7 @@ class ServicosPageState extends State<ServicosPage>
                             padding: EdgeInsets.only(bottom: 25),
                             child: SizedBox(
                               width: larguraTela,
-                              height: alturaTela * 0.24,
+                              height: alturaTela * 0.30,
                               child: ServiceCard(
                                 index: index,
                                 controller: _controller,

@@ -1,3 +1,4 @@
+import 'package:cfc_vitoria_app/Dto/App/agendamento_marcado_dto.dart';
 import 'package:cfc_vitoria_app/Dto/App/checklist_documentos_dto.dart';
 import 'package:cfc_vitoria_app/Dto/Request/Documento/documento_dto.dart';
 import 'package:cfc_vitoria_app/Dto/Response/Servico/servico_rdto.dart';
@@ -179,7 +180,10 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
         criandoAgendamento = false;
       });
 
-      Get.offNamed("/agendamento_marcado", arguments: dataCompleta);
+      var agendamentoMarcado = AgendamentoMarcadoDTO(
+          dataHoraMarcado: dataCompleta, servicoId: servicoSelected!.id);
+
+      Get.offNamed("/agendamento_marcado", arguments: agendamentoMarcado);
     } catch (e) {
       setState(() {
         criandoAgendamento = false;
@@ -299,68 +303,65 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
               BaseText(
                   text: "Seriço Selecionado", size: 12, color: Colors.black38),
               Container(
-                height: alturaTela * 0.2,
                 width: larguraTela,
                 decoration: BoxDecoration(
-                    color: const Color.fromARGB(70, 226, 226, 226),
-                    borderRadius: BorderRadius.circular(25)),
-                child: Padding(
-                  padding: EdgeInsets.all(8),
-                  child: LayoutBuilder(
-                    builder: (context, constraints) {
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Icon(
-                            Icons.book_outlined,
-                            size: 65,
-                            color: Color(0xFFF0733D),
-                          ),
-                          Column(
-                            spacing: 5,
+                  color: const Color.fromARGB(70, 226, 226, 226),
+                  borderRadius: BorderRadius.circular(25),
+                ),
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(
+                          Icons.book_outlined,
+                          size: 65,
+                          color: const Color(0xFFF0733D),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              SizedBox(
-                                width: constraints.maxWidth * 0.5,
-                                child: BaseText(
-                                  text: servicoSelected?.titulo ?? "",
-                                  size: 25,
-                                  color: Colors.black,
-                                ),
+                              BaseText(
+                                text: servicoSelected?.titulo ?? "",
+                                size: 20,
+                                color: Colors.black,
+                                bold: true,
+                                maxLines: 2,
+                                overflow: true,
                               ),
-                              SizedBox(
-                                width: constraints.maxWidth * 0.5,
-                                child: BaseText(
-                                  maxLines: 4,
-                                  overflow: true,
-                                  text: servicoSelected?.descricao ?? "",
-                                  size: 12,
-                                  color: Colors.black45,
-                                ),
+                              const SizedBox(height: 6),
+                              BaseText(
+                                maxLines: 4,
+                                overflow: true,
+                                text: servicoSelected?.descricao ?? "",
+                                size: 12,
+                                color: Colors.black45,
                               ),
                             ],
                           ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              BaseButton(
-                                heigth: 30,
-                                width: constraints.maxWidth * 0.25,
-                                onPressed: () {
-                                  Get.toNamed("servico",
-                                      arguments: servicoSelected!);
-                                },
-                                text: "Ver",
-                                backgroundColor: Color(0xFFF0733D),
-                                colorFont: Colors.black,
-                              )
-                            ],
-                          )
-                        ],
-                      );
-                    },
-                  ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    Align(
+                      alignment: Alignment.bottomRight,
+                      child: BaseButton(
+                        heigth: 32,
+                        width: 90,
+                        onPressed: () {
+                          Get.toNamed("servico", arguments: servicoSelected!);
+                        },
+                        text: "Ver",
+                        backgroundColor: const Color(0xFFF0733D),
+                        colorFont: Colors.black,
+                        fontSize: 13,
+                      ),
+                    ),
+                  ],
                 ),
               )
             ],
@@ -598,7 +599,6 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
   }
 
   Widget _stepFor() {
-    final alturaTela = MediaQuery.of(context).size.height;
     final larguraTela = MediaQuery.of(context).size.width;
 
     return horarioselectedValue == null
@@ -617,68 +617,66 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
                       size: 12,
                       color: Colors.black38),
                   Container(
-                    height: alturaTela * 0.2,
                     width: larguraTela,
                     decoration: BoxDecoration(
-                        color: const Color.fromARGB(70, 226, 226, 226),
-                        borderRadius: BorderRadius.circular(25)),
-                    child: Padding(
-                      padding: EdgeInsets.all(8),
-                      child: LayoutBuilder(
-                        builder: (context, constraints) {
-                          return Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Icon(
-                                Icons.book_outlined,
-                                size: 65,
-                                color: Color(0xFFF0733D),
-                              ),
-                              Column(
-                                spacing: 5,
+                      color: const Color.fromARGB(70, 226, 226, 226),
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    padding: const EdgeInsets.all(12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Icon(
+                              Icons.book_outlined,
+                              size: 65,
+                              color: const Color(0xFFF0733D),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  SizedBox(
-                                    width: constraints.maxWidth * 0.5,
-                                    child: BaseText(
-                                      text: servicoSelected?.titulo ?? "",
-                                      size: 25,
-                                      color: Colors.black,
-                                    ),
+                                  BaseText(
+                                    text: servicoSelected?.titulo ?? "",
+                                    size: 20,
+                                    color: Colors.black,
+                                    bold: true,
+                                    maxLines: 2,
+                                    overflow: true,
                                   ),
-                                  SizedBox(
-                                    width: constraints.maxWidth * 0.5,
-                                    child: BaseText(
-                                      maxLines: 4,
-                                      overflow: true,
-                                      text: servicoSelected?.descricao ?? "",
-                                      size: 12,
-                                      color: Colors.black45,
-                                    ),
+                                  const SizedBox(height: 6),
+                                  BaseText(
+                                    maxLines: 4,
+                                    overflow: true,
+                                    text: servicoSelected?.descricao ?? "",
+                                    size: 12,
+                                    color: Colors.black45,
                                   ),
                                 ],
                               ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  BaseButton(
-                                    heigth: 30,
-                                    width: constraints.maxWidth * 0.25,
-                                    onPressed: () {
-                                      Get.toNamed("servico",
-                                          arguments: servicoSelected!);
-                                    },
-                                    text: "Ver",
-                                    backgroundColor: Color(0xFFF0733D),
-                                    colorFont: Colors.black,
-                                  )
-                                ],
-                              )
-                            ],
-                          );
-                        },
-                      ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                        Align(
+                          alignment: Alignment.bottomRight,
+                          child: BaseButton(
+                            heigth: 32,
+                            width: 90,
+                            onPressed: () {
+                              Get.toNamed("servico",
+                                  arguments: servicoSelected!);
+                            },
+                            text: "Ver",
+                            backgroundColor: const Color(0xFFF0733D),
+                            colorFont: Colors.black,
+                            fontSize: 13,
+                          ),
+                        ),
+                      ],
                     ),
                   )
                 ],

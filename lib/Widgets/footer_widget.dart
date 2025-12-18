@@ -13,7 +13,7 @@ class _FooterWidgetState extends State<FooterWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(12),
       child: Container(
         decoration: BoxDecoration(
           color: Colors.black12,

@@ -46,7 +46,6 @@ class AgendamentosPageState extends State<AgendamentosPage> {
 
   @override
   Widget build(BuildContext context) {
-    final alturaTela = MediaQuery.of(context).size.height;
     final larguraTela = MediaQuery.of(context).size.width;
 
     return PopScope(
@@ -86,7 +85,6 @@ class AgendamentosPageState extends State<AgendamentosPage> {
                             padding: EdgeInsets.only(bottom: 25),
                             child: SizedBox(
                               width: larguraTela,
-                              height: alturaTela * 0.16,
                               child: ScheduleCard(
                                 agendamento: agendamento,
                               ),

@@ -145,7 +145,7 @@ class ServicoPageState extends State<ServicoPage>
                                   SizedBox(
                                       width: constraints.maxWidth * 0.8,
                                       child: BaseText(
-                                          maxLines: 2,
+                                          maxLines: 4,
                                           text:
                                               "Valores atualizados conforme Órgão do Estado",
                                           size: 16,
@@ -330,6 +330,7 @@ class ServicoPageState extends State<ServicoPage>
                                         SizedBox(width: 8),
                                         Expanded(
                                           child: BaseText(
+                                            maxLines: 4,
                                             text: requisitoRDTO.descricao,
                                             size: 16,
                                             color: Colors.black,

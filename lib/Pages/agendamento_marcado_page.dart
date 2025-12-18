@@ -1,3 +1,4 @@
+import 'package:cfc_vitoria_app/Dto/App/agendamento_marcado_dto.dart';
 import 'package:cfc_vitoria_app/Widgets/base_button_widget.dart';
 import 'package:cfc_vitoria_app/Widgets/base_text_widget.dart';
 import 'package:flutter/material.dart';
@@ -15,16 +16,21 @@ class AgendamentoMarcadoPage extends StatefulWidget {
 class AgendamentoMarcadoState extends State<AgendamentoMarcadoPage>
     with SingleTickerProviderStateMixin {
   double _opacity = 0.0;
+  bool _ocultarTexto = false;
 
-  final DateTime dataHoraAgendamento = Get.arguments as DateTime;
+  final AgendamentoMarcadoDTO dadosAgendamento =
+      Get.arguments as AgendamentoMarcadoDTO;
 
   @override
   void initState() {
     super.initState();
 
+    var ocultarTexto = dadosAgendamento.servicoId == 7 || dadosAgendamento.servicoId == 8 || dadosAgendamento.servicoId == 6 ;
+
     Future.delayed(Duration(milliseconds: 100), () {
       setState(() {
         _opacity = 1.0;
+        _ocultarTexto = ocultarTexto;
       });
     });
   }
@@ -113,7 +119,9 @@ class AgendamentoMarcadoState extends State<AgendamentoMarcadoPage>
                                             BaseText(
                                                 justifyText: true,
                                                 text:
-                                                    "Mal podemos esperar para te receber aqui no CFC no horário agendado! Já estamos aguardando para você vir, realizar a foto para sua carteira e receber toda a atenção que você merece!",
+                                                  _ocultarTexto
+                                                      ? "Estamos aguardando sua visita no CFC no horário agendado! Será um prazer te atender e oferecer todo o suporte e atenção que você merece."
+                                                      : "Mal podemos esperar para te receber aqui no CFC no horário agendado! Já estamos aguardando para você vir, realizar a foto para sua carteira e receber toda a atenção que você merece!",
                                                 bold: false,
                                                 size: 16,
                                                 color: Colors.black),
@@ -144,8 +152,8 @@ class AgendamentoMarcadoState extends State<AgendamentoMarcadoPage>
                                                     BaseText(
                                                         text: DateFormat(
                                                                 "dd/MM/yyyy - HH:mm")
-                                                            .format(
-                                                                dataHoraAgendamento),
+                                                            .format(dadosAgendamento
+                                                                .dataHoraMarcado),
                                                         bold: false,
                                                         size: 16,
                                                         color: Colors.black),

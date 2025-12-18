@@ -1,6 +1,7 @@
 import 'package:cfc_vitoria_app/Utils/routes.dart';
 import 'package:cfc_vitoria_app/Utils/storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -11,6 +12,11 @@ void main() async {
   await dotenv.load();
   WidgetsFlutterBinding.ensureInitialized();
   Intl.defaultLocale = 'pt_BR';
+
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);
+
   initializeDateFormatting('pt_BR', null);
   String initialRoute = await setInitPage();
   runApp(MyApp(

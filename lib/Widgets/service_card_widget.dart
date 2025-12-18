@@ -56,7 +56,6 @@ class ServiceCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Column(
-                        spacing: 5,
                         children: [
                           SizedBox(
                             width: constraints.maxWidth * 0.5,
@@ -69,9 +68,9 @@ class ServiceCard extends StatelessWidget {
                           ),
                           SizedBox(
                             width: constraints.maxWidth * 0.5,
-                            height: constraints.maxHeight * 0.3,
+                            height: constraints.maxHeight * 0.35,
                             child: BaseText(
-                              maxLines: 3,
+                              maxLines: 4,
                               overflow: true,
                               bold: false,
                               text: servico.descricao,

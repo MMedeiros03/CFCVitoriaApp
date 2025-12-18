@@ -31,28 +31,24 @@ class ScheduleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final larguraTela = MediaQuery.of(context).size.width;
-    final alturaTela = MediaQuery.of(context).size.height;
-
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(16)),
         color: Colors.black12,
       ),
-      child: Padding(
-        padding: EdgeInsets.only(right: 8, left: 0, top: 16, bottom: 8),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Icon(
-              Icons.calendar_month_outlined,
-              color: Color(0xFFF0733D),
-              size: 50,
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              spacing: 5,
+      padding: EdgeInsets.all(12),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(
+            Icons.calendar_month_outlined,
+            color: Color(0xFFF0733D),
+            size: 50,
+          ),
+          SizedBox(width: 12),
+          Expanded(
+            // garante que textos se ajustem
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 BaseText(
@@ -78,50 +74,47 @@ class ScheduleCard extends StatelessWidget {
                   color: Colors.black54,
                   text: agendamento.servico.titulo,
                 ),
+                SizedBox(height: 6),
                 Container(
-                  width: larguraTela * 0.4,
-                  height: alturaTela * 0.035,
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
-                      color: defineCorPorSituacao(true),
-                      borderRadius: BorderRadius.circular(25)),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8),
-                    child: Row(
-                      spacing: 6,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Icon(
-                          Icons.circle,
-                          color: defineCorPorSituacao(false),
-                        ),
-                        BaseText(
-                            bold: true,
-                            text: agendamento.situacaoAgendamento,
-                            size: 12,
-                            color: Colors.black)
-                      ],
-                    ),
+                    color: defineCorPorSituacao(true),
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.circle,
+                          size: 12, color: defineCorPorSituacao(false)),
+                      SizedBox(width: 4),
+                      BaseText(
+                        bold: true,
+                        text: agendamento.situacaoAgendamento,
+                        size: 12,
+                        color: Colors.black,
+                      )
+                    ],
+                  ),
+                ),
+                SizedBox(height: 8),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: BaseButton(
+                    width: 125,
+                    heigth: 40,
+                    colorFont: Colors.black,
+                    backgroundColor: Color(0xFFF0733D),
+                    text: "Detalhes",
+                    fontSize: 14,
+                    onPressed: () {
+                      Get.toNamed("/agendamento", arguments: agendamento);
+                    },
                   ),
                 )
               ],
             ),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: BaseButton(
-                width: 125,
-                heigth: 40,
-                colorFont: Colors.black,
-                backgroundColor: Color(0xFFF0733D),
-                text: "Detalhes",
-                fontSize: 14,
-                onPressed: () {
-                  Get.toNamed("/agendamento", arguments: agendamento);
-                },
-              ),
-            )
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

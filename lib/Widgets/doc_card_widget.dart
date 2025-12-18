@@ -19,10 +19,7 @@ class DocCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final alturaTela = MediaQuery.of(context).size.height;
-
     return Container(
-      height: alturaTela * 0.2,
       decoration: const BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(16)),
         color: Colors.black12,
