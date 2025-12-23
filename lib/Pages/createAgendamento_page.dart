@@ -146,7 +146,7 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
                       onPressed: () {
                         _validacoesPorStep();
                       },
-                      text: _currentStep != 3 ? 'Próximo' : 'Finalizar',
+                      text: _currentStep != 4 ? 'Próximo' : 'Finalizar',
                     ),
                   ],
                 ),
@@ -608,17 +608,20 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
   }
 
   Widget _stepFor(){
-
     return SingleChildScrollView(
         child: Column(
           spacing: 25,
           children: [
             BaseText(
-                text: "Por favor, informe quais modalidades de aula voce deseja ter conosco: ",
+                text: servicoSelected?.id != 4
+                    ? 'Este passo não é necessário para o serviço selecionado. Por favor clique em "Proximo"'
+                    : "Por favor, informe quais modalidades de aula voce deseja ter conosco: ",
                 size: 16,
                 color: Colors.black
             ),
-            Form(
+            servicoSelected?.id != 4
+                ? SizedBox.shrink()
+                : Form(
                 child: Column(
                   children: [
                     CheckboxListTile(
