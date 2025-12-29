@@ -182,8 +182,7 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
           dataHoraAgendamento: dataCompleta,
           observacao: "",
           aulasPraticas: _aulasPraticas,
-          aulasTeoricas: _aulasTeoricas
-      ));
+          aulasTeoricas: _aulasTeoricas));
 
       setState(() {
         criandoAgendamento = false;
@@ -607,55 +606,62 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
     );
   }
 
-  Widget _stepFor(){
+  Widget _stepFor() {
     return SingleChildScrollView(
         child: Column(
-          spacing: 25,
-          children: [
-            BaseText(
-                text: servicoSelected?.id != 4
-                    ? 'Este passo não é necessário para o serviço selecionado. Por favor clique em "Proximo"'
-                    : "Por favor, informe quais modalidades de aula voce deseja ter conosco: ",
-                size: 16,
-                color: Colors.black
-            ),
-            servicoSelected?.id != 4
-                ? SizedBox.shrink()
-                : Form(
+      spacing: 25,
+      children: [
+        BaseText(
+            text: servicoSelected?.id != 4
+                ? 'Este passo não é necessário para o serviço selecionado. Por favor clique em "Proximo"'
+                : "Por favor, informe quais modalidades de aula voce deseja ter conosco: ",
+            size: 16,
+            color: Colors.black),
+        servicoSelected?.id != 4
+            ? SizedBox.shrink()
+            : Form(
                 child: Column(
-                  children: [
-                    CheckboxListTile(
-                      title: const BaseText(text: "Aulas práticas", size: 20, color: Colors.black, bold: false,),
-                      value: _aulasPraticas,
-                      onChanged: (value) {
-                        setState(() {
-                          _aulasPraticas = value ?? false;
-                        });
-                      },
-                      checkColor: Colors.black,
-                      activeColor: Color(0xFFF0733D),
-                      controlAffinity: ListTileControlAffinity.leading,
-                      contentPadding: EdgeInsets.zero,
+                children: [
+                  CheckboxListTile(
+                    title: const BaseText(
+                      text: "Aulas práticas",
+                      size: 20,
+                      color: Colors.black,
+                      bold: false,
                     ),
-                    CheckboxListTile(
-                      title: const BaseText(text: "Aulas teóricas", size: 20, color: Colors.black, bold: false,),
-                      value: _aulasTeoricas,
-                      onChanged: (value) {
-                        setState(() {
-                          _aulasTeoricas = value ?? false;
-                        });
-                      },
-                      checkColor: Colors.black,
-                      activeColor: Color(0xFFF0733D),
-                      controlAffinity: ListTileControlAffinity.leading,
-                      contentPadding: EdgeInsets.zero,
+                    value: _aulasPraticas,
+                    onChanged: (value) {
+                      setState(() {
+                        _aulasPraticas = value ?? false;
+                      });
+                    },
+                    checkColor: Colors.black,
+                    activeColor: Color(0xFFF0733D),
+                    controlAffinity: ListTileControlAffinity.leading,
+                    contentPadding: EdgeInsets.zero,
+                  ),
+                  CheckboxListTile(
+                    title: const BaseText(
+                      text: "Revisão para Prova Teórica",
+                      size: 20,
+                      color: Colors.black,
+                      bold: false,
                     ),
-                  ],
-                )
-            )
-          ],
-        )
-    );
+                    value: _aulasTeoricas,
+                    onChanged: (value) {
+                      setState(() {
+                        _aulasTeoricas = value ?? false;
+                      });
+                    },
+                    checkColor: Colors.black,
+                    activeColor: Color(0xFFF0733D),
+                    controlAffinity: ListTileControlAffinity.leading,
+                    contentPadding: EdgeInsets.zero,
+                  ),
+                ],
+              ))
+      ],
+    ));
   }
 
   Widget _stepFive() {
@@ -872,17 +878,15 @@ class AgendamentoPageState extends State<CreateAgendamentoPage> {
     }
   }
 
-  void validaStepFor(){
-      if(!_aulasPraticas && !_aulasTeoricas){
-        BaseSnackbar.exibirNotificacao(
-            "Erro",
-            "Obrigatório selecionar pelo menos uma modalidade de aula.",
-            false);
-      }else{
-        setState(() {
-          _currentStep = _currentStep + 1;
-        });
-      }
+  void validaStepFor() {
+    if (!_aulasPraticas && !_aulasTeoricas) {
+      BaseSnackbar.exibirNotificacao("Erro",
+          "Obrigatório selecionar pelo menos uma modalidade de aula.", false);
+    } else {
+      setState(() {
+        _currentStep = _currentStep + 1;
+      });
+    }
   }
 
   Future _buscaHorariosDisponiveis() async {
